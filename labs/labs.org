@@ -1,0 +1,55 @@
+* Lab 1: javac, java, git
+** B. Git & Local Repos
+*** Using Git
+**** B. Local Repositories (Narrative Introduction)
+    - ~git init~: Creates a box in which to permanently store panoramic pictures.
+    - ~git add~: Takes a temporary photo of one thing that can be assembled into a panoramic photo later.
+    - ~git commit~: Assembles all available temporary photos into a panoramic photo. Also destroys all temporary photos.
+    - ~git log~: Lists all the panoramic photos we’ve ever taken.
+    - ~git show~: Looks at what is in a particular panoramic photo.
+    - ~git chechout~: Rearranges files back to how they looked in a given panoramic photo. Does not affect the panormiac photos in your box in any way.
+**** C. Local Repositories (Technical Overview)
+***** Initializing Local Repositories
+      ~git init~: Git creates a .git subdirectory. Inside this directory it will store a bunch of metadata, as well as old the actual snapshots of the files. 
+***** Tracked vs. Untracked Files
+
+      #+DOWNLOADED: /tmp/screenshot.png @ 2019-03-08 15:59:57
+      [[file:Lab%201:%20javac,%20java,%20git/screenshot_2019-03-08_15-59-57.png]]
+ 
+      TWo main categories: *untracked files* and *tracked files*.
+      ~git status~: Determining the exact status(untracked, unmodified, modified staged) of each file in your repository.
+***** Staging & Committing
+      - ~git add FILE~: Stage a file.
+      - ~git commit -m MESSAGE~: Commit snapshot as one block with a message.
+      - ~git log~: See previous commits 
+***** Undoing Changes
+      - ~git reset HEAD [file]~: Unstage a file that you haven’t yet committed, this will take the file’s status back to modified, leaving changes intact, equivalent of deleting one of the temporary images that you’re going to combine into a panorama.
+      - ~git add [forgotten-file]~ + ~git commit --amend~: Amend latest commit (changing commit message or add forgotten files).
+      - ~git checkout -- [file]~: Revert a file to its state at the time of the most recent commit.
+      - ~git chechout commitnumber repository/file~: Revert a file to a specific commit.
+        
+** C. Git Exercise
+
+   #+begin_src sh 
+     touch lab1-checkoff
+     cd lab1-checkoff/
+     nano 61b.txt
+     nano 61c.txt
+     git add 61b.txt
+     git commit -m "Add61b.txt"
+     nano 61b.txt
+     git add 61b.txt 61c.txt
+     git commit -m "Update 61b.txt and add 61c.txt"
+     nano 61b.txt
+     git checkout -- 61b.txt
+     git checkout 39e3c4ec06c95d57fda6e8d18e32cdcb05a9bb6e ./61b.txt
+   #+end_src 
+
+** D. Git & Remote Repos
+*** Using Git
+**** D. Remote Repositories
+     - ~git clone [remote-repo-URL]~: Makes a copy of the specified repository, but on your local computer. Also creates a working directory that has files arranged exactly like the most recent snapshot in the download repository. Also records the URL of the remote repository for subsequent network data transfers, and gives it the special remote-repo-name “origin”.
+     - ~git remote add [remote-repo-name]~: Records a new location for network data transfers.
+     - ~git remote -v~: Lists all locations for network data transfers.
+     - ~git pull [remote-repo-name] master~: Get the most recent copy of the files as seen in remote-repo-name
+     - ~git push [remote-repo-name] master~: Pushes the most recent copy of your files to the remote-repo-name.

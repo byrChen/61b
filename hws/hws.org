@@ -1,0 +1,258 @@
+* HW0
+** Creative Exercise 1a: Drawing a Triangle
+
+   #+begin_src java :classname Test
+     class Test {
+         public static void main(String[] args) {
+             String a = "*";
+             int b = 1;
+             while (b<6) {
+                 System.out.println(a);
+                 b = b + 1;
+                 a = a + "*";
+             }
+         }
+     }
+
+     #+end_src
+
+     #+RESULTS:
+     | *     |
+     | **    |
+     | ***   |
+     | ****  |
+     | ***** |
+
+** Creative Exercise 1b: DrawTriangle
+
+   #+begin_src java :classname Test
+     public class Test {
+         public static void drawTriangle(int N) {
+             int a = 1;
+             String b = "*";
+             while (a <= N) {
+                 System.out.println(b);
+                 a = a + 1;
+                 b = b + "*";
+             }
+         }
+
+         public static void main(String[] args) {
+             drawTriangle(10);
+         }
+     }
+   #+end_src 
+
+   #+RESULTS:
+   | *          |
+   | **         |
+   | ***        |
+   | ****       |
+   | *****      |
+   | ******     |
+   | *******    |
+   | ********   |
+   | *********  |
+   | ********** |
+
+** Arrays
+
+   #+begin_src java :classname 
+     int[] numbers = new int[3];
+     numbers[0] = 4;
+     numbers[1] = 7;
+     numbers[2] = 10;
+     // or
+     int[] numbers = new int[]{4, 7, 10};
+     System.out.println(numbers[1]);
+     System.out.println(numbers.length);
+   #+end_src 
+   
+** Exercise 2
+
+   #+begin_src java :classname Test 
+     public class Test {
+         public static int max(int[] m) {
+             int a = m[0];
+             int b = 1;
+             while (b < m.length) {
+                 if (a < m[b]) {
+                     a = m[b];
+                 }
+                 b = b + 1;
+             }
+             return a;
+         }
+         public static void main(String[] args) {
+             int[] numbers = new int[]{9, 2, 15, 2, 22, 10, 6};
+             System.out.print(max(numbers));
+         }
+     }
+     #+end_src
+
+     #+RESULTS:
+     : 22
+
+** Exercise 3
+
+   #+begin_src java :classname Test
+     public class Test {
+         public static int max(int[] m) {
+             int a = m[0];
+             int b = 1;
+             for (b = 1; b < m.length; b += 1) {
+                 if (a < m[b]) {
+                     a = m[b];
+                 }
+             }
+             return a;
+         }
+         public static void main(String[] args) {
+             int[] numbers = new int[]{9, 2, 15, 2, 22, 10, 6};
+             System.out.print(max(numbers));
+         }
+     }
+   #+end_src 
+
+   #+RESULTS:
+   : 22
+
+** Break and Continue
+   #+begin_src java :classname Test
+     public class Test {
+         public static void main(String[] args) {
+             String[] a = {"cat", "dog", "laser horse", "ketchup", "horse", "horbse"};
+
+             for (int i = 0; i < a.length; i += 1) {
+                 if (a[i].contains("horse")) {
+                     continue;
+                 }
+                 for (int j = 0; j < 3; j += 1) {
+                     System.out.println(a[i]);
+                 }
+             }
+         }
+     }
+   #+end_src 
+
+   #+RESULTS:
+   | cat     |
+   | cat     |
+   | cat     |
+   | dog     |
+   | dog     |
+   | dog     |
+   | ketchup |
+   | ketchup |
+   | ketchup |
+   | horbse  |
+   | horbse  |
+   | horbse  |
+
+   #+begin_src java :classname Test
+     public class Test {
+         public static void main(String[] args) {
+             String[] a = {"cat", "dog", "laser horse", "ketchup", "horse", "horbse"};
+
+             for (int i = 0; i < a.length; i += 1) {
+                 for (int j = 0; j < 3; j += 1) {
+                     System.out.println(a[i]);
+                     if (a[i].contains("horse")) {
+                         break;
+                     }
+                 }
+             }
+         }
+     }
+   #+end_src 
+
+   #+RESULTS:
+   | cat     |       |
+   | cat     |       |
+   | cat     |       |
+   | dog     |       |
+   | dog     |       |
+   | dog     |       |
+   | laser   | horse |
+   | ketchup |       |
+   | ketchup |       |
+   | ketchup |       |
+   | horse   |       |
+   | horbse  |       |
+   | horbse  |       |
+   | horbse  |       |
+
+** Optional: Exercise 4
+
+#+begin_src java :classname Test
+  public class Test {
+      public static void windowPosSum(int[] a, int n) {
+          for (int i = 0; i < a.length; i += 1) {
+              int b = i + n + 1;
+              if (b > a.length)
+                  b = a.length;
+              for (int j = i + 1; j < b; j += 1) {
+                  if (j > a.length + 1) {
+                      break;
+                  }
+                  if (a[j] > 0) {
+                      a[i] += a[j];
+                  }
+                  else {
+                      continue;
+                  }
+              }
+          }
+          /** your code here */
+      }
+
+      public static void main(String[] args) {
+          int[] a = {1, 2, -3, 4, 5, 4};
+          int n = 3;
+          windowPosSum(a, n);
+
+          // Should print 4, 8, -3, 13, 9, 4
+          System.out.println(java.util.Arrays.toString(a));
+      }
+  }
+
+#+end_src 
+
+#+RESULTS:
+| [7 | 11 | 10 | 13 | 9 | 4] |
+
+** The Enhanced For Loop
+
+   #+begin_src java :classname Test
+     public class Test {
+         public static void main(String[] args) {
+             String[] a = {"cat", "dog", "laser horse", "ketchup", "horse", "horbse"};
+
+             for (String s : a) {
+                 for (int j = 0; j < 3; j += 1) {
+                     System.out.println(s);
+                     if (s.contains("horse")) {
+                         break;
+                     }
+                 }
+             }
+         }
+     }
+   #+end_src 
+
+   #+RESULTS:
+   | cat     |       |
+   | cat     |       |
+   | cat     |       |
+   | dog     |       |
+   | dog     |       |
+   | dog     |       |
+   | laser   | horse |
+   | ketchup |       |
+   | ketchup |       |
+   | ketchup |       |
+   | horse   |       |
+   | horbse  |       |
+   | horbse  |       |
+   | horbse  |       |
+
