@@ -154,3 +154,12 @@
      - ~def~ in python, ~public static~ in java.  
 **** Style Guide
 *** L1: Intro, Hello World Java
+*** Objects
+**** Defining and Using Classes
+***** Static vs. Non-Static Methods
+****** Static Methods
+****** Instance Variables and Object Instantiation
+****** Constructors in Java
+****** Terminology Summary
+***** Class Methods vs. Instance Methods
+*** L2: Defining and Using Classes
