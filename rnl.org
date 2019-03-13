@@ -154,12 +154,164 @@
      - ~def~ in python, ~public static~ in java.  
 **** Style Guide
 *** L1: Intro, Hello World Java
-*** Objects
+*** 1.2 Objects
 **** Defining and Using Classes
 ***** Static vs. Non-Static Methods
 ****** Static Methods
+       All code in Java must be *part of a class* (or something similar).
+
+       #+begin_src java :classname Dog
+         public class Dog {
+             public static void makeNoise() {
+                 System.out.println("Bark!");
+             }
+         }
+       #+end_src 
+       
+       #+begin_src java :classname DogLauncher
+         public class DogLauncher {
+             public static void main(String[] args) {
+                 Dog.makeNoise();
+             }
+         }
+       #+end_src 
+
+       - No ~main~ method in class ~Dog~. 
+       - ~DogLauncher~ is a *client* of ~Dog~.
+       - Neither or the two techniques(add ~main~ to ~Dog~ or create ~DogLauncher~) is better.
 ****** Instance Variables and Object Instantiation
+******* Approach 1: create separate classes for each type of ~Dog~.
+        
+        #+begin_src java :classname TinyDog
+          public class TinyDog {
+              public static void makeNoise() {
+                  System.out.println("yip yip yip yip");
+              }
+          }
+        #+end_src 
+
+        #+begin_src java :classname MalamuteDog
+          public class MalamuteDog {
+              public static void makeNoise() {
+                  System.out.println("arooooooooooooooo!");
+              }
+          }
+        #+end_src 
+
+******* Approach 2: create instances of the ~Dog~ class and make the behavior of the ~Dog~ methods contingent upon the properties of the specific ~Dog~.
+
+        #+begin_src java :classname Dog
+          public class Dog {
+              public int weightInPounds;
+
+              public void makeNoise() {
+                  if (weightInPounds < 10) {
+                      System.out.println("yipyipyip!");
+                  } else if (weightInPounds < 30) {
+                      System.out.println("bark. bark.");
+                  } else {
+                      System.out.println("woof!");
+                  }
+              }
+          }
+        #+end_src 
+
+        #+begin_src java :classname DogLauncher
+          public class DogLauncher {
+              public static void main(String[] args) {
+                  Dog d;
+                  d = new Dog();
+                  d.weightInPounds = 20;
+                  d.makeNoise();
+              }
+          }
+        #+end_src 
+
+******* Some key observations and terminology:
+        - ~Object~ in Java is an *instance* of any class.
+        - *Instance variables* or *non-static variables*: variables *must* be declared *inside the class* (new variables can be added at runtime in Python or Matlab).
+        - *Instance methods* or *non-static methods* (no ~static~ keyword): methods created in class.
+        - ~new~ to instantiate a ~class~.
+        - *Instantiated object* can be assinged to a *declared* variable of the appropriate type: ~d = new Dog()~ 
+
 ****** Constructors in Java
+
+       #+begin_src java :classname Dog
+         public class Dog {
+             public int weightInPounds;
+
+             public Dog(int w) {
+                 weightInPounds = w;
+             }
+
+             public void makeNoise() {
+                 if (weightInPounds < 10) {
+                     System.out.println("yipyipyip!");
+                 } else if (weightInPounds < 30) {
+                     System.out.println("bark. bark.");
+                 } else {
+                     System.out.println("woof!");
+                 }    
+             }
+         }
+       #+end_src 
+
+       #+begin_src java :classname DogLauncher
+         public class DogLauncher {
+             public static void main(String[] args) {
+                 Dog d = new Dog(20);
+                 d.makeNoise();
+             }
+         }
+       #+end_src 
+       
+       - *Constructors* can save the time and messiness of manually typing out potentially many *instance variable assignments*.
+       - The *constructor* with signature ~public Dog(int w)~ will be invoked anytime when ~new Dog(n)~.
+       - Similar to ~__init__~ in Python.
+
 ****** Terminology Summary
+****** Array Instantiation, Arrays of Objects
+******* Array instantiation
+
+        #+begin_src java :classname ArrayDemo
+          public class ArrayDemo {
+              public static void main(String[] args) {
+                  /* Create an array of five integers. */
+                  int[] someArray = new int[5];
+                  someArray[0] = 3;
+                  someArray[1] = 4;
+              }
+          }
+        #+end_src 
+
+******* Arrays of instantiated objects
+
+        #+begin_src java :classname DogArrayDemo
+          public class DogArrayDemo {
+              public static void main(String[] args) {
+                  /* Create an array of two dogs. */
+                  Dog[] dogs = new Dog[2];
+                  dogs[0] = new Dog(8);
+                  dogs[1] = new Dog(20);
+
+                  /* Yipping will result, since dogs[0] has weight 8. */
+                  dogs[0].makeNoise();
+              }
+          }
+        #+end_src 
+        
+        Two different ~new~:
+        1. ~new Dog[2]~ to *create* an *array* that hold 2 ~Dog~ *objects(not instantiated)*.
+        2. ~new Dog(8)~ to *instantiate* each ~Dog~ *object*.
 ***** Class Methods vs. Instance Methods
+      Java allows us to define 2 types of methods:
+      1. *Class methods*, a.k.a static methods.
+      2. *Instance methods*, a.k.a non-static methods.
+****** Static Variables
+***** public static void main(String[] args)
+****** Command Line Arguments
+****** Summing Command Line Arguments
+***** Using Libraries
 *** L2: Defining and Using Classes
+
+    
