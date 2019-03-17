@@ -1,45 +1,69 @@
 * 1. Introduction to Java
-*** 1.1 Essentials
-**** Hello World 
+** 1.1 Essentials
+*** Hello World 
 
-     #+begin_src java :classname HelloWorld
-       public class HelloWorld {
-           public static void main(String[] args) {
-               System.out.println("Hello world!");
-           }
-       }
-     #+end_src
+    #+begin_src java :classname HelloWorld
+      public class HelloWorld {
+          public static void main(String[] args) {
+              System.out.println("Hello world!");
+          }
+      }
+    #+end_src
 
-     #+RESULTS:
-     : Hello world!
+    #+RESULTS:
+    : Hello world!
 
-     *Some key syntactic features*
-     - The pg consists of a *class declaration*: ~public class~. In Java, all code lives *inside of classes*.
-     - Code is running inside of a *method called main*: ~public static void main(String[] args)~.
-     -  ~{~ and ~}~.
-     - Semi-colons ~;~.
-**** Running a Java Pg 
-     *The most common way to execute a Java pg*: Compiler ~javac~ --> Interpreter ~java~
+    *Some key syntactic features*
+    - The pg consists of a *class declaration*: ~public class~. In Java, all code lives *inside of classes*.
+    - Code is running inside of a *method called main*: ~public static void main(String[] args)~.
+    -  ~{~ and ~}~.
+    - Semi-colons ~;~.
+*** Running a Java Pg 
+    *The most common way to execute a Java pg*: Compiler ~javac~ --> Interpreter ~java~
 
-     #+DOWNLOADED: https://joshhug.gitbooks.io/hug61b/content/assets/compilation_figure.svg @ 2019-03-01 10:36:13
-     [[file:1.%20Introduction%20to%20Java/compilation_figure_2019-03-01_10-36-13.svg]]
+    #+DOWNLOADED: https://joshhug.gitbooks.io/hug61b/content/assets/compilation_figure.svg @ 2019-03-01 10:36:13
+    [[file:1.%20Introduction%20to%20Java/compilation_figure_2019-03-01_10-36-13.svg]]
 
-     #+begin_src sh 
-       javac HelloWorld.java 
-       java HelloWorld
-     #+end_src 
+    #+begin_src sh 
+      javac HelloWorld.java 
+      java HelloWorld
+    #+end_src 
     
-     #+RESULTS:
-     : Hello world!
+    #+RESULTS:
+    : Hello world!
 
-**** Vars and Loops
+*** Vars and Loops
+
+    #+begin_src java :classname HelloNumbers
+      public class HelloNumbers {
+          public static void main(String[] args) {
+              int x = 0;
+              while (x < 10) {
+                  System.out.print(x + " ");
+                  x = x + 1;
+              }
+          }
+      }
+    #+end_src 
+
+    #+RESULTS:
+    : 0 1 2 3 4 5 6 7 8 9
+
+    *Some interesting features of this pg* 
+    - Var x *must declared and given a type* before *used*.
+    - Loop def in ~{}~, boolean expression in ~()~.
+    - ~System.out.print~ instead of ~System.out.println~, no new line.
+    
+**** Exercise 1.1.2 Modify ~HelloNumbers~ so that it prints out the cumulative sum of the integers from 0 to 9. For example, your output should start with 0 1 3 6 10... and should end with 45. 
 
      #+begin_src java :classname HelloNumbers
        public class HelloNumbers {
            public static void main(String[] args) {
-               int x = 0;
-               while (x < 10) {
-                   System.out.print(x + " ");
+               int x = 1;
+               int sum = 0;
+               while (sum < 46) {
+                   System.out.print(sum + " ");
+                   sum = x + sum;
                    x = x + 1;
                }
            }
@@ -47,194 +71,326 @@
      #+end_src 
 
      #+RESULTS:
-     : 0 1 2 3 4 5 6 7 8 9
+     : 0 1 3 6 10 15 21 28 36 45
 
-     *Some interesting features of this pg* 
-     - Var x *must declared and given a type* before *used*.
-     - Loop def in ~{}~, boolean expression in ~()~.
-     - ~System.out.print~ instead of ~System.out.println~, no new line.
+*** Static Typing
+    One of the most important features of Java is that *all vars and expressions* have a so-called ~static type~, the type of a var can *never change*.
+
+    #+begin_src java :classname HelloNumbers
+      public class HelloNumbers {
+          public static void main(String[] args) {
+              int x = 0;
+              while (x < 10) {
+                  System.out.print(x + " ");
+                  x = x + 1;
+              }
+              x = "horse";
+          }
+      }
+    #+end_src 
+
+    #+RESULTS:
+
+    *Static typing advs*
+    - The *compiler* ensures that all *types are compatible*, easier to *debug*.
+    - *Compiled* pgs will *never* run into *type errors*.
+    - Every var, para, and func has *a declared type*, easier to understand and reason code.
+
+    #+begin_src java :classname test
+      public class test {
+          public static void main(String[] args) {
+              String h = 5 + "horse";
+              System.out.print(h);
+          }
+      }
+    #+end_src 
+
+    #+RESULTS:
+    : 5horse
     
-***** Exercise 1.1.2 Modify ~HelloNumbers~ so that it prints out the cumulative sum of the integers from 0 to 9. For example, your output should start with 0 1 3 6 10... and should end with 45. 
+    #+begin_src python :results output
+      print(5+'horse')
+    #+end_src 
 
-      #+begin_src java :classname HelloNumbers
-        public class HelloNumbers {
+    #+RESULTS:
+
+    - For java, *stronly typed*, ~String~ can concatenate the elements into a str, while ~int~ can't concatenate a num and a str.
+    - For python, type not constrained, ~5+'horse'~ errors. 
+
+*** Def Funcs in Java
+
+    #+begin_src python :results output
+      def larger(x, y):
+          if x > y:
+              return x
+          return y
+
+      print(larger(8, 10))
+    #+end_src 
+
+    #+RESULTS:
+    : 10
+
+    #+begin_src java :classname LargerDemo
+      public class LargerDemo {
+          public static int larger(int x, int y) {
+              if (x > y) {
+                  return x;
+              }
+              return y;
+          }
+
+          public static void main(String[] args) {
+              System.out.println(larger(8, 10));
+          }
+      }
+    #+end_src 
+
+    #+RESULTS:
+    : 10
+
+    - In python, funcs can be declared *anywhere*.
+    - In java, java code is *part of a class*, funcs must defed *belong to some class* and called *methods*.
+    - ~def~ in python, ~public static~ in java.  
+*** Style Guide
+** L1: Intro, Hello World Java
+** 1.2 Objects
+*** Defining and Using Classes
+**** Static vs. Non-Static Methods
+***** Static Methods
+      All code in Java must be *part of a class* (or something similar).
+
+      #+begin_src java :classname Dog
+        public class Dog {
+            public static void makeNoise() {
+                System.out.println("Bark!");
+            }
+        }
+      #+end_src 
+       
+      #+begin_src java :classname DogLauncher
+        public class DogLauncher {
             public static void main(String[] args) {
-                int x = 1;
-                int sum = 0;
-                while (sum < 46) {
-                    System.out.print(sum + " ");
-                    sum = x + sum;
-                    x = x + 1;
-                }
+                Dog.makeNoise();
             }
         }
       #+end_src 
 
-      #+RESULTS:
-      : 0 1 3 6 10 15 21 28 36 45
+      - No ~main~ method in class ~Dog~. 
+      - ~DogLauncher~ is a *client* of ~Dog~.
+      - Neither or the two techniques(add ~main~ to ~Dog~ or create ~DogLauncher~) is better.
+***** Instance Variables and Object Instantiation
+****** Approach 1: create separate classes for each type of ~Dog~.
+        
+       #+begin_src java :classname TinyDog
+         public class TinyDog {
+             public static void makeNoise() {
+                 System.out.println("yip yip yip yip");
+             }
+         }
+       #+end_src 
 
-**** Static Typing
-     One of the most important features of Java is that *all vars and expressions* have a so-called ~static type~, the type of a var can *never change*.
+       #+begin_src java :classname MalamuteDog
+         public class MalamuteDog {
+             public static void makeNoise() {
+                 System.out.println("arooooooooooooooo!");
+             }
+         }
+       #+end_src 
 
-     #+begin_src java :classname HelloNumbers
-       public class HelloNumbers {
-           public static void main(String[] args) {
-               int x = 0;
-               while (x < 10) {
-                   System.out.print(x + " ");
-                   x = x + 1;
-               }
-               x = "horse";
-           }
-       }
-     #+end_src 
-
-     #+RESULTS:
-
-     *Static typing advs*
-     - The *compiler* ensures that all *types are compatible*, easier to *debug*.
-     - *Compiled* pgs will *never* run into *type errors*.
-     - Every var, para, and func has *a declared type*, easier to understand and reason code.
-
-     #+begin_src java :classname test
-       public class test {
-           public static void main(String[] args) {
-               String h = 5 + "horse";
-               System.out.print(h);
-           }
-       }
-     #+end_src 
-
-     #+RESULTS:
-     : 5horse
-    
-     #+begin_src python :results output
-       print(5+'horse')
-     #+end_src 
-
-     #+RESULTS:
-
-     - For java, *stronly typed*, ~String~ can concatenate the elements into a str, while ~int~ can't concatenate a num and a str.
-     - For python, type not constrained, ~5+'horse'~ errors. 
-
-**** Def Funcs in Java
-
-     #+begin_src python :results output
-       def larger(x, y):
-           if x > y:
-               return x
-           return y
-
-       print(larger(8, 10))
-     #+end_src 
-
-     #+RESULTS:
-     : 10
-
-     #+begin_src java :classname LargerDemo
-       public class LargerDemo {
-           public static int larger(int x, int y) {
-               if (x > y) {
-                   return x;
-               }
-               return y;
-           }
-
-           public static void main(String[] args) {
-               System.out.println(larger(8, 10));
-           }
-       }
-     #+end_src 
-
-     #+RESULTS:
-     : 10
-
-     - In python, funcs can be declared *anywhere*.
-     - In java, java code is *part of a class*, funcs must defed *belong to some class* and called *methods*.
-     - ~def~ in python, ~public static~ in java.  
-**** Style Guide
-*** L1: Intro, Hello World Java
-*** 1.2 Objects
-**** Defining and Using Classes
-***** Static vs. Non-Static Methods
-****** Static Methods
-       All code in Java must be *part of a class* (or something similar).
+****** Approach 2: create instances of the ~Dog~ class and make the behavior of the ~Dog~ methods contingent upon the properties of the specific ~Dog~.
 
        #+begin_src java :classname Dog
          public class Dog {
-             public static void makeNoise() {
-                 System.out.println("Bark!");
+             public int weightInPounds;
+
+             public void makeNoise() {
+                 if (weightInPounds < 10) {
+                     System.out.println("yipyipyip!");
+                 } else if (weightInPounds < 30) {
+                     System.out.println("bark. bark.");
+                 } else {
+                     System.out.println("woof!");
+                 }
              }
          }
        #+end_src 
-       
+
        #+begin_src java :classname DogLauncher
          public class DogLauncher {
              public static void main(String[] args) {
-                 Dog.makeNoise();
+                 Dog d;
+                 d = new Dog();
+                 d.weightInPounds = 20;
+                 d.makeNoise();
              }
          }
        #+end_src 
 
-       - No ~main~ method in class ~Dog~. 
-       - ~DogLauncher~ is a *client* of ~Dog~.
-       - Neither or the two techniques(add ~main~ to ~Dog~ or create ~DogLauncher~) is better.
-****** Instance Variables and Object Instantiation
-******* Approach 1: create separate classes for each type of ~Dog~.
+****** Some key observations and terminology:
+       - ~Object~ in Java is an *instance* of any class.
+       - *Instance variables* or *non-static variables*: variables *must* be declared *inside the class* (new variables can be added at runtime in Python or Matlab).
+       - *Instance methods* or *non-static methods* (no ~static~ keyword): methods created in class.
+       - ~new~ to instantiate a ~class~.
+       - *Instantiated object* can be assinged to a *declared* variable of the appropriate type: ~d = new Dog()~ 
+
+***** Constructors in Java
+
+      #+begin_src java :classname Dog
+        public class Dog {
+            public int weightInPounds;
+
+            public Dog(int w) {
+                weightInPounds = w;
+            }
+
+            public void makeNoise() {
+                if (weightInPounds < 10) {
+                    System.out.println("yipyipyip!");
+                } else if (weightInPounds < 30) {
+                    System.out.println("bark. bark.");
+                } else {
+                    System.out.println("woof!");
+                }    
+            }
+        }
+      #+end_src 
+
+      #+begin_src java :classname DogLauncher
+        public class DogLauncher {
+            public static void main(String[] args) {
+                Dog d = new Dog(20);
+                d.makeNoise();
+            }
+        }
+      #+end_src 
+       
+      - *Constructors* can save the time and messiness of manually typing out potentially many *instance variable assignments*.
+      - The *constructor* with signature ~public Dog(int w)~ will be invoked anytime when ~new Dog(n)~.
+      - Similar to ~__init__~ in Python.
+
+***** Terminology Summary
+***** Array Instantiation, Arrays of Objects
+****** Array instantiation
+
+       #+begin_src java :classname ArrayDemo
+         public class ArrayDemo {
+             public static void main(String[] args) {
+                 /* Create an array of five integers. */
+                 int[] someArray = new int[5];
+                 someArray[0] = 3;
+                 someArray[1] = 4;
+             }
+         }
+       #+end_src 
+
+****** Arrays of instantiated objects
+
+       #+begin_src java :classname DogArrayDemo
+         public class DogArrayDemo {
+             public static void main(String[] args) {
+                 /* Create an array of two dogs. */
+                 Dog[] dogs = new Dog[2];
+                 dogs[0] = new Dog(8);
+                 dogs[1] = new Dog(20);
+
+                 /* Yipping will result, since dogs[0] has weight 8. */
+                 dogs[0].makeNoise();
+             }
+         }
+       #+end_src 
         
-        #+begin_src java :classname TinyDog
-          public class TinyDog {
-              public static void makeNoise() {
-                  System.out.println("yip yip yip yip");
-              }
-          }
-        #+end_src 
+       Two different ~new~:
+       1. ~new Dog[2]~ to *create* an *array* that hold 2 ~Dog~ *objects(not instantiated)*.
+       2. ~new Dog(8)~ to *instantiate* each ~Dog~ *object*.
+**** Class Methods vs. Instance Methods
+     Java allows us to define *2 types* of methods:
+     1. *Class methods*, a.k.a *static* methods: *Static methods* are actions that are taken by the *class itself*.
+     2. *Instance methods*, a.k.a *non-static* methods: *Instance methods* are actions that can be taken only by *a specific instance of a class*.
+       
+     #+begin_src java :classname Dog
+       public class Dog {
+           public int weightInPounds;
 
-        #+begin_src java :classname MalamuteDog
-          public class MalamuteDog {
-              public static void makeNoise() {
-                  System.out.println("arooooooooooooooo!");
-              }
-          }
-        #+end_src 
+           public Dog(int w) {
+               weightInPounds = w;
+           }
 
-******* Approach 2: create instances of the ~Dog~ class and make the behavior of the ~Dog~ methods contingent upon the properties of the specific ~Dog~.
+           public void makeNoise() {
+               if (weightInPounds < 10) {
+                   System.out.println("yipyipyip!");
+               } else if (weightInPounds < 30) {
+                   System.out.println("bark. bark.");
+               } else {
+                   System.out.println("woof!");
+               }
+           }
 
-        #+begin_src java :classname Dog
-          public class Dog {
-              public int weightInPounds;
+           public static Dog maxDog(Dog d1, Dog d2) {
+               if (d1.weightInPounds > d2.weightInPounds) {
+                   return d1;
+               }
+               return d2;
+           }
 
-              public void makeNoise() {
-                  if (weightInPounds < 10) {
-                      System.out.println("yipyipyip!");
-                  } else if (weightInPounds < 30) {
-                      System.out.println("bark. bark.");
-                  } else {
-                      System.out.println("woof!");
-                  }
-              }
-          }
-        #+end_src 
+           public Dog maxDog(Dog d2) {
+               if (this.weightInPounds > d2.weightInPounds) {
+                   return this;
+               }
+               return d2;
+           }
 
-        #+begin_src java :classname DogLauncher
-          public class DogLauncher {
-              public static void main(String[] args) {
-                  Dog d;
-                  d = new Dog();
-                  d.weightInPounds = 20;
-                  d.makeNoise();
-              }
-          }
-        #+end_src 
+       }
+      #+end_src 
+       
+     #+begin_src java :classname DogLauncher
+        public class DogLauncher {
+            public static void main(String[] args) {
+                Dog d = new Dog(100);
+                Dog d2 = new Dog(20);
+                d.maxDog(d,d2);
+                Dog.maxDog(d,d2);
+            }
+        }
+      #+end_src
+       
+     - Class method: ~public static Dog maxDog~.
+     - Instance method: ~public Dog maxDog~.
+***** Exercise 1.2.1: What would the following method do? If you're not sure, try it out.        
 
-******* Some key observations and terminology:
-        - ~Object~ in Java is an *instance* of any class.
-        - *Instance variables* or *non-static variables*: variables *must* be declared *inside the class* (new variables can be added at runtime in Python or Matlab).
-        - *Instance methods* or *non-static methods* (no ~static~ keyword): methods created in class.
-        - ~new~ to instantiate a ~class~.
-        - *Instantiated object* can be assinged to a *declared* variable of the appropriate type: ~d = new Dog()~ 
+      #+begin_src java :classname Dog
+        public class Dog {
+            public int weightInPounds;
 
-****** Constructors in Java
+            public Dog(int w) {
+                weightInPounds = w;
+            }
+
+            public static Dog maxDog(Dog d1, Dog d2) {
+                if (weightInPounds > d2.weightInPounds) {
+                    return this;
+                }
+                return d2;
+            }
+        }
+      #+end_src 
+       
+      ~javac Dog.java~ output: *non-static variable* this *cannot* be referenced from a *static context*.
+      
+***** Static Variables
+
+      #+begin_src java :classname Dog
+        public class Dog {
+            public int weightInPounds;
+            public static String binomen = "Canis familiaris";
+            ...
+        }
+      #+end_src 
+
+      - *Inherented* to *class it self* rather than the *instance* of class.
+      - Usage: ~Dog.binomen~, not ~d.binomen~.
+      - Java allows ~d.binomen~, a bad style. 
+****** Exercise 1.2.2: Complete this exercise:
 
        #+begin_src java :classname Dog
          public class Dog {
@@ -251,67 +407,114 @@
                      System.out.println("bark. bark.");
                  } else {
                      System.out.println("woof!");
-                 }    
+                 }
              }
-         }
-       #+end_src 
 
-       #+begin_src java :classname DogLauncher
-         public class DogLauncher {
-             public static void main(String[] args) {
-                 Dog d = new Dog(20);
-                 d.makeNoise();
+             public static Dog maxDog(Dog d1, Dog d2) {
+                 if (d1.weightInPounds > d2.weightInPounds) {
+                     return d1;
+                 }
+                 return d2;
              }
+
+             public Dog maxDog(Dog d2) {
+                 if (this.weightInPounds > d2.weightInPounds) {
+                     return this;
+                 }
+                 return d2;
+             }
+
          }
-       #+end_src 
+      #+end_src 
        
-       - *Constructors* can save the time and messiness of manually typing out potentially many *instance variable assignments*.
-       - The *constructor* with signature ~public Dog(int w)~ will be invoked anytime when ~new Dog(n)~.
-       - Similar to ~__init__~ in Python.
+       #+begin_src java :classname Dogloop
+         public class Dogloop {
+             public static void main(String[] args) {
+                 Dog smallDog = new Dog(5);
+                 Dog mediumDog = new Dog(25);
+                 Dog hugeDog = new Dog(150);
 
-****** Terminology Summary
-****** Array Instantiation, Arrays of Objects
-******* Array instantiation
+                 Dog[] manyDogs = new Dog[4];
+                 manyDogs[0] = smallDog;
+                 manyDogs[1] = hugeDog;
+                 manyDogs[2] = new Dog(130);
 
-        #+begin_src java :classname ArrayDemo
-          public class ArrayDemo {
-              public static void main(String[] args) {
-                  /* Create an array of five integers. */
-                  int[] someArray = new int[5];
-                  someArray[0] = 3;
-                  someArray[1] = 4;
-              }
-          }
-        #+end_src 
+                 int i = 0;
+                 while (i < manyDogs.length) {
+                     Dog.maxDog(manyDogs[i], mediumDog).makeNoise();
+                     i = i + 1;
+                 }
+             }
+         }
+      #+end_src
 
-******* Arrays of instantiated objects
+******* Env analysis and output
 
-        #+begin_src java :classname DogArrayDemo
-          public class DogArrayDemo {
-              public static void main(String[] args) {
-                  /* Create an array of two dogs. */
-                  Dog[] dogs = new Dog[2];
-                  dogs[0] = new Dog(8);
-                  dogs[1] = new Dog(20);
-
-                  /* Yipping will result, since dogs[0] has weight 8. */
-                  dogs[0].makeNoise();
-              }
-          }
-        #+end_src 
+        #+DOWNLOADED: /tmp/screenshot.png @ 2019-03-17 14:43:29
+        [[file:1.%20Introduction%20to%20Java/screenshot_2019-03-17_14-43-29.png]]
+       
+        #+begin_example
+          bark. bark.
+          woof!
+          woof!
+          Exception in thread "main" java.lang.NullPointerException
+                  at Dog.maxDog(Dog.java:19)
+                  at Dogloop.main(Dogloop.java:14)
+        #+end_example
         
-        Two different ~new~:
-        1. ~new Dog[2]~ to *create* an *array* that hold 2 ~Dog~ *objects(not instantiated)*.
-        2. ~new Dog(8)~ to *instantiate* each ~Dog~ *object*.
-***** Class Methods vs. Instance Methods
-      Java allows us to define 2 types of methods:
-      1. *Class methods*, a.k.a static methods.
-      2. *Instance methods*, a.k.a non-static methods.
-****** Static Variables
-***** public static void main(String[] args)
-****** Command Line Arguments
-****** Summing Command Line Arguments
-***** Using Libraries
-*** L2: Defining and Using Classes
+**** public static void main(String[] args)
+     ~public static void main(String[] args)~:
+     - ~public~: So far, all of *methods* start with ~public~.
+     - ~static~: ~static~ method, not associated with *any particular instance*.
+     - ~void~: No return type.
+     - ~main~: Method's name.
+     - ~String[] args~: A *para* passed to the ~main~ method.
+***** Command Line Args
+      Since ~main~ is called by the *Java interpreter itself(~javac~) rather than another Java class*, it is the *interpreter's job* to *supply these args*. They refer usually to the *command line arguments*. 
 
-    
+      #+begin_src java :classname 
+        public class ArgsDemo {
+            public static void main(String[] args) {
+                System.out.println(args[0]);
+            }
+        }
+      #+end_src 
+
+      #+begin_src sh 
+        java ArgsDemo these are command line args
+      #+end_src 
+
+      #+RESULTS:
+      : these
+
+      - ~args~ = ~{"these", "are", "command", "line", "args"}~
+***** Summing Command Line Arguments
+****** Exercise 1.2.3: try to write a program that sums up the command line arguments, assuming they are numbers. For a solution, see the webcast or the code provided on GitHub.
+
+       #+begin_src java :classname argsum
+         public class argsum {
+             public static void main(String[] args) {
+                 int i = 0;
+                 int sum = 0;
+                 while(i < args.length) {
+                     sum += Integer.parseInt(args[i]);
+                     i += 1;
+                 }
+                 System.out.print(sum);
+             }
+         }
+       #+end_src 
+
+       #+begin_src sh 
+         java argsum 1 2 3 4 5 6
+       #+end_src 
+
+       #+RESULTS:
+       : 21
+ 
+       - ~Integer.parseInt(String)~: Convert ~String~ to a *primitive* ~int~ and *return* it.
+**** Using Libraries
+** L2: Defining and Using Classes
+* 2. Lists
+** 2.1 Mystery of the Walrus
+*** Lists
