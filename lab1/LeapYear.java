@@ -32,7 +32,9 @@ public class LeapYear {
 
     /** 判断year是不是闰年*/
     public static boolean isLeapYear(int year) {
-        return (year % 400 == 0) ? (year % 400 == 0):(year % 4 == 0 && year % 100 != 0);
+        if (year % 400 == 0) {
+            return true;
+        } else return (year % 4 == 0 && year % 100 != 0);
     }
 }
 
