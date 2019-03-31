@@ -46,9 +46,6 @@
       }
     #+end_src 
 
-    #+RESULTS:
-    : 0 1 2 3 4 5 6 7 8 9
-
     *Some interesting features of this pg* 
     - Var x *must declared and given a type* before *used*.
     - Loop def in ~{}~, boolean expression in ~()~.
@@ -518,3 +515,153 @@
 * 2. Lists
 ** 2.1 Mystery of the Walrus
 *** Lists
+    ~List~ could easily change the number of object after the simulation had begun.
+**** The Mystery of the Walrus
+     
+     #+begin_src java :classname PollQuestions
+       public class PollQuestions {
+           public static void main(String[] args) {
+               Walrus a = new Walrus(1000, 8.3);
+               Walrus b;
+               b = a;
+               b.weight = 5;
+               System.out.println(a);
+               System.out.println(b);      
+
+               int x = 5;
+               int y;
+               y = x;
+               x = 2;
+               System.out.println("x is: " + x);
+               System.out.println("y is: " + y);      
+           }
+   
+           public static class Walrus {
+               public int weight;
+               public double tuskSize;
+      
+               public Walrus(int w, double ts) {
+                   weight = w;
+                   tuskSize = ts;
+               }
+
+               public String toString() {
+                   return String.format("weight: %d, tusk size: %.2f", weight, tuskSize);
+               }
+           }
+       }
+     #+end_src 
+
+***** Env analysis
+
+      #+DOWNLOADED: /tmp/screenshot.png @ 2019-03-19 23:37:17
+      [[file:2.%20Lists/screenshot_2019-03-19_23-37-17.png]]
+ 
+**** Bits
+     72 and 'H' both stored as 01001000 *in memory*, interpreter differs them by *type*.
+     8 primitive types of Java: byte, short, int, long, float, double, boolean, and char.
+
+     #+begin_src java :classname 
+       char c = 'H';
+       int x = c;
+       System.out.println(c);
+       System.out.println(x);
+     #+end_src 
+
+     #+begin_example output
+       H
+       72
+     #+end_example
+
+**** Declaring a Variable (Simplified)
+
+     #+begin_src java :classname 
+       int x;
+       double y;
+     #+end_src 
+
+     #+DOWNLOADED: /tmp/screenshot.png @ 2019-03-20 00:12:16
+     [[file:2.%20Lists/screenshot_2019-03-20_00-12-16.png]]
+
+     #+begin_src java :classname 
+       x = -1431195969;
+       y = 567213.112;
+     #+end_src 
+
+     #+DOWNLOADED: /tmp/screenshot.png @ 2019-03-20 00:12:55
+     [[file:2.%20Lists/screenshot_2019-03-20_00-12-55.png]]
+ 
+     - When you *declare* a variable of a certain type, Java finds a *contiguous* block with exactly enough bits to hold a thing of that type.
+     - In addition to setting aside memory, the Java interpreter also *creates an entry* in an *internal table* that *maps each variable name to the location of the first bit* in the box.
+     - the *exact memory address* is *below the level of abstraction accessible* to us in Java
+     - Java does not write anything into the *reserved* box when a variable is *declared*. Java compiler *prevents* you from using a variable until after the box has been filled with bits using the = operator.
+     - The *top* bits represent -1431195969, and the *bottom* bits represent 567213.112. 
+
+***** Simplified Box Notation
+
+      #+DOWNLOADED: /tmp/screenshot.png @ 2019-03-20 15:05:29
+      [[file:2.%20Lists/screenshot_2019-03-20_15-05-29.png]]
+ 
+**** The Golden Rule of Equals (GRoE)
+     In Java, ~=~ for *any* assignment means *interpreter copying bits* from A into B.
+**** Reference Types
+     - ~primitive type~: ~byte~, ~short~, ~int~, ~long~, ~float~, ~double~, ~boolean~, ~char~.
+     - ~reference type~: Everything else, including arrays.  
+***** Object Instantiation
+
+      #+begin_src java :classname 
+        public static class Walrus {
+            public int weight;
+            public double tuskSize;
+
+            public Walrus(int w, double ts) {
+                weight = w;
+                tuskSize = ts;
+            }
+        }
+      #+end_src 
+      
+      Use ~new Walrus(1000, 8.3)~ 
+
+      #+DOWNLOADED: /tmp/screenshot.png @ 2019-03-31 23:08:50
+      [[file:2.%20Lists/screenshot_2019-03-31_23-08-50.png]]
+ 
+      In *real implementations* of the Java programming language, there is actually some *additional overhead* for any object, so a Walrus takes somewhat more than 96 bits. 
+***** Reference Variable Declaration
+      When a variable of *any reference type declared*, Java allocates *a box of 64 bits* to store the *address(fist bit)* of the variable *in memory*.
+
+      1. ~Walrus someWalrus~: Creating a *box of 64 bits*.
+      2. ~someWalrus = new Walrus(1000, 8.3)~: Creating a new ~Walrus~ and return its *address* by the ~new~ operator.
+         - If Walrus ~weight~ is stored starting at bit ~5051956592385990207~ and ~tuskSize~ at ~5051956592385990239~ (more 32 bits than ~weight~, which is ~int~):
+          
+           #+DOWNLOADED: /tmp/screenshot.png @ 2019-03-31 23:39:47
+           [[file:2.%20Lists/screenshot_2019-03-31_23-39-47.png]]
+          
+         - Assigning ~null~ to a *reference variable* (such as ~someWalrus~):
+
+           #+DOWNLOADED: /tmp/screenshot.png @ 2019-03-31 23:41:47
+           [[file:2.%20Lists/screenshot_2019-03-31_23-41-47.png]]
+ 
+***** Box and Pointer Notation
+       
+      #+DOWNLOADED: /tmp/screenshot.png @ 2019-03-31 23:45:22
+      [[file:2.%20Lists/screenshot_2019-03-31_23-45-22.png]]
+ 
+***** Resolving the Mystery of the Walrus
+
+      #+begin_src java :classname 
+        Walrus a = new Walrus(1000, 8.3);
+        Walrus b;
+        b = a;
+      #+end_src 
+
+      #+DOWNLOADED: /tmp/screenshot.png @ 2019-04-01 00:28:59
+      [[file:2.%20Lists/screenshot_2019-04-01_00-28-59.png]]
+ 
+**** Parameter Passing
+***** Test Your Understanding
+**** Instantiation of Arrays
+***** The Law of the Broken Futon
+**** IntLists
+***** size and iterativeSize
+***** get

@@ -13,7 +13,7 @@
 **** Tracked vs. Untracked Files
 
      #+DOWNLOADED: /tmp/screenshot.png @ 2019-03-08 15:59:57
-     [[file:Lab%201:%20javac,%20java,%20git/screenshot_2019-03-08_15-59-57.png]]
+     [[file:lab01/screenshot_2019-03-08_15-59-57.png]]
 
      TWo main categories: *untracked files* and *tracked files*.
      ~git status~: Determining the exact status(untracked, unmodified, modified staged) of each file in your repository.
@@ -51,3 +51,26 @@
      git checkout 39e3c4ec06c95d57fda6e8d18e32cdcb05a9bb6e ./61b.txt
    #+end_src 
 
+** F. Leap Year
+*** Style
+    #+begin_example
+      Running style check on 2 files...
+      LeapYear.java:37:9: '}' at column 9 should be on the same line as the next part of a multi-block statement (one that directly contains multiple blocks: if/else-if/else, do/while or try/catch/finally). [RightCurly]
+      LeapYear.java:38:14: Conditional logic can be removed. [SimplifyBooleanReturn]
+      LeapYear.java:40:9: '}' at column 9 should be on the same line as the next part of a multi-block statement (one that directly contains multiple blocks: if/else-if/else, do/while or try/catch/finally). [RightCurly]
+      HelloNumbers.java:0: File does not end with a newline. [NewlineAtEndOfFile]
+    #+end_example
+     
+    #+begin_src java :classname 
+      // before
+      if (year % 400 == 0) {
+          return true;
+      } else {
+          return (year % 4 == 0 && year % 100 != 0);
+      }
+      // after
+      if (year % 400 == 0) {
+          return true;
+      } else return (year % 4 == 0 && year % 100 != 0);
+
+    #+end_src 
