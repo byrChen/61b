@@ -1,4 +1,4 @@
-* Lab 1: javac, java, git
+* Lab 1 javac, java, git
 ** Using Git
 *** B. Local Repositories (Narrative Introduction)
    - ~git init~: Creates a box in which to permanently store panoramic pictures.
