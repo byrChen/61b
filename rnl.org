@@ -1,3 +1,5 @@
+#+TAGS: QUESTIONS(q) OUTSTANDING(o)
+
 * 1. Introduction to Java
 ** 1.1 Essentials
 *** Hello World 
@@ -150,7 +152,6 @@
     - In java, java code is *part of a class*, funcs must defed *belong to some class* and called *methods*.
     - ~def~ in python, ~public static~ in java.  
 *** Style Guide
-** L1: Intro, Hello World Java
 ** 1.2 Objects
 *** Defining and Using Classes
 **** Static vs. Non-Static Methods
@@ -230,7 +231,6 @@
        - *Instance methods* or *non-static methods* (no ~static~ keyword): methods created in class.
        - ~new~ to instantiate a ~class~.
        - *Instantiated object* can be assinged to a *declared* variable of the appropriate type: ~d = new Dog()~ 
-
 ***** Constructors in Java
 
       #+begin_src java :classname Dog
@@ -511,7 +511,6 @@
  
        - ~Integer.parseInt(String)~: Convert ~String~ to a *primitive* ~int~ and *return* it.
 **** Using Libraries
-** L2: Defining and Using Classes
 * 2. Lists
 ** 2.1 Mystery of the Walrus
 *** Lists
@@ -658,6 +657,8 @@
       #+DOWNLOADED: /tmp/screenshot.png @ 2019-04-01 00:28:59
       [[file:2.%20Lists/screenshot_2019-04-01_00-28-59.png]]
  
+***** Question:                                                   :QUESTIONS:
+      1. ~primitive type~ 变量存的是值而 ~reference type~ 变量存的是地址？
 **** Parameter Passing
 ***** Test Your Understanding
 ****** Exercise 2.1.1
@@ -683,8 +684,96 @@
        ~doStuff~ has an effect on only ~walrus~, not ~x~.
 
 **** Instantiation of Arrays
-***** The Law of the Broken Futon
+
+      #+begin_src java :classname 
+        int[] x; //declaration
+        Planet[] planets;
+        x = new int[]{0, 1, 2, 95, 4}; //instantiate
+      #+end_src 
+
+      - *Declaration* ~type[] x~ (~type~ can be ~primitive~ or ~reference~): creating memory boxes of *64 bits* to store *addresses*.
+      - *Instantiation* ~x = new type[]{...}~: creating boxes of 32 bits each and returns the address of the overall object (this list) for assignment to x
+
 **** IntLists
+
+     #+begin_src java :classname 
+       public class IntList {
+           public int first;
+           public IntList rest;        
+
+           public IntList(int f, IntList r) {
+               first = f;
+               rest = r;
+           }
+       }
+     #+end_src 
+     
+     to make a list of numbers 5, 10, and 15.
+
+     #+begin_src java :classname 
+       // build forwards
+       IntList L = new IntList(5, null);
+       L.rest = new IntList(10, null);
+       L.rest.rest = new IntList(15, null);
+       // or backwards
+       IntList L = new IntList(15, null);
+       L = new IntList(10, L);
+       L = new IntList(5, L);
+     #+end_src 
+
+     above code is ugly and prone to errors -> adopt the *usual object oriented* programming strategy of *adding helper methods* to class to perform basic tasks
 ***** size and iterativeSize
+
+     #+begin_src java :classname 
+       public int size() {
+           if (rest == null) {
+               return 1;
+           }
+           return 1 + this.rest.size();
+       }
+       //iterative size
+       public int iterativeSize() {
+           IntList p = this;
+           int totalSize = 0;
+           while (p != null) {
+               totalSize += 1;
+               p = p.rest;
+           }
+           return totalSize;
+       }
+     #+end_src 
+ 
+     - ~if (this == null) return 0;~ leads to ~NullPointer error~
+     - use ~p~ for ~pointer~ in ~iterativeSize~ as ~this~ *can't be reassigned* in Java.    
 ***** get
-      
+
+      #+begin_src java :classname 
+        public class IntList {
+            public int first;
+            public IntList rest;
+
+            public IntList(int f, IntList r) {
+                first = f;
+                rest = r;
+            }
+
+            public int get(int i) {
+                if (i == 0) {
+                    return first;
+                }
+                return rest.get(i - 1);
+            }
+        }
+      #+end_src 
+
+***** Question:                                                   :QUESTIONS:
+      1. 如果获取函数 ~get(-1)~ 该怎么处理
+* 3. Testing
+** 3.1 A New Way
+* 4. Inheritance, Implements
+
+
+
+* 1. Intro, Hello World Java
+* 2. Defining and Using Classes
+
