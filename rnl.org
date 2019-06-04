@@ -722,7 +722,7 @@
      #+end_src 
 
      above code is ugly and prone to errors -> adopt the *usual object oriented* programming strategy of *adding helper methods* to class to perform basic tasks
-***** size and iterativeSize
+***** size and iterativeSize (helper methods)
 
      #+begin_src java :classname 
        public int size() {
@@ -768,10 +768,262 @@
 
 ***** Question:                                                   :QUESTIONS:
       1. 如果获取函数 ~get(-1)~ 该怎么处理
+** 2.2 The SLLists
+*** SLLists
+    ~IntList~ is a *naked recursive* data structure 
+**** Improvement #1: Rebranding
+
+     #+begin_src java :classname 
+       public class IntNode {
+           public int item;
+           public IntNode next;
+
+           public IntNode(int i, IntNode n) {
+               item = i;
+               next = n;
+           }
+       }
+     #+end_src 
+
+**** Improvement #2: Bureaucracy
+
+     #+begin_src java :classname 
+       public class SLList {
+           public IntNode first;
+
+           public SLList(int x) {
+               first = new IntNode(x, null);
+           }
+       }
+     #+end_src 
+
+     #+begin_src java :classname 
+       IntList L1 = new IntList(5, null);
+       SLList L2  = new SLList(5);
+     #+end_src 
+     
+     ~SLList~ *hides* the detail that there exists a *null link* from the user 
+**** addFirst and getFirst
+
+     #+begin_src java :classname 
+       public class SLList {
+           public IntNode first;
+
+           public SLList(int x) {
+               first = new IntNode(x, null);
+           }
+
+           /** Adds an item to the front of the list. */
+           public void addFirst(int x) {
+               first = new IntNode(x, first);
+           }
+
+           public int getFirst() {
+               return first.item;
+           }
+       }
+     #+end_src 
+
+     #+begin_src java :classname 
+       // IntList
+       IntList L = new IntList(15, null);
+       L = new IntList(10, L);
+       L = new IntList(5, L);
+       int x = L.first;
+       // SLList 
+       SLList L = new SLList(15);
+       L.addFirst(10);
+       L.addFirst(5);
+       int x = L.getFirst()
+     #+end_src 
+
+     #+DOWNLOADED: /tmp/screenshot.png @ 2019-05-30 23:43:42
+     [[file:2._Lists/screenshot_2019-05-30_23-43-42.png]]
+
+     - ~SLList~ class acts as a *middleman* between the *list user* and the *naked recursive data structure*
+     - ~IntList~ user may have a potentially *undesireable* possibility to have *extra* variables that point to the middle of the ~IntList~
+      
+       #+begin_src java :classname 
+         IntList L = new IntList(15, null);
+         L2 = new IntList(10, L);
+         L1 = new IntList(5, L2);
+       #+end_src 
+
+***** Exercise 2.2.1: Try to write an ~addFirst~ method to the ~IntList~ class (tricky as well as inefficient)
+      
+      #+begin_src java :classname 
+        public class IntList {
+            public int first;
+            public IntList rest;        
+
+            public IntList(int f, IntList r) {
+                first = f;
+                rest = r;
+            }
+
+            public void addFirst(int x, IntList L) {
+                rest = L;
+                first = x;
+            }
+        }
+      #+end_src 
+
+      #+begin_src java :classname 
+        L = new IntList(15, null);
+        L.addFirst(10, L);
+        L.addFirst(5, L);
+        int x = L.first
+      #+end_src 
+
+**** Improvement #3: Public vs. Private
+     ~SLList~ can be *bypassed* and the *raw power* of *naked data structure* (with all its dangers) can be accessed. A programmer can easily modify the list *directly*, without going through the *kid-tested*, *mother-approved* ~addFirst~ method, for example:
+
+     #+begin_src java :classname 
+       SLList L = new SLList(15);
+       L.addFirst(10);
+       L.first.next.next = L.first.next;
+     #+end_src 
+
+     #+DOWNLOADED: /tmp/screenshot.png @ 2019-05-31 00:15:38
+     [[file:2._Lists/screenshot_2019-05-31_00-15-38.png]]
+     
+     - This results in a malformed list with an infinite loop -> to deal with, change ~public IntNode first~ to ~private IntNode first~
+     - *Private* variables and methods can only be accessed by code inside the *same* ~.java~ file
+ 
+**** Improvement #4: Nested Classes
+
+
+     #+begin_src java :classname 
+       public class SLList {
+           public static class IntNode {
+               public int item;
+               public IntNode next;
+               public IntNode(int i, IntNode n) {
+                   item = i;
+                   next = n;
+               }
+           }
+
+           private IntNode first;
+           ...
+     #+end_src 
+
+     - ~static~ means that *methods* inside the ~static~ class can not access any of the *members* of the *enclosing class*
+***** Exercise 2.2.2
+      
+      #+begin_src java :classname 
+        /** A rather contrived exercise to test your understanding of when
+            nested classes may be made static. This is NOT an example of good
+            class design, even after you fix the bug.
+
+            The challenge with this file is to delete the keyword static the
+            minimum number of times so that the code compiles.
+
+            Guess before TRYING to compile, otherwise the compiler will spoil
+            the problem.*/
+        public class Government {
+          private int treasury = 5;
+
+          private void spend() {
+            treasury -= 1;
+          }
+
+          private void tax() {
+            treasury += 1;
+          }
+
+          public void report() {
+            System.out.println(treasury);
+          }
+
+          public static Government greaterTreasury(Government a, Government b) {
+            if (a.treasury > b.treasury) {
+              return a;
+            }
+            return b;
+          }
+
+          public static class Peasant {
+            public void doStuff() {
+              System.out.println("hello");			
+            }
+          }
+
+          public static class King { 
+            public void doStuff() {
+              spend();			
+            }
+          }
+
+          public static class Mayor {
+            public void doStuff() {
+              tax();			
+            }
+          }
+
+          public static class Accountant {
+            public void doStuff() {
+              report();			
+            }
+          }
+
+          public static class Thief {
+            public void doStuff() {
+              treasury = 0;			
+            }
+          }
+
+          public static class Explorer {
+            public void doStuff(Government a, Government b) {
+              Government favorite = Government.greaterTreasury(a, b);
+              System.out.println("The best government has treasury " + favorite.treasury);			
+            }
+          }
+        }
+      #+end_src 
+      
+      - Extra ~static class~: ~King~, ~Mayor~, ~Accountant~, ~Thief~
+      - ~Explorer~ is ok because it accesses ~greaterTreasury~ and ~treasury~ through ~Government favorite~, instead of *directly*.    
+
+      
+**** addLast() and size()
+     - ~addLast~ 
+     #+begin_src java :classname 
+       /** Adds an item to the end of the list. */
+       public void addLast(int x) {
+           IntNode p = first;
+
+           /* Advance p to the end of the list. */
+           while (p.next != null) {
+               p = p.next;
+           }
+           p.next = new IntNode(x, null);
+       }
+     #+end_src 
+     
+     #+begin_src java :classname 
+       /** Returns the size of the list starting at IntNode p. */
+       private static int size(IntNode p) {
+           if (p.next == null) {
+               return 1;
+           }
+
+           return 1 + size(p.next);
+       }
+     #+end_src 
+
+     #+begin_src java :classname 
+       public int size() {
+           return size(first);
+       }
+     #+end_src 
+
+
+
+
 * 3. Testing
 ** 3.1 A New Way
 * 4. Inheritance, Implements
-
 
 
 * 1. Intro, Hello World Java
