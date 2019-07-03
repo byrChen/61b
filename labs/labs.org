@@ -74,3 +74,88 @@
       } else return (year % 4 == 0 && year % 100 != 0);
 
     #+end_src 
+* Lab 2 Unit Testing with JUnit and IntLists 
+** Application: IntLists
+   #+begin_src java :classname 
+     public static void dSquareList(IntList L) {
+
+         while (L != null) {
+             L.first = L.first * L.first;
+             L = L.rest;
+         }
+     }
+
+     /**
+      ,* Returns a list equal to L with all elements squared. Non-destructive.
+      ,*/
+     public static IntList squareListIterative(IntList L) {
+         if (L == null) {
+             return null;
+         }
+         IntList res = new IntList(L.first * L.first, null);
+         IntList ptr = res;
+         L = L.rest;
+         while (L != null) {
+             ptr.rest = new IntList(L.first * L.first, null);
+             L = L.rest;
+             ptr = ptr.rest;
+         }
+         return res;
+     }
+
+     /**
+      ,* Returns a list equal to L with all elements squared. Non-destructive.
+      ,*/
+     public static IntList squareListRecursive(IntList L) {
+         if (L == null) {
+             return null;
+         }
+         return new IntList(L.first * L.first, squareListRecursive(L.rest));
+     }
+
+     /** DO NOT MODIFY ANYTHING ABOVE THIS LINE! */
+
+
+     /**
+      ,* Returns a list consisting of the elements of A followed by the
+      ,* *  elements of B.  May modify items of A. Don't use 'new'.
+      ,*/
+
+     public static IntList dcatenate(IntList A, IntList B) {
+         //TODO:  fill in method
+         if (A == null){
+             return B;
+         }
+         else {
+             IntList C = A;
+             while (C.rest != null){
+                 C = C.rest;
+             }
+             C.rest = B;
+             return A;
+         }
+
+     }
+
+     /**
+      ,* Returns a list consisting of the elements of A followed by the
+      ,* * elements of B.  May NOT modify items of A.  Use 'new'.
+      ,*/
+     public static IntList catenate(IntList A, IntList B) {
+         //TODO:  fill in method
+          if (A == null){
+             return B;
+          }
+          else {
+              IntList C = new IntList(A.first, null);
+              IntList D = C;
+              while (A.rest != null) {
+                  D.rest = new IntList(A.rest.first, null);
+                  D = D.rest;
+                  A = A.rest;
+              }
+              D.rest = B;
+              return C;
+          }
+     }
+   #+end_src 
