@@ -1,30 +1,19 @@
 * HW0
 ** Creative Exercise 1a: Drawing a Triangle
-
    #+begin_src java :classname Test
      class Test {
          public static void main(String[] args) {
              String a = "*";
              int b = 1;
-             while (b<6) {
+             while (b < 6) {
                  System.out.println(a);
                  b = b + 1;
                  a = a + "*";
              }
          }
      }
-
      #+end_src
-
-     #+RESULTS:
-     | *     |
-     | **    |
-     | ***   |
-     | ****  |
-     | ***** |
-
 ** Creative Exercise 1b: DrawTriangle
-
    #+begin_src java :classname Test
      public class Test {
          public static void drawTriangle(int N) {
@@ -42,21 +31,8 @@
          }
      }
    #+end_src 
-
-   #+RESULTS:
-   | *          |
-   | **         |
-   | ***        |
-   | ****       |
-   | *****      |
-   | ******     |
-   | *******    |
-   | ********   |
-   | *********  |
-   | ********** |
-
+   - ~public static void drawTriangle(int N)~ 
 ** Arrays
-
    #+begin_src java :classname 
      int[] numbers = new int[3];
      numbers[0] = 4;
@@ -67,9 +43,7 @@
      System.out.println(numbers[1]);
      System.out.println(numbers.length);
    #+end_src 
-   
 ** Exercise 2
-
    #+begin_src java :classname Test 
      public class Test {
          public static int max(int[] m) {
@@ -89,12 +63,8 @@
          }
      }
      #+end_src
-
-     #+RESULTS:
-     : 22
-
+     - ~public static int max(int[] m)~ 
 ** Exercise 3
-
    #+begin_src java :classname Test
      public class Test {
          public static int max(int[] m) {
@@ -113,10 +83,7 @@
          }
      }
    #+end_src 
-
-   #+RESULTS:
-   : 22
-
+   - ~while () {}~ and ~for ( ; ; ) {}~ 
 ** Break and Continue
    #+begin_src java :classname Test
      public class Test {
@@ -134,21 +101,7 @@
          }
      }
    #+end_src 
-
-   #+RESULTS:
-   | cat     |
-   | cat     |
-   | cat     |
-   | dog     |
-   | dog     |
-   | dog     |
-   | ketchup |
-   | ketchup |
-   | ketchup |
-   | horbse  |
-   | horbse  |
-   | horbse  |
-
+   - ~continue;~ 
    #+begin_src java :classname Test
      public class Test {
          public static void main(String[] args) {
@@ -165,64 +118,43 @@
          }
      }
    #+end_src 
-
-   #+RESULTS:
-   | cat     |       |
-   | cat     |       |
-   | cat     |       |
-   | dog     |       |
-   | dog     |       |
-   | dog     |       |
-   | laser   | horse |
-   | ketchup |       |
-   | ketchup |       |
-   | ketchup |       |
-   | horse   |       |
-   | horbse  |       |
-   | horbse  |       |
-   | horbse  |       |
-
+   - ~break;~ 
 ** Optional: Exercise 4
-
-#+begin_src java :classname Test
-  public class Test {
-      public static void windowPosSum(int[] a, int n) {
-          for (int i = 0; i < a.length; i += 1) {
-              int b = i + n + 1;
-              if (b > a.length)
-                  b = a.length;
-              for (int j = i + 1; j < b; j += 1) {
-                  if (j > a.length + 1) {
-                      break;
-                  }
-                  if (a[j] > 0) {
-                      a[i] += a[j];
-                  }
-                  else {
-                      continue;
-                  }
-              }
-          }
-          /** your code here */
-      }
-
-      public static void main(String[] args) {
-          int[] a = {1, 2, -3, 4, 5, 4};
-          int n = 3;
-          windowPosSum(a, n);
-
-          // Should print 4, 8, -3, 13, 9, 4
-          System.out.println(java.util.Arrays.toString(a));
-      }
-  }
-
-#+end_src 
-
-#+RESULTS:
-| [7 | 11 | 10 | 13 | 9 | 4] |
-
+   #+begin_src java :classname Test
+     public class Test {
+         public static void windowPosSum(int[] a, int n) {
+             for (int i = 0; i < a.length; i += 1) {
+                 int b = i + n + 1;
+                 if (b > a.length)
+                     b = a.length;
+                 for (int j = i + 1; j < b; j += 1) {
+                     if (j > a.length + 1) {
+                         break;
+                     }
+                     if (a[j] > 0) {
+                         a[i] += a[j];
+                     }
+                     else {
+                         continue;
+                     }
+                 }
+             }
+             /** your code here */
+         }
+   
+         public static void main(String[] args) {
+             int[] a = {1, 2, -3, 4, 5, 4};
+             int n = 3;
+             windowPosSum(a, n);
+   
+             // Should print 4, 8, -3, 13, 9, 4
+             System.out.println(java.util.Arrays.toString(a));
+         }
+     }
+   #+end_src 
+   - ~for (int i = 0; i < a.length; i += 1) {}~ and ~for (int j = i + 1; j < b; j += 1) {}~
+   - ~int b = i + n + 1;~ 
 ** The Enhanced For Loop
-
    #+begin_src java :classname Test
      public class Test {
          public static void main(String[] args) {
@@ -239,20 +171,4 @@
          }
      }
    #+end_src 
-
-   #+RESULTS:
-   | cat     |       |
-   | cat     |       |
-   | cat     |       |
-   | dog     |       |
-   | dog     |       |
-   | dog     |       |
-   | laser   | horse |
-   | ketchup |       |
-   | ketchup |       |
-   | ketchup |       |
-   | horse   |       |
-   | horbse  |       |
-   | horbse  |       |
-   | horbse  |       |
-
+   - ~for (String s : a) {}~ 

@@ -77,6 +77,9 @@
 * Lab 2 Unit Testing with JUnit and IntLists 
 ** Application: IntLists
    #+begin_src java :classname 
+     /**
+      ,* Returns a list equal to L with all elements squared. Destructive.
+      ,*/
      public static void dSquareList(IntList L) {
 
          while (L != null) {
@@ -121,7 +124,7 @@
       ,* *  elements of B.  May modify items of A. Don't use 'new'.
       ,*/
 
-     public static IntList dcatenate(IntList A, IntList B) {
+     public static IntList dcatenateIterative(IntList A, IntList B) {
          //TODO:  fill in method
          if (A == null){
              return B;
@@ -137,11 +140,23 @@
 
      }
 
+     public static IntList dcatenateRecursive(IntList A, IntList B) {
+         //TODO:  fill in method
+         if (A == null){
+             return B;
+         }
+         else {
+             IntList C = dcatenateIterative(A.rest, B);
+             A.rest = C;
+             return A;
+         }
+     }
+
      /**
       ,* Returns a list consisting of the elements of A followed by the
       ,* * elements of B.  May NOT modify items of A.  Use 'new'.
       ,*/
-     public static IntList catenate(IntList A, IntList B) {
+     public static IntList catenateIterative(IntList A, IntList B) {
          //TODO:  fill in method
           if (A == null){
              return B;
@@ -158,4 +173,26 @@
               return C;
           }
      }
+
+
+     /**
+      ,* Returns a list consisting of the elements of A followed by the
+      ,* * elements of B.  May NOT modify items of A.  Use 'new'.
+      ,*/
+     public static IntList catenateRecursive(IntList A, IntList B) {
+         //TODO:  fill in method
+          if (A == null){
+             return B;
+          }
+          else {
+              IntList C = new IntList(A.first, catenateIterative(A.rest, B));
+              return C;
+          }
+     }
    #+end_src 
+   - Destructive: no ~new IntList~ 
+     - Iterative: ~IntList B = A~ and ~while (B...) {}~
+     - Recursive: ~IntList B = recursivefunc(A...)~ 
+   - Non-destructive: use ~new IntList~ 
+     - Iterative: ~IntList B = new IntList()~ and ~IntList C = B~
+     - Recursive: ~IntList B = new IntList(recursivefunc(A...)...)~ 

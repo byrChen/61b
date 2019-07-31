@@ -1327,8 +1327,6 @@
 ***** Question:                                                   :QUESTIONS:
       1. 那两个运行时定义类成员的例子是什么意思？
       2. 运行时定义 ~array~ 值也是不好的风格？ 
-
-
 **** Appendix: Java Arrays vs. Other Languages
      - Have no special syntax for *"slicing"* (such as in Python).
      - Cannot be *shrunk or expanded* (such as in Ruby).
