@@ -1,1 +1,26 @@
 * Proj 0 NBody
+** Writing the Body Class
+*** calcDistance
+    #+begin_src java :classname 
+      public double calcDistance(Body b ) {
+          double d = Math.sqrt(Math.pow(xxPos - b.xxPos, 2) + Math.pow(yyPos - b.yyPos, 2));
+          return d;
+      }
+    #+end_src 
+    - ~Math.sqrt(a)~ and ~Math.pow(b, n)~ 
+*** calcNetForceExertedByX and calcNetForceExertedByY
+    #+begin_src java :classname 
+      public double calcNetForceExertedByX(Body[] b) {
+          double NetForceByX = 0.0;
+          for (Body body : b) {
+              if (!this.equals(body)) {
+                  NetForceByX += this.calcForceExertedByX(body);
+              }
+          }
+          return NetForceByX;
+      }
+    #+end_src 
+    - ~calcForceExertedByX(Body[] b)~
+    - ~for (Body body : b) {}~
+    - ~if (!this.equals(body))~ 
+
