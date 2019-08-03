@@ -23,4 +23,60 @@
     - ~calcForceExertedByX(Body[] b)~
     - ~for (Body body : b) {}~
     - ~if (!this.equals(body))~ 
+** (Optional) Testing Your Body Class
+  #+begin_src java :classname 
+    public class TestBody {
 
+        public static void main(String[] args) {
+            checkBody();
+        }
+
+        private static void checkEquals(double expected, double actual, String label, double eps){
+            if (Double.isNaN(actual) || Double.isInfinite(actual)) {
+                System.out.println("FAIL: " + label
+                                   + ": Expected " + expected + " and you gave " + actual);
+            } else if (expected == actual) {
+                System.out.println("PASS: " + label
+                                   + ": Expected " + expected + " and you gave " + actual);
+            } else {
+                System.out.println("FAIL: " + label
+                                   + ": Expected " + expected + " and you gave " + actual);
+            }
+        }
+
+        private static void checkBody(){
+            Body b1 = new Body(1.0, 1.0, 3.0, 4.0, 5.0, "jupiter.gif");
+            Body b2 = new Body(2.0, 1.0, 3.0, 4.0, 4e11, "jupiter.gif");
+            checkEquals(133.4, b1.calcForceExertedBy(b2), "Pairwise Force", 0.01);
+        }
+    }
+  #+end_src 
+  - ~private static void~
+  - ~Double.isNaN~ and ~Double.isInfinite~ first to guarantee ~==~ working
+  - ~": Expected " + expected~ returns ~String~, ~int~ can be converted to ~String~
+  - ~eps~ for ~==~ 
+** Getting Started with the Simulator (NBody.java)
+*** readBodies
+    #+begin_src java :classname 
+      public static Body[] readBodies(String filePath) {
+          In in = new In(filePath);
+          int firstItemInFile = in.readInt();
+          double radius = in.readDouble();
+          Body[] b = new Body[5];
+          for (int i = 0; i < 5; i++) {
+              double xxPos = in.readDouble();
+              double yyPos = in.readDouble();
+              double xxVel = in.readDouble();
+              double yyVel = in.readDouble();
+              double mass = in.readDouble();
+              String imgFileName = in.readString();
+              b[i] = new Body(xxPos, yyPos, xxVel, yyVel, mass, imgFileName);
+          }
+          return b;
+      }
+    #+end_src 
+    - ~public static Body[] readBodies~
+    - ~Body[] b = new Body[5]~
+    - ~b[i] = new Body(xxPos, yyPos, xxVel, yyVel, mass, imgFileName)~ 
+
+** Drawing the Initial Universe State (main)

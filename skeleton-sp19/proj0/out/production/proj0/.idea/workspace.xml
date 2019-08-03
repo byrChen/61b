@@ -2,10 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f3281196-0be0-40dc-9760-24c2ec1ac62c" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../lab2/DebugPractice/DebugExercise1.java" beforeDir="false" afterPath="$PROJECT_DIR$/../lab2/DebugPractice/DebugExercise1.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lab2/DebugPractice/DebugExercise2.java" beforeDir="false" afterPath="$PROJECT_DIR$/../lab2/DebugPractice/DebugExercise2.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lab2/Intlist/IntList.java" beforeDir="false" afterPath="$PROJECT_DIR$/../lab2/Intlist/IntList.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lab2/Intlist/IntListTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../lab2/Intlist/IntListTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TestBody.java" beforeDir="false" afterPath="$PROJECT_DIR$/TestBody.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -13,8 +12,26 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="GroovyConsoleState">
+    <option name="list">
+      <list>
+        <Entry>
+          <option name="url" value="file://$APPLICATION_CONFIG_DIR$/consoles/groovy/groovy_console.groovy" />
+          <option name="moduleName" value="proj0" />
+          <option name="title" value="proj0 (Bundled Groovy 2.4.17)" />
+        </Entry>
+      </list>
+    </option>
   </component>
   <component name="ProjectId" id="1OkyegbvbclxHWh6iOvvrcvSFa3" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -47,7 +64,14 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.TestBody">
+    <configuration name="TestBody" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="TestBody" />
+      <module name="proj0" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="TestCalcDistance" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="TestCalcDistance" />
       <module name="proj0" />
@@ -57,6 +81,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.TestBody" />
         <item itemvalue="Application.TestCalcDistance" />
       </list>
     </recent_temporary>
@@ -75,7 +100,16 @@
       <workItem from="1564536032390" duration="1277000" />
       <workItem from="1564537359017" duration="2072000" />
       <workItem from="1564576643853" duration="4547000" />
-      <workItem from="1564618426903" duration="1907000" />
+      <workItem from="1564618426903" duration="4867000" />
+      <workItem from="1564634974969" duration="6990000" />
+      <workItem from="1564658478321" duration="5478000" />
+      <workItem from="1564677837648" duration="92000" />
+      <workItem from="1564677932685" duration="166000" />
+      <workItem from="1564678449814" duration="5000" />
+      <workItem from="1564705766880" duration="3984000" />
+      <workItem from="1564729150665" duration="3703000" />
+      <workItem from="1564744170197" duration="1152000" />
+      <workItem from="1564793694075" duration="3663000" />
     </task>
     <servers />
   </component>
@@ -94,5 +128,10 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$/.." />
+    </ignored-roots>
   </component>
 </project>
