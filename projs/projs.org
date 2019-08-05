@@ -62,14 +62,15 @@
           In in = new In(filePath);
           int firstItemInFile = in.readInt();
           double radius = in.readDouble();
-          Body[] b = new Body[5];
-          for (int i = 0; i < 5; i++) {
+          int N = 25;
+          Body[] b = new Body[N];
+          for (int i = 0; i < N; i++) {
               double xxPos = in.readDouble();
               double yyPos = in.readDouble();
               double xxVel = in.readDouble();
               double yyVel = in.readDouble();
               double mass = in.readDouble();
-              String imgFileName = in.readString();
+              String imgFileName = "./images/" + in.readString();
               b[i] = new Body(xxPos, yyPos, xxVel, yyVel, mass, imgFileName);
           }
           return b;
@@ -78,5 +79,51 @@
     - ~public static Body[] readBodies~
     - ~Body[] b = new Body[5]~
     - ~b[i] = new Body(xxPos, yyPos, xxVel, yyVel, mass, imgFileName)~ 
-
 ** Drawing the Initial Universe State (main)
+   #+begin_src java :classname 
+     public static void main(String[] args) {
+         double T = Double.parseDouble(args[0]);
+         double dt = Double.parseDouble(args[1]);
+         String filename = args[2];
+         double radius = readRadius(filename);
+         Body[] bodies = readBodies(filename);
+         String backgroud = "./images/starfield.jpg";
+         StdDraw.setScale(-radius, radius);
+         StdDraw.enableDoubleBuffering();
+         int N = 25;
+         Double[] xForces = new Double[N];
+         Double[] yForces = new Double[N];
+         for (double i = 0; i < T; i = i + dt) {
+             StdDraw.clear();
+             for (int j = 0; j < N; j++) {
+                 xForces[j] = bodies[j].calcNetForceExertedByX(bodies);
+                 yForces[j] = bodies[j].calcNetForceExertedByY(bodies);
+             }
+             for (int j = 0; j < N; j++) {
+                 bodies[j].update(dt, xForces[j], yForces[j]);
+             }
+             StdDraw.picture(0, 0, backgroud);
+             for (Body b : bodies) {
+                 b.draw();
+             }
+             StdDraw.show();
+             StdDraw.pause(20);
+         }
+     }
+
+     StdOut.printf("%d\n", bodies.length);
+     StdOut.printf("%.2e\n", radius);
+     for (int i = 0; i < bodies.length; i++) {
+         StdOut.printf("%11.4e %11.4e %11.4e %11.4e %11.4e %12s\n",
+                       bodies[i].xxPos, bodies[i].yyPos, bodies[i].xxVel,
+                       bodies[i].yyVel, bodies[i].mass, bodies[i].imgFileName);
+     }
+   #+end_src 
+   - ~Double.parseDouble(String)~ 
+   - ~Class[] var = new Class[N]~
+   - ~StdDraw~ and ~StdOut~
+   - ~StdOut.printf()~
+*** Question:                                                     :QUESTIONS:
+    1. ~StdOut~ 和 ~System.out~ 异同？对比c++里的 ~cout~ 和 ~stdout~ 
+   
+

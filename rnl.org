@@ -258,9 +258,10 @@
              }
          }
        #+end_src 
-       Two different ~new~:
-       1. ~new Dog[2]~ to *create* an *array* that hold 2 ~Dog~ *objects(not instantiated)*.
-       2. ~new Dog(8)~ to *instantiate* each ~Dog~ *object*.
+       - ~class[] var = new class[n]~ for lists
+       - Two different ~new~:
+         1. ~new Dog[2]~ to *create* an *array* that hold 2 ~Dog~ *objects(not instantiated)*.
+         2. ~new Dog(8)~ to *instantiate* each ~Dog~ *object*.
 **** Class Methods vs. Instance Methods
      Java allows us to define *2 types* of methods:
      1. *Class methods*, a.k.a *static* methods: *Static methods* are actions that are taken by the *class itself*.
@@ -1190,7 +1191,6 @@
        - ~x~: The array to use as a destination
        - ~3~: Where to start in the destination array
        - ~2~: How many items to copy 
- 
 **** 2D Arrays in Java
      2D array in Java is actually just an *array of arrays*
      #+begin_src java :classname 
