@@ -2,16 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f3281196-0be0-40dc-9760-24c2ec1ac62c" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../../projs/projs.org" beforeDir="false" afterPath="$PROJECT_DIR$/../../projs/projs.org" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../rnl.org" beforeDir="false" afterPath="$PROJECT_DIR$/../../rnl.org" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Body.class" beforeDir="false" afterPath="$PROJECT_DIR$/Body.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Body.java" beforeDir="false" afterPath="$PROJECT_DIR$/Body.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NBody.class" beforeDir="false" afterPath="$PROJECT_DIR$/NBody.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NBody.java" beforeDir="false" afterPath="$PROJECT_DIR$/NBody.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TestCalcForceExertedByXY.class" beforeDir="false" afterPath="$PROJECT_DIR$/TestCalcForceExertedByXY.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TestCalcForceExertedByXY.java" beforeDir="false" afterPath="$PROJECT_DIR$/TestCalcForceExertedByXY.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/examples/StdDrawDemo.java" beforeDir="false" afterPath="$PROJECT_DIR$/examples/StdDrawDemo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/proj0/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/proj0/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -135,7 +128,9 @@
       <workItem from="1564793694075" duration="10237000" />
       <workItem from="1564882590590" duration="7062000" />
       <workItem from="1564933346867" duration="936000" />
-      <workItem from="1564967554424" duration="10772000" />
+      <workItem from="1564967554424" duration="11193000" />
+      <workItem from="1565049636030" duration="91000" />
+      <workItem from="1565316129998" duration="38000" />
     </task>
     <servers />
   </component>

@@ -2,24 +2,18 @@
 
 * 1. Introduction to Java
 ** 1.1 Essentials
-*** Hello World 
-
-    #+begin_src java :classname HelloWorld
-      public class HelloWorld {
-          public static void main(String[] args) {
-              System.out.println("Hello world!");
-          }
-      }
-    #+end_src
-
-    #+RESULTS:
-    : Hello world!
-
-    *Some key syntactic features*
-    - The pg consists of a *class declaration*: ~public class~. In Java, all code lives *inside of classes*.
-    - Code is running inside of a *method called main*: ~public static void main(String[] args)~.
-    -  ~{~ and ~}~.
-    - Semi-colons ~;~.
+   #+begin_src java :classname HelloWorld
+     public class HelloWorld {
+         public static void main(String[] args) {
+             System.out.println("Hello world!");
+         }
+     }
+   #+end_src
+   *Some key syntactic features*
+   - The pg consists of a *class declaration*: ~public class~. In Java, all code lives *inside of classes*.
+   - Code is running inside of a *method called main*: ~public static void main(String[] args)~.
+   -  ~{~ and ~}~.
+   - Semi-colons ~;~.
 *** Running a Java Pg 
     *The most common way to execute a Java pg*: Compiler ~javac~ --> Interpreter ~java~
 
@@ -35,7 +29,6 @@
     : Hello world!
 
 *** Vars and Loops
-
     #+begin_src java :classname HelloNumbers
       public class HelloNumbers {
           public static void main(String[] args) {
@@ -47,30 +40,27 @@
           }
       }
     #+end_src 
-
-    *Some interesting features of this pg* 
-    - Var x *must declared and given a type* before *used*.
-    - Loop def in ~{}~, boolean expression in ~()~.
-    - ~System.out.print~ instead of ~System.out.println~, no new line.
-    
-**** Exercise 1.1.2 Modify ~HelloNumbers~ so that it prints out the cumulative sum of the integers from 0 to 9. For example, your output should start with 0 1 3 6 10... and should end with 45. 
-
-     #+begin_src java :classname HelloNumbers
-       public class HelloNumbers {
-           public static void main(String[] args) {
-               int x = 1;
-               int sum = 0;
-               while (sum < 46) {
-                   System.out.print(sum + " ");
-                   sum = x + sum;
-                   x = x + 1;
-               }
-           }
-       }
-     #+end_src 
-
-     #+RESULTS:
-     : 0 1 3 6 10 15 21 28 36 45
+    - *Some interesting features of this pg* 
+      - Var x *must declared and given a type* before *used*.
+      - Loop def in ~{}~, boolean expression in ~()~.
+      - ~System.out.print~ instead of ~System.out.println~, no new line.
+    - Exercise 1.1.2 Modify ~HelloNumbers~ so that it prints out the cumulative sum of the integers from 0 to 9. For example, your output should start with 0 1 3 6 10... and should end with 45. 
+      #+begin_src java :classname HelloNumbers
+        public class HelloNumbers {
+            public static void main(String[] args) {
+                int x = 1;
+                int sum = 0;
+                while (sum < 46) {
+                    System.out.print(sum + " ");
+                    sum = x + sum;
+                    x = x + 1;
+                }
+            }
+        }
+      #+end_src 
+ 
+      #+RESULTS:
+      : 0 1 3 6 10 15 21 28 36 45
 
 *** Static Typing
     One of the most important features of Java is that *all vars and expressions* have a so-called ~static type~, the type of a var can *never change*.
@@ -129,86 +119,84 @@
     - In python, funcs can be declared *anywhere*.
     - In java, java code is *part of a class*, funcs must defed *belong to some class* and called *methods*.
     - ~def~ in python, ~public static~ in java.  
-*** Style Guide
 ** 1.2 Objects
-*** Defining and Using Classes
-**** Static vs. Non-Static Methods
-***** Static Methods
-      All code in Java must be *part of a class* (or something similar).
-      #+begin_src java :classname Dog
-        public class Dog {
-            public static void makeNoise() {
-                System.out.println("Bark!");
-            }
-        }
-      #+end_src 
-      #+begin_src java :classname DogLauncher
-        public class DogLauncher {
-            public static void main(String[] args) {
-                Dog.makeNoise();
-            }
-        }
-      #+end_src 
+*** Static vs. Non-Static Methods
+    - Static Methods
+     All code in Java must be *part of a class* (or something similar).
+     #+begin_src java :classname Dog
+       public class Dog {
+           public static void makeNoise() {
+               System.out.println("Bark!");
+           }
+       }
+     #+end_src 
+     #+begin_src java :classname DogLauncher
+       public class DogLauncher {
+           public static void main(String[] args) {
+               Dog.makeNoise();
+           }
+       }
+     #+end_src 
       - No ~main~ method in class ~Dog~. 
       - ~DogLauncher~ is a *client* of ~Dog~.
       - Neither or the two techniques(add ~main~ to ~Dog~ or create ~DogLauncher~) is better.
-***** Instance Variables and Object Instantiation
-****** Approach 1: create separate classes for each type of ~Dog~.
-       #+begin_src java :classname TinyDog
-         public class TinyDog {
-             public static void makeNoise() {
-                 System.out.println("yip yip yip yip");
-             }
-         }
-       #+end_src 
-       #+begin_src java :classname MalamuteDog
-         public class MalamuteDog {
-             public static void makeNoise() {
-                 System.out.println("arooooooooooooooo!");
-             }
-         }
-       #+end_src 
-****** Approach 2: create instances of the ~Dog~ class and make the behavior of the ~Dog~ methods contingent upon the properties of the specific ~Dog~.
-       #+begin_src java :classname Dog
-         public class Dog {
-             public int weightInPounds;
-
-             public void makeNoise() {
-                 if (weightInPounds < 10) {
-                     System.out.println("yipyipyip!");
-                 } else if (weightInPounds < 30) {
-                     System.out.println("bark. bark.");
-                 } else {
-                     System.out.println("woof!");
-                 }
-             }
-         }
-       #+end_src 
-       #+begin_src java :classname DogLauncher
-         public class DogLauncher {
-             public static void main(String[] args) {
-                 Dog d;
-                 d = new Dog();
-                 d.weightInPounds = 20;
-                 d.makeNoise();
-             }
-         }
-       #+end_src 
-****** Some key observations and terminology:
-       - ~Object~ in Java is an *instance* of any class.
-       - *Instance variables* or *non-static variables*: variables *must* be declared *inside the class* (new variables can be added at runtime in Python or Matlab).
-       - *Instance methods* or *non-static methods* (no ~static~ keyword): methods created in class.
-       - ~new~ to instantiate a ~class~.
-       - *Instantiated object* can be assinged to a *declared* variable of the appropriate type: ~d = new Dog()~ 
-***** Constructors in Java
+    - Instance Variables and Object Instantiation
+      - Approach 1: create separate classes for each type of ~Dog~.
+         #+begin_src java :classname TinyDog
+           public class TinyDog {
+               public static void makeNoise() {
+                   System.out.println("yip yip yip yip");
+               }
+           }
+         #+end_src 
+         #+begin_src java :classname MalamuteDog
+           public class MalamuteDog {
+               public static void makeNoise() {
+                   System.out.println("arooooooooooooooo!");
+               }
+           }
+         #+end_src 
+      - Approach 2: create instances of the ~Dog~ class and make the behavior of the ~Dog~ methods contingent upon the properties of the specific ~Dog~.
+        #+begin_src java :classname Dog
+          public class Dog {
+              public int weightInPounds;
+  
+              public void makeNoise() {
+                  if (weightInPounds < 10) {
+                      System.out.println("yipyipyip!");
+                  } else if (weightInPounds < 30) {
+                      System.out.println("bark. bark.");
+                  } else {
+                      System.out.println("woof!");
+                  }
+              }
+          }
+        #+end_src 
+        #+begin_src java :classname DogLauncher
+          public class DogLauncher {
+              public static void main(String[] args) {
+                  Dog d;
+                  d = new Dog();
+                  d.weightInPounds = 20;
+                  d.makeNoise();
+              }
+          }
+        #+end_src 
+      - Some key observations and terminology:
+        - ~Object~ in Java is an *instance* of any class.
+        - *Instance variables* or *non-static variables*: variables *must* be declared *inside the class* (new variables can be added at runtime in Python or Matlab).
+        - *Instance methods* or *non-static methods* (no ~static~ keyword): methods created in class.
+        - ~new~ to instantiate a ~class~.
+        - *Instantiated object* can be assinged to a *declared* variable of the appropriate type: ~d = new Dog()~ 
+    - Constructors in Java
       #+begin_src java :classname Dog
         public class Dog {
             public int weightInPounds;
-
+ 
             public Dog(int w) {
                 weightInPounds = w;
             }
-
+ 
             public void makeNoise() {
                 if (weightInPounds < 10) {
                     System.out.println("yipyipyip!");
@@ -228,102 +216,99 @@
             }
         }
       #+end_src 
-      - *Constructors* can save the time and messiness of manually typing out potentially many *instance variable assignments*.
-      - The *constructor* with signature ~public Dog(int w)~ will be invoked anytime when ~new Dog(n)~.
-      - Similar to ~__init__~ in Python.
-***** Terminology Summary
-***** Array Instantiation, Arrays of Objects
-****** Array instantiation
-       #+begin_src java :classname ArrayDemo
-         public class ArrayDemo {
-             public static void main(String[] args) {
-                 /* Create an array of five integers. */
-                 int[] someArray = new int[5];
-                 someArray[0] = 3;
-                 someArray[1] = 4;
-             }
-         }
-       #+end_src 
-****** Arrays of instantiated objects
-       #+begin_src java :classname DogArrayDemo
-         public class DogArrayDemo {
-             public static void main(String[] args) {
-                 /* Create an array of two dogs. */
-                 Dog[] dogs = new Dog[2];
-                 dogs[0] = new Dog(8);
-                 dogs[1] = new Dog(20);
+       - *Constructors* can save the time and messiness of manually typing out potentially many *instance variable assignments*.
+       - The *constructor* with signature ~public Dog(int w)~ will be invoked anytime when ~new Dog(n)~.
+       - Similar to ~__init__~ in Python.
+    - Array Instantiation, Arrays of Objects
+      - Array instantiation
+        #+begin_src java :classname ArrayDemo
+          public class ArrayDemo {
+              public static void main(String[] args) {
+                  /* Create an array of five integers. */
+                  int[] someArray = new int[5];
+                  someArray[0] = 3;
+                  someArray[1] = 4;
+              }
+          }
+        #+end_src 
+      - Arrays of instantiated objects
+        #+begin_src java :classname DogArrayDemo
+          public class DogArrayDemo {
+              public static void main(String[] args) {
+                  /* Create an array of two dogs. */
+                  Dog[] dogs = new Dog[2];
+                  dogs[0] = new Dog(8);
+                  dogs[1] = new Dog(20);
+  
+                  /* Yipping will result, since dogs[0] has weight 8. */
+                  dogs[0].makeNoise();
+              }
+          }
+        #+end_src 
+        - ~class[] var = new class[n]~ for lists
+        - Two different ~new~:
+          1. ~new Dog[2]~ to *create* an *array* that hold 2 ~Dog~ *objects(not instantiated)*.
+          2. ~new Dog(8)~ to *instantiate* each ~Dog~ *object*.
+*** Class Methods vs. Instance Methods
+    Java allows us to define *2 types* of methods:
+    1. *Class methods*, a.k.a *static* methods: *Static methods* are actions that are taken by the *class itself*.
+    2. *Instance methods*, a.k.a *non-static* methods: *Instance methods* are actions that can be taken only by *a specific instance of a class*.
+    #+begin_src java :classname Dog
+      public class Dog {
+          public int weightInPounds;
 
-                 /* Yipping will result, since dogs[0] has weight 8. */
-                 dogs[0].makeNoise();
-             }
-         }
-       #+end_src 
-       - ~class[] var = new class[n]~ for lists
-       - Two different ~new~:
-         1. ~new Dog[2]~ to *create* an *array* that hold 2 ~Dog~ *objects(not instantiated)*.
-         2. ~new Dog(8)~ to *instantiate* each ~Dog~ *object*.
-**** Class Methods vs. Instance Methods
-     Java allows us to define *2 types* of methods:
-     1. *Class methods*, a.k.a *static* methods: *Static methods* are actions that are taken by the *class itself*.
-     2. *Instance methods*, a.k.a *non-static* methods: *Instance methods* are actions that can be taken only by *a specific instance of a class*.
-     #+begin_src java :classname Dog
-       public class Dog {
-           public int weightInPounds;
+          public Dog(int w) {
+              weightInPounds = w;
+          }
 
-           public Dog(int w) {
-               weightInPounds = w;
+          public void makeNoise() {
+              if (weightInPounds < 10) {
+                  System.out.println("yipyipyip!");
+              } else if (weightInPounds < 30) {
+                  System.out.println("bark. bark.");
+              } else {
+                  System.out.println("woof!");
+              }
+          }
+
+          public static Dog maxDog(Dog d1, Dog d2) {
+              if (d1.weightInPounds > d2.weightInPounds) {
+                  return d1;
+              }
+              return d2;
+          }
+
+          public Dog maxDog(Dog d2) {
+              if (this.weightInPounds > d2.weightInPounds) {
+                  return this;
+              }
+              return d2;
+          }
+
+      }
+     #+end_src 
+    #+begin_src java :classname DogLauncher
+       public class DogLauncher {
+           public static void main(String[] args) {
+               Dog d = new Dog(100);
+               Dog d2 = new Dog(20);
+               d.maxDog(d,d2);
+               Dog.maxDog(d,d2);
            }
-
-           public void makeNoise() {
-               if (weightInPounds < 10) {
-                   System.out.println("yipyipyip!");
-               } else if (weightInPounds < 30) {
-                   System.out.println("bark. bark.");
-               } else {
-                   System.out.println("woof!");
-               }
-           }
-
-           public static Dog maxDog(Dog d1, Dog d2) {
-               if (d1.weightInPounds > d2.weightInPounds) {
-                   return d1;
-               }
-               return d2;
-           }
-
-           public Dog maxDog(Dog d2) {
-               if (this.weightInPounds > d2.weightInPounds) {
-                   return this;
-               }
-               return d2;
-           }
-
        }
-      #+end_src 
-       
-     #+begin_src java :classname DogLauncher
-        public class DogLauncher {
-            public static void main(String[] args) {
-                Dog d = new Dog(100);
-                Dog d2 = new Dog(20);
-                d.maxDog(d,d2);
-                Dog.maxDog(d,d2);
-            }
-        }
-      #+end_src
-       
-     - Class method: ~public static Dog maxDog~.
-     - Instance method: ~public Dog maxDog~.
-***** Exercise 1.2.1: What would the following method do? If you're not sure, try it out.        
-
+    #+end_src
+    - Class method: ~public static Dog maxDog~.
+    - Instance method: ~public Dog maxDog~.
+     
+    - Exercise 1.2.1: What would the following method do? If you're not sure, try it out.        
       #+begin_src java :classname Dog
         public class Dog {
             public int weightInPounds;
-
+ 
             public Dog(int w) {
                 weightInPounds = w;
             }
-
+ 
             public static Dog maxDog(Dog d1, Dog d2) {
                 if (weightInPounds > d2.weightInPounds) {
                     return this;
@@ -332,11 +317,8 @@
             }
         }
       #+end_src 
-       
-      ~javac Dog.java~ output: *non-static variable* this *cannot* be referenced from a *static context*.
-      
-***** Static Variables
-
+      - ~javac Dog.java~ output: *non-static variable* this *cannot* be referenced from a *static context*.
+    - Static Variables
       #+begin_src java :classname Dog
         public class Dog {
             public int weightInPounds;
@@ -344,92 +326,86 @@
             ...
         }
       #+end_src 
-
       - *Inherented* to *class itself* rather than the *instance* of class.
       - Usage: ~Dog.binomen~, not ~d.binomen~.
       - Java allows ~d.binomen~, a bad style. 
-****** Exercise 1.2.2: Complete this exercise:
-
-       #+begin_src java :classname Dog
-         public class Dog {
-             public int weightInPounds;
-
-             public Dog(int w) {
-                 weightInPounds = w;
-             }
-
-             public void makeNoise() {
-                 if (weightInPounds < 10) {
-                     System.out.println("yipyipyip!");
-                 } else if (weightInPounds < 30) {
-                     System.out.println("bark. bark.");
-                 } else {
-                     System.out.println("woof!");
-                 }
-             }
-
-             public static Dog maxDog(Dog d1, Dog d2) {
-                 if (d1.weightInPounds > d2.weightInPounds) {
-                     return d1;
-                 }
-                 return d2;
-             }
-
-             public Dog maxDog(Dog d2) {
-                 if (this.weightInPounds > d2.weightInPounds) {
-                     return this;
-                 }
-                 return d2;
-             }
-
-         }
-      #+end_src 
-       
-       #+begin_src java :classname Dogloop
-         public class Dogloop {
-             public static void main(String[] args) {
-                 Dog smallDog = new Dog(5);
-                 Dog mediumDog = new Dog(25);
-                 Dog hugeDog = new Dog(150);
-
-                 Dog[] manyDogs = new Dog[4];
-                 manyDogs[0] = smallDog;
-                 manyDogs[1] = hugeDog;
-                 manyDogs[2] = new Dog(130);
-
-                 int i = 0;
-                 while (i < manyDogs.length) {
-                     Dog.maxDog(manyDogs[i], mediumDog).makeNoise();
-                     i = i + 1;
-                 }
-             }
-         }
-      #+end_src
-
-******* Env analysis and output
-
-        #+DOWNLOADED: /tmp/screenshot.png @ 2019-03-17 14:43:29
-        [[file:1.%20Introduction%20to%20Java/screenshot_2019-03-17_14-43-29.png]]
-       
-        #+begin_example
-          bark. bark.
-          woof!
-          woof!
-          Exception in thread "main" java.lang.NullPointerException
-                  at Dog.maxDog(Dog.java:19)
-                  at Dogloop.main(Dogloop.java:14)
-        #+end_example
-        
-**** public static void main(String[] args)
-     ~public static void main(String[] args)~:
-     - ~public~: So far, all of *methods* start with ~public~.
-     - ~static~: ~static~ method, not associated with *any particular instance*.
-     - ~void~: No return type.
-     - ~main~: Method's name.
-     - ~String[] args~: A *para* passed to the ~main~ method.
-***** Command Line Args
+      - Exercise 1.2.2: Complete this exercise:
+        #+begin_src java :classname Dog
+          public class Dog {
+              public int weightInPounds;
+  
+              public Dog(int w) {
+                  weightInPounds = w;
+              }
+  
+              public void makeNoise() {
+                  if (weightInPounds < 10) {
+                      System.out.println("yipyipyip!");
+                  } else if (weightInPounds < 30) {
+                      System.out.println("bark. bark.");
+                  } else {
+                      System.out.println("woof!");
+                  }
+              }
+  
+              public static Dog maxDog(Dog d1, Dog d2) {
+                  if (d1.weightInPounds > d2.weightInPounds) {
+                      return d1;
+                  }
+                  return d2;
+              }
+  
+              public Dog maxDog(Dog d2) {
+                  if (this.weightInPounds > d2.weightInPounds) {
+                      return this;
+                  }
+                  return d2;
+              }
+  
+          }
+        #+end_src 
+        #+begin_src java :classname Dogloop
+           public class Dogloop {
+               public static void main(String[] args) {
+                   Dog smallDog = new Dog(5);
+                   Dog mediumDog = new Dog(25);
+                   Dog hugeDog = new Dog(150);
+   
+                   Dog[] manyDogs = new Dog[4];
+                   manyDogs[0] = smallDog;
+                   manyDogs[1] = hugeDog;
+                   manyDogs[2] = new Dog(130);
+   
+                   int i = 0;
+                   while (i < manyDogs.length) {
+                       Dog.maxDog(manyDogs[i], mediumDog).makeNoise();
+                       i = i + 1;
+                   }
+               }
+           }
+        #+end_src
+        - Env analysis and output
+          #+DOWNLOADED: /tmp/screenshot.png @ 2019-03-17 14:43:29
+          [[file:1.%20Introduction%20to%20Java/screenshot_2019-03-17_14-43-29.png]]
+          #+begin_example
+            bark. bark.
+            woof!
+            woof!
+            Exception in thread "main" java.lang.NullPointerException
+                    at Dog.maxDog(Dog.java:19)
+                    at Dogloop.main(Dogloop.java:14)
+          #+end_example
+*** public static void main(String[] args)
+    ~public static void main(String[] args)~:
+    - ~public~: So far, all of *methods* start with ~public~.
+    - ~static~: ~static~ method, not associated with *any particular instance*.
+    - ~void~: No return type.
+    - ~main~: Method's name.
+    - ~String[] args~: A *para* passed to the ~main~ method.
+     
+    - Command Line Args
       Since ~main~ is called by the *Java interpreter itself(~javac~) rather than another Java class*, it is the *interpreter's job* to *supply these args*. They refer usually to the *command line arguments*. 
-
+  
       #+begin_src java :classname 
         public class ArgsDemo {
             public static void main(String[] args) {
@@ -437,287 +413,240 @@
             }
         }
       #+end_src 
-
+  
       #+begin_src sh 
         java ArgsDemo these are command line args
       #+end_src 
-
+  
       #+RESULTS:
       : these
-
+  
       - ~args~ = ~{"these", "are", "command", "line", "args"}~
-***** Summing Command Line Arguments
-****** Exercise 1.2.3: try to write a program that sums up the command line arguments, assuming they are numbers. For a solution, see the webcast or the code provided on GitHub.
-
-       #+begin_src java :classname argsum
-         public class argsum {
-             public static void main(String[] args) {
-                 int i = 0;
-                 int sum = 0;
-                 while(i < args.length) {
-                     sum += Integer.parseInt(args[i]);
-                     i += 1;
-                 }
-                 System.out.print(sum);
-             }
-         }
-       #+end_src 
-
-       #+begin_src sh 
-         java argsum 1 2 3 4 5 6
-       #+end_src 
-
-       #+RESULTS:
-       : 21
- 
-       - ~Integer.parseInt(String)~: Convert ~String~ to a *primitive* ~int~ and *return* it.
-**** Using Libraries
+    - Summing Command Line Arguments
+      - Exercise 1.2.3: try to write a program that sums up the command line arguments, assuming they are numbers. For a solution, see the webcast or the code provided on GitHub.
+        #+begin_src java :classname argsum
+          public class argsum {
+              public static void main(String[] args) {
+                  int i = 0;
+                  int sum = 0;
+                  while(i < args.length) {
+                      sum += Integer.parseInt(args[i]);
+                      i += 1;
+                  }
+                  System.out.print(sum);
+              }
+          }
+        #+end_src 
+        #+begin_src sh 
+          java argsum 1 2 3 4 5 6
+        #+end_src 
+        #+RESULTS:
+        : 21
+        - ~Integer.parseInt(String)~: Convert ~String~ to a *primitive* ~int~ and *return* it.
 * 2. Lists
 ** 2.1 Mystery of the Walrus
-*** Lists
-    ~List~ could easily change the number of object after the simulation had begun.
-**** The Mystery of the Walrus
-     
-     #+begin_src java :classname PollQuestions
-       public class PollQuestions {
-           public static void main(String[] args) {
-               Walrus a = new Walrus(1000, 8.3);
-               Walrus b;
-               b = a;
-               b.weight = 5;
-               System.out.println(a);
-               System.out.println(b);      
+   ~List~ could easily change the number of object after the simulation had begun.
+*** The Mystery of the Walrus
+    #+begin_src java :classname PollQuestions
+      public class PollQuestions {
+          public static void main(String[] args) {
+              Walrus a = new Walrus(1000, 8.3);
+              Walrus b;
+              b = a;
+              b.weight = 5;
+              System.out.println(a);
+              System.out.println(b);      
 
-               int x = 5;
-               int y;
-               y = x;
-               x = 2;
-               System.out.println("x is: " + x);
-               System.out.println("y is: " + y);      
-           }
+              int x = 5;
+              int y;
+              y = x;
+              x = 2;
+              System.out.println("x is: " + x);
+              System.out.println("y is: " + y);      
+          }
 
-           public static class Walrus {
-               public int weight;
-               public double tuskSize;
+          public static class Walrus {
+              public int weight;
+              public double tuskSize;
 
-               public Walrus(int w, double ts) {
-                   weight = w;
-                   tuskSize = ts;
-               }
+              public Walrus(int w, double ts) {
+                  weight = w;
+                  tuskSize = ts;
+              }
 
-               public String toString() {
-                   return String.format("weight: %d, tusk size: %.2f", weight, tuskSize);
-               }
-           }
-       }
-     #+end_src 
-
-***** Env analysis
-
+              public String toString() {
+                  return String.format("weight: %d, tusk size: %.2f", weight, tuskSize);
+              }
+          }
+      }
+    #+end_src 
+    - Env analysis
       #+DOWNLOADED: /tmp/screenshot.png @ 2019-03-19 23:37:17
       [[file:2.%20Lists/screenshot_2019-03-19_23-37-17.png]]
- 
-**** Bits
-     72 and 'H' both stored as 01001000 *in memory*, interpreter differs them by *type*.
-     8 primitive types of Java: byte, short, int, long, float, double, boolean, and char.
-
-     #+begin_src java :classname 
-       char c = 'H';
-       int x = c;
-       System.out.println(c);
-       System.out.println(x);
-     #+end_src 
-
-     #+begin_example output
-       H
-       72
-     #+end_example
-
-**** Declaring a Variable (Simplified)
-
-     #+begin_src java :classname 
-       int x;
-       double y;
-     #+end_src 
-
-     #+DOWNLOADED: /tmp/screenshot.png @ 2019-03-20 00:12:16
-     [[file:2.%20Lists/screenshot_2019-03-20_00-12-16.png]]
-
-     #+begin_src java :classname 
-       x = -1431195969;
-       y = 567213.112;
-     #+end_src 
-
-     #+DOWNLOADED: /tmp/screenshot.png @ 2019-03-20 00:12:55
-     [[file:2.%20Lists/screenshot_2019-03-20_00-12-55.png]]
- 
-     - When you *declare* a variable of a certain type, Java finds a *contiguous* block with exactly enough bits to hold a thing of that type.
-     - In addition to setting aside memory, the Java interpreter also *creates an entry* in an *internal table* that *maps each variable name to the location of the first bit* in the box.
-     - the *exact memory address* is *below the level of abstraction accessible* to us in Java
-     - Java does not write anything into the *reserved* box when a variable is *declared*. Java compiler *prevents* you from using a variable until after the box has been filled with bits using the = operator.
-     - The *top* bits represent -1431195969, and the *bottom* bits represent 567213.112. 
-
-***** Simplified Box Notation
-
+*** Bits
+    72 and 'H' both stored as 01001000 *in memory*, interpreter differs them by *type*.
+    8 primitive types of Java: byte, short, int, long, float, double, boolean, and char.
+    #+begin_src java :classname 
+      char c = 'H';
+      int x = c;
+      System.out.println(c);
+      System.out.println(x);
+    #+end_src 
+    #+begin_example output
+      H
+      72
+    #+end_example
+*** Declaring a Variable (Simplified)
+    #+begin_src java :classname 
+      int x;
+      double y;
+    #+end_src 
+    #+DOWNLOADED: /tmp/screenshot.png @ 2019-03-20 00:12:16
+    [[file:2.%20Lists/screenshot_2019-03-20_00-12-16.png]]
+    #+begin_src java :classname 
+      x = -1431195969;
+      y = 567213.112;
+    #+end_src 
+    #+DOWNLOADED: /tmp/screenshot.png @ 2019-03-20 00:12:55
+    [[file:2.%20Lists/screenshot_2019-03-20_00-12-55.png]]
+    - When you *declare* a variable of a certain type, Java finds a *contiguous* block with exactly enough bits to hold a thing of that type.
+    - In addition to setting aside memory, the Java interpreter also *creates an entry* in an *internal table* that *maps each variable name to the location of the first bit* in the box.
+    - the *exact memory address* is *below the level of abstraction accessible* to us in Java
+    - Java does not write anything into the *reserved* box when a variable is *declared*. Java compiler *prevents* you from using a variable until after the box has been filled with bits using the = operator.
+     
+    - Simplified Box Notation
       #+DOWNLOADED: /tmp/screenshot.png @ 2019-03-20 15:05:29
       [[file:2.%20Lists/screenshot_2019-03-20_15-05-29.png]]
- 
-**** The Golden Rule of Equals (GRoE)
-     In Java, ~=~ for *any* assignment means *interpreter copying bits* from A into B.
-**** Reference Types
-     - ~primitive type~: ~byte~, ~short~, ~int~, ~long~, ~float~, ~double~, ~boolean~, ~char~.
-     - ~reference type~: Everything else, including arrays.  
-***** Object Instantiation
-
+*** The Golden Rule of Equals (GRoE)
+    In Java, ~=~ for *any* assignment means *interpreter copying bits* from A into B.
+*** Reference Types
+    - ~primitive type~: ~byte~, ~short~, ~int~, ~long~, ~float~, ~double~, ~boolean~, ~char~.
+    - ~reference type~: Everything else, including arrays.
+     
+    - Object Instantiation
       #+begin_src java :classname 
         public static class Walrus {
             public int weight;
             public double tuskSize;
-
+ 
             public Walrus(int w, double ts) {
                 weight = w;
                 tuskSize = ts;
             }
         }
       #+end_src 
-      
       Use ~new Walrus(1000, 8.3)~ 
-
       #+DOWNLOADED: /tmp/screenshot.png @ 2019-03-31 23:08:50
       [[file:2.%20Lists/screenshot_2019-03-31_23-08-50.png]]
- 
       In *real implementations* of the Java programming language, there is actually some *additional overhead* for any object, so a Walrus takes somewhat more than 96 bits. 
-***** Reference Variable Declaration
+    - Reference Variable Declaration
       When a variable of *any reference type declared*, Java allocates *a box of 64 bits* to store the *address(fist bit)* of the variable *in memory*.
-
       1. ~Walrus someWalrus~: Creating a *box of 64 bits*.
       2. ~someWalrus = new Walrus(1000, 8.3)~: Creating a new ~Walrus~ and return its *address* by the ~new~ operator.
          - If Walrus ~weight~ is stored starting at bit ~5051956592385990207~ and ~tuskSize~ at ~5051956592385990239~ (more 32 bits than ~weight~, which is ~int~):
-          
            #+DOWNLOADED: /tmp/screenshot.png @ 2019-03-31 23:39:47
            [[file:2.%20Lists/screenshot_2019-03-31_23-39-47.png]]
-          
          - Assigning ~null~ to a *reference variable* (such as ~someWalrus~):
-
            #+DOWNLOADED: /tmp/screenshot.png @ 2019-03-31 23:41:47
            [[file:2.%20Lists/screenshot_2019-03-31_23-41-47.png]]
- 
-***** Box and Pointer Notation
-       
+    - Box and Pointer Notation
       #+DOWNLOADED: /tmp/screenshot.png @ 2019-03-31 23:45:22
       [[file:2.%20Lists/screenshot_2019-03-31_23-45-22.png]]
- 
-***** Resolving the Mystery of the Walrus
-
+    - Resolving the Mystery of the Walrus
       #+begin_src java :classname 
         Walrus a = new Walrus(1000, 8.3);
         Walrus b;
         b = a;
       #+end_src 
-
       #+DOWNLOADED: /tmp/screenshot.png @ 2019-04-01 00:28:59
       [[file:2.%20Lists/screenshot_2019-04-01_00-28-59.png]]
- 
-***** Question:                                                   :QUESTIONS:
-      1. ~primitive type~ 变量存的是值而 ~reference type~ 变量存的是地址？
-**** Parameter Passing
-***** Test Your Understanding
-****** Exercise 2.1.1
+**** Question:                                                    :QUESTIONS:
+     1. ~primitive type~ 变量存的是值而 ~reference type~ 变量存的是地址？
+*** Parameter Passing
+    - Exercise 2.1.1
+      #+begin_src java :classname PassByValueFigure
+        public class PassByValueFigure {
+            public static void main(String[] args) {
+                Walrus walrus = new Walrus(3500, 10.5);
+                int x = 9;
 
-       #+begin_src java :classname PassByValueFigure
-         public class PassByValueFigure {
-             public static void main(String[] args) {
-                 Walrus walrus = new Walrus(3500, 10.5);
-                 int x = 9;
+                doStuff(walrus, x);
+                System.out.println(walrus);
+                System.out.println(x);
+            }
 
-                 doStuff(walrus, x);
-                 System.out.println(walrus);
-                 System.out.println(x);
-             }
-
-             public static void doStuff(Walrus W, int x) {
-                 W.weight = W.weight - 100;
-                 x = x - 5;
-             }
-         }
-       #+end_src 
-
-       ~doStuff~ has an effect on only ~walrus~, not ~x~.
-
-**** Instantiation of Arrays
-
-      #+begin_src java :classname 
-        int[] x; //declaration
-        Planet[] planets;
-        x = new int[]{0, 1, 2, 95, 4}; //instantiate
+            public static void doStuff(Walrus W, int x) {
+                W.weight = W.weight - 100;
+                x = x - 5;
+            }
+        }
       #+end_src 
-
-      - *Declaration* ~type[] x~ (~type~ can be ~primitive~ or ~reference~): creating memory boxes of *64 bits* to store *addresses*.
-      - *Instantiation* ~x = new type[]{...}~: creating boxes of 32 bits each and returns the address of the overall object (this list) for assignment to x
-
-**** IntLists
-
+      - ~doStuff~ has an effect on only ~walrus~, not ~x~.
+*** Instantiation of Arrays
      #+begin_src java :classname 
-       public class IntList {
-           public int first;
-           public IntList rest;        
-
-           public IntList(int f, IntList r) {
-               first = f;
-               rest = r;
-           }
-       }
+       int[] x; //declaration
+       Planet[] planets;
+       x = new int[]{0, 1, 2, 95, 4}; //instantiate
      #+end_src 
-     
-     to make a list of numbers 5, 10, and 15.
+     - *Declaration* ~type[] x~ (~type~ can be ~primitive~ or ~reference~): creating memory boxes of *64 bits* to store *addresses*.
+     - *Instantiation* ~x = new type[]{...}~: creating boxes of 32 bits each and returns the address of the overall object (this list) for assignment to x
+*** IntLists
+    #+begin_src java :classname 
+      public class IntList {
+          public int first;
+          public IntList rest;        
 
-     #+begin_src java :classname 
-       // build forwards
-       IntList L = new IntList(5, null);
-       L.rest = new IntList(10, null);
-       L.rest.rest = new IntList(15, null);
-       // or backwards
-       IntList L = new IntList(15, null);
-       L = new IntList(10, L);
-       L = new IntList(5, L);
-     #+end_src 
+          public IntList(int f, IntList r) {
+              first = f;
+              rest = r;
+          }
+      }
+    #+end_src 
+    to make a list of numbers 5, 10, and 15.
+    #+begin_src java :classname 
+      // build forwards
+      IntList L = new IntList(5, null);
+      L.rest = new IntList(10, null);
+      L.rest.rest = new IntList(15, null);
+      // or backwards
+      IntList L = new IntList(15, null);
+      L = new IntList(10, L);
+      L = new IntList(5, L);
+    #+end_src 
+    above code is ugly and prone to errors -> adopt the *usual object oriented* programming strategy of *adding helper methods* to class to perform basic tasks
 
-     above code is ugly and prone to errors -> adopt the *usual object oriented* programming strategy of *adding helper methods* to class to perform basic tasks
-***** size and iterativeSize (helper methods)
-
-     #+begin_src java :classname 
-       public int size() {
-           if (rest == null) {
-               return 1;
-           }
-           return 1 + this.rest.size();
-       }
-       //iterative size
-       public int iterativeSize() {
-           IntList p = this;
-           int totalSize = 0;
-           while (p != null) {
-               totalSize += 1;
-               p = p.rest;
-           }
-           return totalSize;
-       }
-     #+end_src 
- 
-     - ~if (this == null) return 0;~ leads to ~NullPointer error~
-     - use ~p~ for ~pointer~ in ~iterativeSize~ as ~this~ *can't be reassigned* in Java.    
-***** get
-
+    - ~size~ and ~iterativeSize~ (helper methods)
+      #+begin_src java :classname 
+        public int size() {
+            if (rest == null) {
+                return 1;
+            }
+            return 1 + this.rest.size();
+        }
+        //iterative size
+        public int iterativeSize() {
+            IntList p = this;
+            int totalSize = 0;
+            while (p != null) {
+                totalSize += 1;
+                p = p.rest;
+            }
+            return totalSize;
+        }
+      #+end_src 
+      - ~if (this == null) return 0;~ leads to ~NullPointer error~
+      - use ~p~ for ~pointer~ in ~iterativeSize~ as ~this~ *can't be reassigned* in Java.    
+    - ~get~
       #+begin_src java :classname 
         public class IntList {
             public int first;
             public IntList rest;
-
+ 
             public IntList(int f, IntList r) {
                 first = f;
                 rest = r;
             }
-
+ 
             public int get(int i) {
                 if (i == 0) {
                     return first;
@@ -726,209 +655,192 @@
             }
         }
       #+end_src 
-
-***** Question:                                                   :QUESTIONS:
-      1. 如果获取函数 ~get(-1)~ 该怎么处理
+**** Question:                                                    :QUESTIONS:
+     1. 如果获取函数 ~get(-1)~ 该怎么处理
 ** 2.2 The SLList
-*** SLLists
-    ~IntList~ is a *naked recursive* data structure 
-**** Improvement #1: Rebranding
+   ~IntList~ is a *naked recursive* data structure 
+*** Improvement #1: Rebranding
+    #+begin_src java :classname 
+      public class IntNode {
+          public int item;
+          public IntNode next;
 
-     #+begin_src java :classname 
-       public class IntNode {
-           public int item;
-           public IntNode next;
+          public IntNode(int i, IntNode n) {
+              item = i;
+              next = n;
+          }
+      }
+    #+end_src 
+*** Improvement #2: Bureaucracy
+    #+begin_src java :classname 
+      public class SLList {
+          public IntNode first;
 
-           public IntNode(int i, IntNode n) {
-               item = i;
-               next = n;
-           }
-       }
-     #+end_src 
+          public SLList(int x) {
+              first = new IntNode(x, null);
+          }
+      }
+    #+end_src 
+    #+begin_src java :classname 
+      IntList L1 = new IntList(5, null);
+      SLList L2  = new SLList(5);
+    #+end_src 
+    ~SLList~ *hides* the detail that there exists a *null link* from the user 
+*** addFirst and getFirst
+    #+begin_src java :classname 
+      public class SLList {
+          public IntNode first;
 
-**** Improvement #2: Bureaucracy
+          public SLList(int x) {
+              first = new IntNode(x, null);
+          }
 
-     #+begin_src java :classname 
-       public class SLList {
-           public IntNode first;
+          /** Adds an item to the front of the list. */
+          public void addFirst(int x) {
+              first = new IntNode(x, first);
+          }
 
-           public SLList(int x) {
-               first = new IntNode(x, null);
-           }
-       }
-     #+end_src 
-
-     #+begin_src java :classname 
-       IntList L1 = new IntList(5, null);
-       SLList L2  = new SLList(5);
-     #+end_src 
+          public int getFirst() {
+              return first.item;
+          }
+      }
+    #+end_src 
+    #+begin_src java :classname 
+      // IntList
+      IntList L = new IntList(15, null);
+      L = new IntList(10, L);
+      L = new IntList(5, L);
+      int x = L.first;
+      // SLList 
+      SLList L = new SLList(15);
+      L.addFirst(10);
+      L.addFirst(5);
+      int x = L.getFirst()
+    #+end_src 
+    #+DOWNLOADED: /tmp/screenshot.png @ 2019-05-30 23:43:42
+    [[file:2._Lists/screenshot_2019-05-30_23-43-42.png]]
+    - ~SLList~ class acts as a *middleman* between the *list user* and the *naked recursive data structure*
+    - ~IntList~ user may have a potentially *undesireable* possibility to have *extra* variables that point to the middle of the ~IntList~
+      #+begin_src java :classname 
+        IntList L = new IntList(15, null);
+        L2 = new IntList(10, L);
+        L1 = new IntList(5, L2);
+      #+end_src
      
-     ~SLList~ *hides* the detail that there exists a *null link* from the user 
-**** addFirst and getFirst
-
-     #+begin_src java :classname 
-       public class SLList {
-           public IntNode first;
-
-           public SLList(int x) {
-               first = new IntNode(x, null);
-           }
-
-           /** Adds an item to the front of the list. */
-           public void addFirst(int x) {
-               first = new IntNode(x, first);
-           }
-
-           public int getFirst() {
-               return first.item;
-           }
-       }
-     #+end_src 
-
-     #+begin_src java :classname 
-       // IntList
-       IntList L = new IntList(15, null);
-       L = new IntList(10, L);
-       L = new IntList(5, L);
-       int x = L.first;
-       // SLList 
-       SLList L = new SLList(15);
-       L.addFirst(10);
-       L.addFirst(5);
-       int x = L.getFirst()
-     #+end_src 
-
-     #+DOWNLOADED: /tmp/screenshot.png @ 2019-05-30 23:43:42
-     [[file:2._Lists/screenshot_2019-05-30_23-43-42.png]]
-
-     - ~SLList~ class acts as a *middleman* between the *list user* and the *naked recursive data structure*
-     - ~IntList~ user may have a potentially *undesireable* possibility to have *extra* variables that point to the middle of the ~IntList~
-      
-       #+begin_src java :classname 
-         IntList L = new IntList(15, null);
-         L2 = new IntList(10, L);
-         L1 = new IntList(5, L2);
-       #+end_src 
-
-***** Exercise 2.2.1: Try to write an ~addFirst~ method to the ~IntList~ class (tricky as well as inefficient)
-      
+    - Exercise 2.2.1: Try to write an ~addFirst~ method to the ~IntList~ class (tricky as well as inefficient)
       #+begin_src java :classname 
         public class IntList {
             public int first;
             public IntList rest;        
-
+ 
             public IntList(int f, IntList r) {
                 first = f;
                 rest = r;
             }
-
+ 
             public void addFirst(int x, IntList L) {
                 rest = L;
                 first = x;
             }
         }
       #+end_src 
-
       #+begin_src java :classname 
         L = new IntList(15, null);
         L.addFirst(10, L);
         L.addFirst(5, L);
         int x = L.first
       #+end_src 
+*** Improvement #3: Public vs. Private
+    ~SLList~ can be *bypassed* and the *raw power* of *naked data structure* (with all its dangers) can be accessed. A programmer can easily modify the list *directly*, without going through the *kid-tested*, *mother-approved* ~addFirst~ method, for example:
+    #+begin_src java :classname 
+      SLList L = new SLList(15);
+      L.addFirst(10);
+      L.first.next.next = L.first.next;
+    #+end_src 
+    #+DOWNLOADED: /tmp/screenshot.png @ 2019-05-31 00:15:38
+    [[file:2._Lists/screenshot_2019-05-31_00-15-38.png]]
+    - This results in a malformed list with an infinite loop -> to deal with, change ~public IntNode first~ to ~private IntNode first~
+    - ~Private~ *variables and methods* can only be accessed by code inside the *same* ~.java~ file
+*** Improvement #4: Nested Classes
+    #+begin_src java :classname 
+      public class SLList {
+          public static class IntNode {
+              public int item;
+              public IntNode next;
+              public IntNode(int i, IntNode n) {
+                  item = i;
+                  next = n;
+              }
+          }
 
-**** Improvement #3: Public vs. Private
-     ~SLList~ can be *bypassed* and the *raw power* of *naked data structure* (with all its dangers) can be accessed. A programmer can easily modify the list *directly*, without going through the *kid-tested*, *mother-approved* ~addFirst~ method, for example:
-     #+begin_src java :classname 
-       SLList L = new SLList(15);
-       L.addFirst(10);
-       L.first.next.next = L.first.next;
-     #+end_src 
-
-     #+DOWNLOADED: /tmp/screenshot.png @ 2019-05-31 00:15:38
-     [[file:2._Lists/screenshot_2019-05-31_00-15-38.png]]
- 
-     - This results in a malformed list with an infinite loop -> to deal with, change ~public IntNode first~ to ~private IntNode first~
-     - ~Private~ *variables and methods* can only be accessed by code inside the *same* ~.java~ file
-**** Improvement #4: Nested Classes
-     #+begin_src java :classname 
-       public class SLList {
-           public static class IntNode {
-               public int item;
-               public IntNode next;
-               public IntNode(int i, IntNode n) {
-                   item = i;
-                   next = n;
-               }
-           }
-
-           private IntNode first;
-           ...
-     #+end_src 
-     - ~static~ means that *methods* inside the ~static~ class can not access any of the *members* of the *enclosing class*
-***** Exercise 2.2.2
-      
+          private IntNode first;
+          ...
+    #+end_src 
+    - ~static~ means that *methods* inside the ~static~ class can not access any of the *members* of the *enclosing class*
+     
+    - Exercise 2.2.2
       #+begin_src java :classname 
         /** A rather contrived exercise to test your understanding of when
             nested classes may be made static. This is NOT an example of good
             class design, even after you fix the bug.
-
+ 
             The challenge with this file is to delete the keyword static the
             minimum number of times so that the code compiles.
-
+ 
             Guess before TRYING to compile, otherwise the compiler will spoil
             the problem.*/
         public class Government {
           private int treasury = 5;
-
+ 
           private void spend() {
             treasury -= 1;
           }
-
+ 
           private void tax() {
             treasury += 1;
           }
-
+ 
           public void report() {
             System.out.println(treasury);
           }
-
+ 
           public static Government greaterTreasury(Government a, Government b) {
             if (a.treasury > b.treasury) {
               return a;
             }
             return b;
           }
-
+ 
           public static class Peasant {
             public void doStuff() {
               System.out.println("hello");			
             }
           }
-
+ 
           public static class King { 
             public void doStuff() {
               spend();			
             }
           }
-
+ 
           public static class Mayor {
             public void doStuff() {
               tax();			
             }
           }
-
+ 
           public static class Accountant {
             public void doStuff() {
               report();			
             }
           }
-
+ 
           public static class Thief {
             public void doStuff() {
               treasury = 0;			
             }
           }
-
+ 
           public static class Explorer {
             public void doStuff(Government a, Government b) {
               Government favorite = Government.greaterTreasury(a, b);
@@ -937,300 +849,290 @@
           }
         }
       #+end_src 
-      
       - Extra ~static class~: ~King~, ~Mayor~, ~Accountant~, ~Thief~
-      - ~Explorer~ is ok because it accesses ~greaterTreasury~ and ~treasury~ through ~Government favorite~, instead of *directly*.    
+      - ~Explorer~ is ok because it accesses ~greaterTreasury~ and ~treasury~ through ~Government favorite~, not *directly*.    
+*** addLast() and size()
+    - ~addLast~ 
+      #+begin_src java :classname 
+        /** Adds an item to the end of the list. */
+        public void addLast(int x) {
+            IntNode p = first;
 
-**** addLast() and size()
-     - ~addLast~ 
-       #+begin_src java :classname 
-         /** Adds an item to the end of the list. */
-         public void addLast(int x) {
-             IntNode p = first;
+            /* Advance p to the end of the list. */
+            while (p.next != null) {
+                p = p.next;
+            }
+            p.next = new IntNode(x, null);
+        }
+      #+end_src 
+    - ~private static int size(IntNode p)~: Returns the size of the list *starting* at ~IntNode p~
+      #+begin_src java :classname 
+        /** Returns the size of the list starting at IntNode p. */
+        private static int size(IntNode p) {
+            if (p.next == null) {
+                return 1;
+            }
 
-             /* Advance p to the end of the list. */
-             while (p.next != null) {
-                 p = p.next;
-             }
-             p.next = new IntNode(x, null);
-         }
-       #+end_src 
-     - ~private static int size(IntNode p)~: Returns the size of the list *starting* at ~IntNode p~
-       #+begin_src java :classname 
-         /** Returns the size of the list starting at IntNode p. */
-         private static int size(IntNode p) {
-             if (p.next == null) {
-                 return 1;
-             }
+            return 1 + size(p.next);
+        }
+      #+end_src
+      - A *private helper* (~SLList~) method that interacts with the underlying *naked recursive* data structure (~IntNode~) 
+      - *Recursive*: ~return 1 + size(p.next)~
+      - ~private~: variables and methods can only be accessed by code inside the *same* ~.java~ file
+      - ~static~: variables and methods *inherented to class itself* rather than *instances of class* 
+    - ~public int size()~: Returns the size of the *whole* list (starting at ~first~)  
+      #+begin_src java :classname 
+        public int size() {
+            return size(first);
+        }
+      #+end_src
+      - ~size()~ and ~size(IntNode p)~: *overloaded* with the same name but *different signatures*  
+*** Improvement #5: Caching
+    add a ~size~ variable to the ~SLList~ class that tracks the current size. This practice of *saving important data to speed up retrieval* is sometimes known as *caching*.
+    #+begin_src java :classname 
+      public class SLList {
+          ... /* IntNode declaration omitted. */
+          private IntNode first;
+          private int size;
 
-             return 1 + size(p.next);
-         }
-       #+end_src
-       - A *private helper* (~SLList~) method that interacts with the underlying *naked recursive* data structure (~IntNode~) 
-       - *Recursive*: ~return 1 + size(p.next)~
-       - ~private~: variables and methods can only be accessed by code inside the *same* ~.java~ file
-       - ~static~: variables and methods *inherented to class itself* rather than *instances of class* 
-     - ~public int size()~: Returns the size of the *whole* list (starting at ~first~)  
-       #+begin_src java :classname 
-         public int size() {
-             return size(first);
-         }
-       #+end_src
-       - ~size()~ and ~size(IntNode p)~: *overloaded* with the same name but *different signatures*  
+          public SLList(int x) {
+              first = new IntNode(x, null);
+              size = 1;
+          }
 
-**** Improvement #5: Caching
-     add a ~size~ variable to the ~SLList~ class that tracks the current size. This practice of *saving important data to speed up retrieval* is sometimes known as *caching*.
-     #+begin_src java :classname 
-       public class SLList {
-           ... /* IntNode declaration omitted. */
-           private IntNode first;
-           private int size;
+          public void addFirst(int x) {
+              first = new IntNode(x, first);
+              size += 1;
+          }
 
-           public SLList(int x) {
-               first = new IntNode(x, null);
-               size = 1;
-           }
+          public int size() {
+              return size;
+          }
+          ...
+      }
+    #+end_src 
+    - make ~size()~ incredibly fast no matter how large the list
+    - slow down ~addFirst~ and ~addLast~ method
+    - increase memory of usage of ~SLList~ class 
+*** Improvement #6: The Empty List
+    #+begin_src java :classname 
+      public class SLList {
+          ...
+          public SLList() {
+              first = null;
+              size = 0;
+          }
 
-           public void addFirst(int x) {
-               first = new IntNode(x, first);
-               size += 1;
-           }
+          public SLList(int x) {
+              first = new IntNode(x, null);
+              size = 1;
+          }
 
-           public int size() {
-               return size;
-           }
-           ...
-       }
-     #+end_src 
-     - make ~size()~ incredibly fast no matter how large the list
-     - slow down ~addFirst~ and ~addLast~ method
-     - increase memory of usage of ~SLList~ class 
+          /** Adds an item to the end of the list. */
+          public void addLast(int x) {
+              size += 1
+              if (first == Null) {
+                  first = new IntNode(x, Null);
+                  return;
+              }
+              IntNode p = first;
 
-**** Improvement #6: The Empty List
-     #+begin_src java :classname 
-       public class SLList {
-           ...
-           public SLList() {
-               first = null;
-               size = 0;
-           }
+              /* Advance p to the end of the list. */
+              while (p.next != null) {
+                  p = p.next;
+              }
+              p.next = new IntNode(x, null);
+          }
 
-           public SLList(int x) {
-               first = new IntNode(x, null);
-               size = 1;
-           }
+          /** Crashes when you call addLast on an empty SLList. Fix it. */
+          public static void main(String[] args) {
+              SLList x = new SLList();
+              x.addLast(5);
+          }
+      }
+    #+end_src 
+    - ~SLList(int x)~ and ~SLList~ *overloaded*
+    - ~addLast~ crashes on *empty* SLList
+**** Question:                                                    :QUESTIONS:
+     1. java里的 ~this~ 怎么用？可以来解决 ~addLast~ ？  
+*** Improvement #6b: Sentinel Nodes
+    make all ~SLLists~ to use the *same methods* -> create a special ~IntNode~ node: *sentinel node*  
+    #+begin_src java :classname 
+      public void addLast(int x) {
+          size += 1;
+          IntNode p = sentinel;
+          while (p.next != null) {
+              p = p.next;
+          }
 
-           /** Adds an item to the end of the list. */
-           public void addLast(int x) {
-               size += 1
-               if (first == Null) {
-                   first = new IntNode(x, Null);
-                   return;
-               }
-               IntNode p = first;
-
-               /* Advance p to the end of the list. */
-               while (p.next != null) {
-                   p = p.next;
-               }
-               p.next = new IntNode(x, null);
-           }
-
-           /** Crashes when you call addLast on an empty SLList. Fix it. */
-           public static void main(String[] args) {
-               SLList x = new SLList();
-               x.addLast(5);
-           }
-       }
-     #+end_src 
-     - ~SLList(int x)~ and ~SLList~ *overloaded*
-     - ~addLast~ crashes on *empty* SLList
-***** Question:                                                   :QUESTIONS:
-      1. java里的 ~this~ 怎么用？可以来解决 ~addLast~ ？  
-**** Improvement #6b: Sentinel Nodes
-     make all ~SLLists~ to use the *same methods* -> create a special ~IntNode~ node: *sentinel node*  
-     #+begin_src java :classname 
-       public void addLast(int x) {
-           size += 1;
-           IntNode p = sentinel;
-           while (p.next != null) {
-               p = p.next;
-           }
-
-           p.next = new IntNode(x, null);
-       }
-     #+end_src 
-     - Empty list created by ~SLList L = new SLList()~
-       #+DOWNLOADED: /tmp/screenshot.png @ 2019-06-06 00:18:33
-       [[file:2._Lists/screenshot_2019-06-06_00-18-33.png]]
-     - a ~SLList~ with 5, 10, 15
-       #+DOWNLOADED: /tmp/screenshot.png @ 2019-06-06 00:19:26
-       [[file:2._Lists/screenshot_2019-06-06_00-19-26.png]]
-     - ~sentinel = new IntNode(random, Null)~
-***** Question:                                                   :QUESTIONS:
-      1.在哪里定义 ~sentinel~ ？ ~sentinel~ 与 ~first~ 和 ~addFirst~ 怎么串联起来？   
-**** Invariants
-     An *invariant* is a *fact* about a *data structure* that is guaranteed to be *true* (assuming there are no bugs in your code)
-     A ~SLList~ with a *sentinel node* has at least the following invariants:
-     - The ~sentinel~ reference always points to a *sentinel node*.
-     - The *front item* (if it exists), is always at ~sentinel.next.item~.
-     - The ~size~ variable is always the total number of items that have been added.
-
+          p.next = new IntNode(x, null);
+      }
+    #+end_src 
+    - Empty list created by ~SLList L = new SLList()~
+      #+DOWNLOADED: /tmp/screenshot.png @ 2019-06-06 00:18:33
+      [[file:2._Lists/screenshot_2019-06-06_00-18-33.png]]
+    - a ~SLList~ with 5, 10, 15
+      #+DOWNLOADED: /tmp/screenshot.png @ 2019-06-06 00:19:26
+      [[file:2._Lists/screenshot_2019-06-06_00-19-26.png]]
+    - ~sentinel = new IntNode(random, Null)~
+**** Question:                                                    :QUESTIONS:
+     1.在哪里定义 ~sentinel~ ？ ~sentinel~ 与 ~first~ 和 ~addFirst~ 怎么串联起来？   
+*** Invariants
+    An *invariant* is a *fact* about a *data structure* that is guaranteed to be *true* (assuming there are no bugs in your code)
+    A ~SLList~ with a *sentinel node* has at least the following invariants:
+    - The ~sentinel~ reference always points to a *sentinel node*.
+    - The *front item* (if it exists), is always at ~sentinel.next.item~.
+    - The ~size~ variable is always the total number of items that have been added.
 ** 2.3 The DLList
-*** DLList
-**** addLast
-     Previous ~addLast~ is *slow* for long lists -> adding a ~last~ variable 
-     #+begin_src java :classname 
-       public class SLList {
-           private IntNode sentinel;
-           private IntNode last;
-           private int size;    
+*** addLast
+    Previous ~addLast~ is *slow* for long lists -> adding a ~last~ variable 
+    #+begin_src java :classname 
+      public class SLList {
+          private IntNode sentinel;
+          private IntNode last;
+          private int size;    
 
-           public void addLast(int x) {
-               last.next = new IntNode(x, null);
-               last = last.next;
-               size += 1;
-           }
-           ...
-       }
-     #+end_src 
-***** Exercise 2.3.1
+          public void addLast(int x) {
+              last.next = new IntNode(x, null);
+              last = last.next;
+              size += 1;
+          }
+          ...
+      }
+    #+end_src 
+
+    - Exercise 2.3.1
       #+DOWNLOADED: /tmp/screenshot.png @ 2019-06-09 22:14:35
       [[file:2._Lists/screenshot_2019-06-09_22-14-35.png]]
-      ~addLast~ and ~getLast~ *rapid*, ~removeLast~ slow   
-**** SecondToLast
-     Adding a ~secondToLast~ 
-**** Improvement #7: Looking Back
-     Adding a previous pointer to each ~IntNode~ 
-     #+begin_src java :classname 
-       public class IntNode {
-           public IntNode prev;
-           public int item;
-           public IntNode next;
-       }
-     #+end_src 
-      
-     #+DOWNLOADED: /tmp/screenshot.png @ 2019-06-09 22:51:21
-     [[file:2._Lists/screenshot_2019-06-09_22-51-21.png]]
-**** Improvement #8: Sentinel Upgrade
-     ~last~ sometimes points at the ~sentinel~ node, and sometimes at a real node ->
-     - Adding a *second sentinel* node to the back of the list
-       #+DOWNLOADED: /tmp/screenshot.png @ 2019-06-09 23:08:50
-       [[file:2._Lists/screenshot_2019-06-09_23-08-50.png]]
-     - Implementing the list so that it is *circular*, with the *front and back* pointers sharing the *same sentinel* node
-       #+DOWNLOADED: /tmp/screenshot.png @ 2019-06-09 23:09:34
-       [[file:2._Lists/screenshot_2019-06-09_23-09-34.png]]
-**** Generic DLLists
-     :PROPERTIES:
-     :ID:       bb911b87-f2ab-4583-bd38-debebff91afb
-     :END:
-     Creating data structures that hold any ~reference~ type 
-     - Adding ~<>~ to define generic ~DLList~ 
-       #+begin_src java :classname 
-         public class DLList<BleepBlorp> {
-             private IntNode sentinel;
-             private int size;
+     ~addLast~ and ~getLast~ *rapid*, ~removeLast~ slow   
+*** SecondToLast
+    Adding a ~secondToLast~ 
+*** Improvement #7: Looking Back
+    Adding a previous pointer to each ~IntNode~ 
+    #+begin_src java :classname 
+      public class IntNode {
+          public IntNode prev;
+          public int item;
+          public IntNode next;
+      }
+    #+end_src 
+    #+DOWNLOADED: /tmp/screenshot.png @ 2019-06-09 22:51:21
+    [[file:2._Lists/screenshot_2019-06-09_22-51-21.png]]
+*** Improvement #8: Sentinel Upgrade
+    ~last~ sometimes points at the ~sentinel~ node, and sometimes at a real node ->
+    - Adding a *second sentinel* node to the back of the list
+      #+DOWNLOADED: /tmp/screenshot.png @ 2019-06-09 23:08:50
+      [[file:2._Lists/screenshot_2019-06-09_23-08-50.png]]
+    - Implementing the list so that it is *circular*, with the *front and back* pointers sharing the *same sentinel* node
+      #+DOWNLOADED: /tmp/screenshot.png @ 2019-06-09 23:09:34
+      [[file:2._Lists/screenshot_2019-06-09_23-09-34.png]]
+*** Generic DLLists
+    Creating data structures that hold any ~reference~ type 
+    - Adding ~<>~ to define generic ~DLList~ 
+      #+begin_src java :classname 
+        public class DLList<BleepBlorp> {
+            private IntNode sentinel;
+            private int size;
 
-             public class IntNode {
-                 public IntNode prev;
-                 public BleepBlorp item;
-                 public IntNode next;
-                 ...
-             }
-             ...
-         }
-       #+end_src
-     - Instantiate generic ~DLList~ 
-       #+begin_src java :classname 
-         DLList<String> d2 = new DLList<>("hello");
-         d2.addLast("world");
-       #+end_src 
-     - Generics only work with ~reference~ types -> using the ~reference~ version of the ~primitive~ type
-       #+begin_src java :classname 
-         DLList<Integer> d1 = new DLList<>(5);
-         d1.insertFront(10);
-       #+end_src 
-
+            public class IntNode {
+                public IntNode prev;
+                public BleepBlorp item;
+                public IntNode next;
+                ...
+            }
+            ...
+        }
+      #+end_src
+    - Instantiate generic ~DLList~ 
+      #+begin_src java :classname 
+        DLList<String> d2 = new DLList<>("hello");
+        d2.addLast("world");
+      #+end_src 
+    - Generics only work with ~reference~ types -> using the ~reference~ version of the ~primitive~ type
+      #+begin_src java :classname 
+        DLList<Integer> d1 = new DLList<>(5);
+        d1.insertFront(10);
+      #+end_src 
 ** 2.4 Arrays
-*** Array Basics
-**** Array Creation
-     Three valid notations for array creation
-     #+begin_src java :classname 
-       x = new int[3];
-       y = new int[]{1, 2, 3, 4, 5};
-       int[] z = {9, 10, 11, 12, 13};
-     #+end_src 
-**** Array Access and Modification
-     #+begin_src java :classname 
-       public class ClassNameHere {
-           public static void main(String[] args) {
-               int[] z = null;
-               int[] x, y;
+*** Array Creation
+    Three valid notations for array creation
+    #+begin_src java :classname 
+      x = new int[3];
+      y = new int[]{1, 2, 3, 4, 5};
+      int[] z = {9, 10, 11, 12, 13};
+    #+end_src 
+*** Array Access and Modification
+    #+begin_src java :classname 
+      public class ClassNameHere {
+          public static void main(String[] args) {
+              int[] z = null;
+              int[] x, y;
 
-               x = new int[]{1, 2, 3, 4, 5};
-               y = x;
-               x = new int[]{-1, 2, 5, 4, 99};
-               y = new int[3];
-               z = new int[0];
-               int xL = x.length;
+              x = new int[]{1, 2, 3, 4, 5};
+              y = x;
+              x = new int[]{-1, 2, 5, 4, 99};
+              y = new int[3];
+              z = new int[0];
+              int xL = x.length;
 
-               String[] s = new String[6];
-               s[4] = "ketchup";
-               s[x[3] - x[1]] = "muffins";
+              String[] s = new String[6];
+              s[4] = "ketchup";
+              s[x[3] - x[1]] = "muffins";
 
-               int[] b = {9, 10, 11};
-               System.arraycopy(b, 0, x, 3, 2);
-           }
-       }
-     #+end_src 
-     #+DOWNLOADED: /tmp/screenshot.png @ 2019-06-11 21:03:11
-     [[file:2._Lists/screenshot_2019-06-11_21-03-11.png]]
-     - ~System.arraycopy(b, 0, x, 3, 2)~ = ~x[3:5] = b[0:2]~ in python
-       - ~b~: The array to use as a source
-       - ~0~: Where to start in the source array
-       - ~x~: The array to use as a destination
-       - ~3~: Where to start in the destination array
-       - ~2~: How many items to copy 
-**** 2D Arrays in Java
-     2D array in Java is actually just an *array of arrays*
-     #+begin_src java :classname 
-       public class ArrayBasics2 {
-           public static void main(String[] args) {
-               int[][] pascalsTriangle;
-               pascalsTriangle = new int[4][];
-               int[] rowZero = pascalsTriangle[0];
+              int[] b = {9, 10, 11};
+              System.arraycopy(b, 0, x, 3, 2);
+          }
+      }
+    #+end_src 
+    #+DOWNLOADED: /tmp/screenshot.png @ 2019-06-11 21:03:11
+    [[file:2._Lists/screenshot_2019-06-11_21-03-11.png]]
+    - ~System.arraycopy(b, 0, x, 3, 2)~ = ~x[3:5] = b[0:2]~ in python
+      - ~b~: The array to use as a source
+      - ~0~: Where to start in the source array
+      - ~x~: The array to use as a destination
+      - ~3~: Where to start in the destination array
+      - ~2~: How many items to copy 
+*** 2D Arrays in Java
+    2D array in Java is actually just an *array of arrays*
+    #+begin_src java :classname 
+      public class ArrayBasics2 {
+          public static void main(String[] args) {
+              int[][] pascalsTriangle;
+              pascalsTriangle = new int[4][];
+              int[] rowZero = pascalsTriangle[0];
 		
-               pascalsTriangle[0] = new int[]{1};
-               pascalsTriangle[1] = new int[]{1, 1};
-               pascalsTriangle[2] = new int[]{1, 2, 1};
-               pascalsTriangle[3] = new int[]{1, 3, 3, 1};
-               int[] rowTwo = pascalsTriangle[2];
-               rowTwo[1] = -5;
+              pascalsTriangle[0] = new int[]{1};
+              pascalsTriangle[1] = new int[]{1, 1};
+              pascalsTriangle[2] = new int[]{1, 2, 1};
+              pascalsTriangle[3] = new int[]{1, 3, 3, 1};
+              int[] rowTwo = pascalsTriangle[2];
+              rowTwo[1] = -5;
 
-               int[][] matrix;
-               matrix = new int[4][];
-               matrix = new int[4][4]; 
+              int[][] matrix;
+              matrix = new int[4][];
+              matrix = new int[4][4]; 
 
-               int[][] pascalAgain = new int[][]{{1}, {1, 1}, 
-                                                 {1, 2, 1}, {1, 3, 3, 1}};
-           }
-       } 
-     #+end_src 
-     #+DOWNLOADED: /tmp/screenshot.png @ 2019-06-11 21:26:52
-     [[file:2._Lists/screenshot_2019-06-11_21-26-52.png]]
-***** Exercise 2.4.1
+              int[][] pascalAgain = new int[][]{{1}, {1, 1}, 
+                                                {1, 2, 1}, {1, 3, 3, 1}};
+          }
+      } 
+    #+end_src 
+    #+DOWNLOADED: /tmp/screenshot.png @ 2019-06-11 21:26:52
+    [[file:2._Lists/screenshot_2019-06-11_21-26-52.png]]
+
+    - Exercise 2.4.1
       #+begin_src java :classname 
         public class ArrayDanger {
-
+ 
             public static void main(String[] args) {
                 int[][] x = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
-
+ 
                 int[][] z = new int[3][];
                 z[0] = x[0];
                 z[1] = x[1];
                 z[2] = x[2];
                 z[0][0] = -z[0][0];
-
+ 
                 int[][] w = new int[3][3];
                 System.arraycopy(x[0], 0, w[0], 0, 3);
                 System.arraycopy(x[1], 0, w[1], 0, 3);
@@ -1244,66 +1146,1358 @@
       [[file:2._Lists/screenshot_2019-06-11_21-31-26.png]]
       - ~z[i] = x[i]~ will make ~z[i]~ and ~x[i]~ point to the same array (the *same memory box*), so any operations on the one will have the *same effect* on the other
       - ~System.arraycopy~ will *create new memory box* and just copy the *value* from *src array to des array*. 
-**** Arrays vs. Classes
-     Both ~arrays~ and ~classes~ can be used to organize a *bunch of memory boxes*. In both cases, the number of memory boxes is *fixed*
-     - Key differences between memory boxes in ~arrays~ and ~classes~
-       - ~Array~ boxes are *numbered* and accessed using ~[]~ notation, and ~class~ boxes are *named* and accessed using dot notation ~.~
-       - ~Array~ boxes must all be the *same* type. ~Class~ boxes can be *different* types
-     - One particularly notable *impact of these difference* is that ~[]~ notation allows us to specify which index we'd like *at runtime*
-       #+begin_src java :classname 
-         int indexOfInterest = askUserForInteger();
-         int[] x = {100, 101, 102, 103};
-         int k = x[indexOfInterest];
-         System.out.println(k);
+*** Arrays vs. Classes
+    Both ~arrays~ and ~classes~ can be used to organize a *bunch of memory boxes*. In both cases, the number of memory boxes is *fixed*
+    - Key differences between memory boxes in ~arrays~ and ~classes~
+      - ~Array~ boxes are *numbered* and accessed using ~[]~ notation, and ~class~ boxes are *named* and accessed using dot notation ~.~
+      - ~Array~ boxes must all be the *same* type. ~Class~ boxes can be *different* types
+    - One particularly notable *impact of these difference* is that ~[]~ notation allows us to specify which index we'd like *at runtime*
+      #+begin_src java :classname 
+        int indexOfInterest = askUserForInteger();
+        int[] x = {100, 101, 102, 103};
+        int k = x[indexOfInterest];
+        System.out.println(k);
 
-         $ javac arrayDemo
-         $ java arrayDemo
-         What index do you want? 2
-         102
-       #+end_src
-       - By contrast, *specifying fields* in a class is not something we do at runtime
-         #+begin_src java :classname 
-           String fieldOfInterest = "mass";
-           Planet p = new Planet(6e24, "earth");
-           double mass = p[fieldOfInterest];
+        $ javac arrayDemo
+        $ java arrayDemo
+        What index do you want? 2
+        102
+      #+end_src
+      - By contrast, *specifying fields* in a class is not something we do at runtime
+        #+begin_src java :classname 
+          String fieldOfInterest = "mass";
+          Planet p = new Planet(6e24, "earth");
+          double mass = p[fieldOfInterest];
 
-           $ javac classDemo
-           FieldDemo.java:5: error: array required, but Planet found
-                   double mass = earth[fieldOfInterest];        
-                                          ^
+          $ javac classDemo
+          FieldDemo.java:5: error: array required, but Planet found
+                  double mass = earth[fieldOfInterest];        
+                                         ^
   
-           String fieldOfInterest = "mass";
-           Planet p = new Planet(6e24, "earth");
-           double mass = p.fieldOfInterest;
+          String fieldOfInterest = "mass";
+          Planet p = new Planet(6e24, "earth");
+          double mass = p.fieldOfInterest;
 
-           $ javac classDemo
-           FieldDemo.java:5: error: cannot find symbol
-                   double mass = earth.fieldOfInterest;        
-                                      ^
-             symbol:   variable fieldOfInterest
-              location: variable earth of type Planet
-         #+end_src
-         - ~reflection~: A way to specify desired fields in a class at runtime, which is considered very *bad* coding style for *typical* programs
-***** Question:                                                   :QUESTIONS:
-      1. 那两个运行时定义类成员的例子是什么意思？
-      2. 运行时定义 ~array~ 值也是不好的风格？ 
-**** Appendix: Java Arrays vs. Other Languages
-     - Have no special syntax for *"slicing"* (such as in Python).
-     - Cannot be *shrunk or expanded* (such as in Ruby).
-     - Do not have *member methods* (such as in Javascript).
-     - Must contain values only of the *same type* (unlike Python).
+          $ javac classDemo
+          FieldDemo.java:5: error: cannot find symbol
+                  double mass = earth.fieldOfInterest;        
+                                     ^
+            symbol:   variable fieldOfInterest
+             location: variable earth of type Planet
+        #+end_src
+        - ~reflection~: A way to specify desired fields in a class at runtime, which is considered very *bad* coding style for *typical* programs
+**** Question:                                                    :QUESTIONS:
+     1. 那两个运行时定义类成员的例子是什么意思？
+     2. 运行时定义 ~array~ 值也是不好的风格？ 
+*** Appendix: Java Arrays vs. Other Languages
+    - Have no special syntax for *"slicing"* (such as in Python).
+    - Cannot be *shrunk or expanded* (such as in Ruby).
+    - Do not have *member methods* (such as in Javascript).
+    - Must contain values only of the *same type* (unlike Python).
+** 2.5 The AList
+   Unlike the ~DLList~, the ~AList~ will use *arrays* to store data instead of a *linked list*.
+   ~int get(int i)~ in ~DLList~ costs $n/2$ times in worst case -> accessing ~array[i]~ takes *constant* time -> *array-based* list instead of *linked*-list  
+*** Our First Attempt: The Naive Array Based List
+    - Optional Exercise 2.5.1: Try to build an AList class that supports addLast, getLast, get, and size operations. Your AList should work for any size array up to 100.
+      #+begin_src java :classname 
+        public class AList {
+            private int[] items;
+            private int size;
+ 
+            /** Creates an empty list. */
+            public AList() {
+                items = new int[100];
+                size = 0;
+            }
+ 
+            /** Inserts X into the back of the list. */
+            public void addLast(int x) {
+                items[size] = x;
+                size = size + 1;
+            }
+ 
+            /** Returns the item from the back of the list. */
+            public int getLast() {
+                return items[size - 1];
+            }
+            /** Gets the ith item in the list (0 is the front). */
+            public int get(int i) {
+                return items[i];
+            }
+ 
+            /** Returns the number of items in the list. */
+            public int size() {
+                return size;
+            }
+ 
+            /** Deletes item from back of the list and
+             ,* returns deleted item. */
+            public int removeLast() {
+                int x = getLast();
+                size = size - 1;
+                return x;
+            }
+        } 
+      #+end_src 
+      - Any change to *list(abstract idea)* must be reflected in a change in one or more *memory boxes(concrete representation)* in implementation: ~size~, ~items~ and ~items[i]~ above
+      - *Invariants* guide the changes
+        - The position of the next item to be inserted is always ~size~
+        - ~size~ is always the number of items in the ~AList~
+        - The last item in the list is always in position ~size - 1~ 
+*** Naive Resizing Arrays
+    #+begin_src java :classname 
+      public void resize(int capacity) {
+          int[] a = new int[capacity];
+          System.arraycopy(items, 0, a, 0, size);
+          items = a;
+      }
+
+      public void addLast(int x) {
+          if (size == items.length) {
+              resize(size + 1);
+          }
+          items[size] = x;
+          size = size + 1;
+      }
+    #+end_src 
+    - ~System.arraycopy(items, 0, a, 0, size);~
+    - Only if ~size == items.length~ would call ~resize~ 
+*** Analyzing the Naive Resizing Array
+    #+DOWNLOADED: https://joshhug.gitbooks.io/hug61b/content/chap2/fig25/insert_experiment.png @ 2019-08-06 12:08:11
+    [[file:2._Lists/insert_experiment_2019-08-06_12-08-10.png]]
+    - ~add~ in ~SLList~ takes the same additional amount of time
+    - ~addLast~ in ~AList~ 
+      - *Creating* all those memory boxes and *recopying* their contents takes time
+      - Each operation takes *linear* time (integral is a *parabola*)
+*** Geometric Resizing
+    Grow the size of array by a *multiplicative* amount, rather than an *additive* amount
+    #+begin_src java :classname 
+      public void insertBack(int x) {
+          if (size == items.length) {
+              resize(size + RFACTOR);
+          }
+          items[size] = x;
+          size += 1;
+      }
+    #+end_src 
+    #+begin_src java :classname 
+      public void insertBack(int x) {
+          if (size == items.length) {
+              resize(size * RFACTOR);
+          }
+          items[size] = x;
+          size += 1;
+      }
+    #+end_src 
+*** Memory Performance
+    Usage ratio R: size of the list / length of the ~items~ array, halve the size of the array when R falls to less than 0.25
+*** Generic ALists
+    #+begin_src java :classname 
+      public class AList<Glorp> {
+          private Glorp[] items;
+          private int size;
+
+          /** Creates an empty list. */
+          public AList() {
+              items = (Glorp []) new Object[8];
+              size = 0;
+          }
+
+          /** Inserts X into the back of the list. */
+
+          public void resize(int capacity) {
+              Glorp[] a = (Glorp []) new Object[capacity];
+              System.arraycopy(items, 0, a, 0, size);
+              items = a;
+          }
+
+          public void addLast(int x) {
+              if (size == items.length) {
+                  resize(size + 1);
+              }
+              items[size] = x;
+              size = size + 1;
+          }
+
+          /** Returns the item from the back of the list. */
+          public Glorp getLast() {
+              return items[size - 1];
+          }
+          /** Gets the ith item in the list (0 is the front). */
+          public Glorp get(int i) {
+              return items[i];
+          }
+
+          /** Returns the number of items in the list. */
+          public int size() {
+              return size;
+          }
+
+          /** Deletes item from back of the list and
+           ,* returns deleted item. */
+          public Glorp removeLast() {
+              Glorp x = getLast();
+              items[size - 1] = null;
+              size = size - 1;
+              return x;
+          }
+      } 
+   #+end_src 
+    - Not ~Glorp[] items = new Glorp[8];~ but ~Glorp[] items = (Glorp []) new Object[8];~
+    - Java only destroys *objects* when the last *reference* has been lost: ~items[size - 1] = null;~ to *save memory* and *avoid loitering*, while ~int~ need not ~items[size - 1] = 0~
 * 3. Testing
-** 3.1 A New Way
+  Testing and Selection Sort
+** JUnit Testing
+*** Ad hoc test 
+    #+begin_src java :classname 
+      public class TestSort {
+          /** Tests the sort method of the Sort class. */
+          public static void testSort() {
+              String[] input = {"i", "have", "an", "egg"};
+              String[] expected = {"an", "egg", "have", "i"};
+              Sort.sort(input);
+              for (int i = 0; i < input.length; i += 1) {
+                  if (!input[i].equals(expected[i])) {
+                      System.out.println("Mismatch in position " + i + ", expected: " + expected + ", but got: " + input[i] + ".");
+                      break;
+                  }
+              }
+          }
+
+          public static void main(String[] args) {
+              testSort();
+          }
+      }
+    #+end_src 
+    #+begin_src java :classname 
+      public class Sort {
+          /** Sorts strings destructively. */
+          public static void sort(String[] x) {        
+          }
+      }
+    #+end_src 
+    - ~==~ can't be used for ~Object~
+    - ~java.util.Arrays.equals~ for ~Array~
+*** JUnit 
+    #+begin_src java :classname 
+      public static void testSort() {
+          String[] input = {"i", "have", "an", "egg"};
+          String[] expected = {"an", "egg", "have", "i"};
+          Sort.sort(input);
+          org.junit.Assert.assertArrayEquals(expected, input);
+      }
+    #+end_src 
+** Selection Sort
+   #+begin_src java :classname 
+     public static void sort(String[] x) { 
+         // find the smallest item
+         // move it to the front
+         // selection sort the rest (using recursion?)
+     }
+   #+end_src 
+*** findSmallest
+    #+begin_src java :classname 
+      /** Returns the smallest string in x. 
+       ,* @source Got help with string compares from https://goo.gl/a7yBU5. */
+      public static String findSmallest(String[] x) {
+          String smallest = x[0];
+          for (int i = 0; i < x.length; i += 1) {
+              int cmp = x[i].compareTo(smallest);
+              if (cmp < 0) {
+                  smallest = x[i];
+              }
+          }
+          return smallest;
+      }
+    #+end_src 
+    - Not ~if (x[i] < smallest)~ but ~int cmp = x[i].compareTo(smallest);~ 
+    #+begin_src java :classname 
+      public class TestSort {
+          ...
+          public static void testFindSmallest() {
+              String[] input = {"i", "have", "an", "egg"};
+              String expected = "an";
+
+              String actual = Sort.findSmallest(input);
+              org.junit.Assert.assertEquals(expected, actual);        
+
+              String[] input2 = {"there", "are", "many", "pigs"};
+              String expected2 = "are";
+
+              String actual2 = Sort.findSmallest(input2);
+              org.junit.Assert.assertEquals(expected2, actual2);
+      }
+          public static void main(String[] args) {
+              testFindSmallest(); // note: we changed this from testSort!
+          }
+      }
+    #+end_src 
+    - ~org.junit.Assert.assertEquals(expected, actual)~ 
+*** Swap
+    #+begin_src java :classname 
+      public static void swap(String[] x, int a, int b) {
+          String temp = x[a];
+          x[a] = x[b];
+          x[b] = temp;
+      }
+    #+end_src 
+    #+begin_src java :classname 
+      public class TestSort {
+          ...    
+
+          /** Test the Sort.swap method. */
+          public static void testSwap() {
+              String[] input = {"i", "have", "an", "egg"};
+              int a = 0;
+              int b = 2;
+              String[] expected = {"an", "have", "i", "egg"};
+
+              Sort.swap(input, a, b);
+              org.junit.Assert.assertArrayEquals(expected, input);
+          }
+
+          public static void main(String[] args) {
+              testSwap();
+          }
+      }
+    #+end_src 
+*** Revising findSmallest
+    #+begin_src java :classname 
+      /** Sorts strings destructively. */
+      public static void sort(String[] x) { 
+          // find the smallest item
+          String smallest = findSmallest(x);
+
+          // move it to the front
+          swap(x, 0, smallest);
+
+          // selection sort the rest (using recursion?)
+      }
+    #+end_src 
+    - ~smallest~ should be the index
+    ->
+    #+begin_src java :classname 
+      public static int findSmallest(String[] x) {
+          int smallestIndex = 0;
+          for (int i = 0; i < x.length; i += 1) {
+              int cmp = x[i].compareTo(x[smallestIndex]);
+              if (cmp < 0) {
+                  smallestIndex = i;
+              }
+          }
+          return smallestIndex;
+      }
+    #+end_src 
+    #+begin_src java :classname 
+      public static void testFindSmallest() {
+          String[] input = {"i", "have", "an", "egg"};
+          int expected = 2;
+
+          int actual = Sort.findSmallest(input);
+          org.junit.Assert.assertEquals(expected, actual);        
+
+          String[] input2 = {"there", "are", "many", "pigs"};
+          int expected2 = 1;
+
+          int actual2 = Sort.findSmallest(input);
+          org.junit.Assert.assertEquals(expected2, actual2);
+      }
+    #+end_src 
+    #+begin_src java :classname 
+      /** Sorts strings destructively. */
+      public static void sort(String[] x) { 
+          // find the smallest item
+          // move it to the front
+          // selection sort the rest (using recursion?)
+          int smallestIndex = findSmallest(x);
+          swap(x, 0, smallestIndex);
+      }
+    #+end_src 
+    #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-09 14:20:51
+    [[file:3._Testing/screenshot_2019-08-09_14-20-51.png]]
+*** Recursive Helper Methods
+    Considering only a subset of a larger array -> create a *private helper* method that has an *additional parameter* (or parameters) that delineate which part of the array to consider.
+    #+begin_src java :classname 
+      private static void sort(String[] x, int start) { 
+          int smallestIndex = findSmallest(x);
+          swap(x, start, smallestIndex);
+          sort(x, start + 1);
+      }
+    #+end_src 
+    #+begin_src java :classname 
+      /** Sorts strings destructively. */
+      public static void sort(String[] x) { 
+          sort(x, 0);
+      }
+    #+end_src 
+*** Debugging and Completing Sort
+    Running ~testSort~ 
+    1. Bug 1
+      #+begin_src java :classname 
+        Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException: 4
+            at Sort.swap(Sort.java:16)
+      #+end_src 
+      ->
+      #+begin_src java :classname 
+        /** Sorts strings destructively starting from item start. */
+        private static void sort(String[] x, int start) { 
+            if (start == x.length) {
+                return;
+            }
+            int smallestIndex = findSmallest(x);
+            swap(x, start, smallestIndex);
+            sort(x, start + 1);
+        }
+      #+end_src
+    2. Bug 2
+      #+begin_src java :classname
+        Exception in thread "main" arrays first differed at element [0]; 
+        expected<[an]> bit was:<[have]>
+      #+end_src 
+      -> 
+      #+begin_src java :classname 
+        public static int findSmallest(String[] x, int start) {
+            int smallestIndex = start;
+            for (int i = start; i < x.length; i += 1) {
+                int cmp = x[i].compareTo(x[smallestIndex]);
+                if (cmp < 0) {
+                    smallestIndex = i;
+                }
+            }
+            return smallestIndex;
+        }
+      #+end_src 
+      #+begin_src java :classname 
+        public static void testFindSmallest() {
+            String[] input = {"i", "have", "an", "egg"};
+            int expected = 2;
+  
+            int actual = Sort.findSmallest(input, 0);
+            org.junit.Assert.assertEquals(expected, actual);        
+  
+            String[] input2 = {"there", "are", "many", "pigs"};
+            int expected2 = 2;
+  
+            int actual2 = Sort.findSmallest(input2, 2);
+            org.junit.Assert.assertEquals(expected2, actual2);
+        }
+      #+end_src 
+      #+begin_src java :classname
+        /** Sorts strings destructively starting from item start. */
+        private static void sort(String[] x, int start) { 
+            if (start == x.length) {
+                return;
+            }
+            int smallestIndex = findSmallest(x, start);
+            swap(x, start, smallestIndex);
+            sort(x, start + 1);
+        }
+      #+end_src
+    #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-09 14:32:18
+    [[file:3._Testing/screenshot_2019-08-09_14-32-18.png]]
+** Reflections on the Development Process
+   Small units' function --> small units' tests --> writing small units to pass --> gathering small units and get bugs --> revising small units' tests and small units --> continue debuging
+** Better JUnit
+*** Two majro enhancements 
+    1. Test annotation
+       - Precede each method with ~@org.junit.Test~
+       - Change each test method to be *non-static*.
+       - Remove ~main~ method from the ~TestSort~ class.
+    2. ~import org.junit.Test~ and ~import static org.junit.Assert.*~
+       - ~@org.junit.Test~ -> ~@Test~
+       - Omit ~org.junit.Assert.~ 
 * 4. Inheritance, Implements
+** 4.1 Intro, Hello World Java
+*** Method overloading
+    #+begin_src java :classname 
+      public static String longest(SLList<String> list) {
+          int maxDex = 0;
+          for (int i = 0; i < list.size(); i += 1) {
+              String longestString = list.get(maxDex);
+              String thisString = list.get(i);
+              if (thisString.length() > longestString.length()) {
+                  maxDex = i;
+              }
+          }
+          return list.get(maxDex);
+      }
+    #+end_src 
+    - ~SLList<String> list~ for ~SLList~ and ~AList<String> list~ for ~AList~
+    - Many disadvantages
+*** Hypernyms, Hyponyms, and Interface
+    #+DOWNLOADED: https://joshhug.gitbooks.io/hug61b/content/assets/subclass.png @ 2019-08-09 17:37:17
+    [[file:4._Inheritance,_Implements/subclass_2019-08-09_17-37-17.png]]
+    - To express relationship above
+      1. Define a *interface* (superclass or hyernym)
+         #+begin_src java :classname 
+           public interface List61B<Item> {
+               public void addFirst(Item x);
+               public void add Last(Item y);
+               public Item getFirst();
+               public Item getLast();
+               public Item removeLast();
+               public Item get(int i);
+               public void insert(Item x, int position);
+               public int size();
+           }
+         #+end_src 
+      2. Specify subclasses (hyponyms): using ~implements List61B<Item>~ 
+         - ~public class AList<Item> implements List61B<Item>{...}~ and ~public class SLList<Item> implements List61B<Item>{...}~
+         - Any instances belong to *its class* and *superclasses of its class* ("is-a" relationship) 
+*** Overriding
+    #+begin_src java :classname 
+      class SLList<Item> {
+          ...
+          @Override
+          public void addFirst(Item x) {
+              insert(x, 0);
+          }
+      }
+    #+end_src 
+    - ~@Override~
+    - Subclass overrides methods: ~SLList~ overrides ~addFirst~ 
+*** Interface Inheritance
+    - *Subclass* inherits all the methods/behaviors of the *superclasses*
+    - A *superclass* memory box can refer to a *subclass* object (GRoE of ~=~ )
+      - ~List61B<String> someList = new SLList<String>();~ and ~someList.addFirst("elk");~ will compile and run well
+      - ~SLList<String> list~ and ~AList<String> list~ -> ~public static String longest(List61B<String> list)~
+*** Implementation Inheritance
+    - Every var in Java has *dynamic (run-time type)* and *static (compile-time type)* types
+      ~List61B<String> lst = new SLList<String>();~ 
+      - *Static type* of ~lst~: *unchangeable* declaration of ~lst~ -> ~List61B~
+      - *Dynamic type* of ~lst~: object's type that ~lst~ refers to -> ~SLList~
+    - Java checks object's *static type* when *compiling* and *dynamic type* when *running* (like *override method*)
+      - Override and *dynamic method selection*
+        - Define default in ~List61B~
+          #+begin_src java :classname 
+            default public void print() {
+                for (int i = 0; i < size(); i += 1) {
+                    System.out.print(get(i) + " ");
+                }
+                System.out.println();
+            }
+          #+end_src
+          - ~default~ keywork
+          - Efficient for ~AList~, inefficient for ~SLList~ 
+        - Override in ~SLList~
+         #+begin_src java :classname 
+           @Override
+           public void print() {
+               for (Node p = sentinel.next; p != null; p = p.next) {
+                   System.out.print(p.item + " ");
+               }
+           }
+         #+end_src
+         - ~@Override~ tag         
+      - Non-override (overload)
+        #+begin_src java :classname 
+          public static void peek(List61B<String> list) {
+              System.out.println(list.getLast());
+          }
+          public static void peek(SLList<String> list) {
+              System.out.println(list.getFirst());
+          }
+        #+end_src
+        #+begin_src java :classname 
+          SLList<String> SP = new SLList<String>();
+          List61B<String> LP = SP;
+          SP.addLast("elk");
+          SP.addLast("are");
+          SP.addLast("cool");
+          peek(SP);
+          peek(LP);
+        #+end_src
+        - ~peek(SP)~ runs the second ~peek~ while ~peek(LP)~ runs the first
+*** Interface Inheritance vs Implementation Inheritance
+    - Interface Inheritance (*what*): Simply tells *what* the subclasses should be able to do.
+    - Implementation inheritance (*how*): Tells the subclasses *how* they should behave.
+    - Common: "is-a" not "has-"
+** 4.2 Extends, Casting, Higher Order Function
+*** Extends
+    - ~RotatingSLList~ 
+      #+DOWNLOADED: https://joshhug.gitbooks.io/hug61b/content/assets/list_subclasses.png @ 2019-08-10 09:28:03
+      [[file:4._Inheritance,_Implements/list_subclasses_2019-08-10_09-28-03.png]]
+      #+begin_src java :classname 
+        public class RotatingSLList<Item> extends SLList<Item> {
+            public void rotateRight() {
+                Item x = removeLast();
+                addFirst(x);
+            }
+        }
+      #+end_src 
+      - By using ~extends~:
+        - Subclasses inherit all instance and static *variables*, all *methods* and all *nested classes* of superclasses.
+        - *Constructors* are not inherited, and *private* members cannot be *directly accessed* by subclasses.
+    - ~VengefulSLList~
+       #+begin_src java :classname 
+         public class VengefulSLList<Item> extends SLList<Item> {
+             SLList<Item> deletedItems;
 
+             public VengefulSLList() {
+                 super();
+                 deletedItems = new SLList<Item>();
+             }
 
+             @Override
+             public Item removeLast() {
+                 Item x = super.removeLast();
+                 deletedItems.addLast(x);
+                 return x;
+             }
 
+             /** Prints deleted items. */
+             public void printLostItems() {
+                 deletedItems.print();
+             }
+         }
+       #+end_src
+      - ~super~ to call *overridden methods and constructors* defined in the *superclass*: ~Item x = super.removeLast();~
+      - Constructor is not inherited, using ~super(paras)~ to make an *explicit call* to the *correct* superclass's constructor, while *implicit call* as just ~deletedItems = new SLList<Item>();~ would only call to superclass's *no-argument constructor*
+        #+begin_src java :classname 
+          public VengefulSLList(Item x) {
+              super(x);
+              deletedItems = new SLList<Item>();
+          }
 
+          public VengefulSLList() {
+              super();
+              deletedItems = new SLList<Item>();
+          }
+        #+end_src
+        - ~super(x)~ explicitly calls ~SLList(Item x)~
+        - ~super()~ explicitly calls ~SLList()~ 
+    - The /Object/ Class
+      Every class in Java ~extends~ the /Object/ class: /VengefulSLList/ ~extends~ /SLList/ *explicitly*, while /SLList/ ~extends~ /Object/ *implicitly*
+*** Encapsulation
+    The root of encapsulation lies in this notion of hiding information from the outside, abstracting away the complexity inside.
+    - Inheritance may break encapsulation
+      - 2 ~bark~ method for class ~Dog~ 
+        #+begin_src java :classname 
+          public void bark() {
+              System.out.println("bark");
+          }
+  
+          public void barkMany(int N) {
+              for (int i = 0; i < N; i += 1) {
+                  bark();
+              }
+          }
+        #+end_src
+        #+begin_src java :classname 
+          public void bark() {
+              barkMany(1);
+          }
+  
+          public void barkMany(int N) {
+              for (int i = 0; i < N; i += 1) {
+                  System.out.println("bark");
+              }
+          }
+        #+end_src
+      - ~VerboseDog~ inherits ~Dog~ 
+        #+begin_src java :classname 
+          @Override
+          public void barkMany(int N) {
+              System.out.println("As a dog, I say: ");
+              for (int i = 0; i < N; i += 1) {
+                  bark();
+              }
+          }
+        #+end_src
+        - Second ~bark~ lead to infinite loop when ~VerbodeDog.barkMany(n)~ is called, encapsulation is broken
+*** Type Checking and Casting
+    - Type Checking
+      #+DOWNLOADED: https://joshhug.gitbooks.io/hug61b/content/assets/dynamic_selection.png @ 2019-08-10 18:43:46
+      [[file:4._Inheritance,_Implements/dynamic_selection_2019-08-10_18-43-46.png]]
+      - ~sl.printLostItems();~ and ~VengefulSLList<Integer> vsl2 = sl;~ both result in *compile-time error*
+      - In general, the compiler only allows *method calls* and *assignments* based on *compile-time* types (*declared* type)
+    - Casting
+      Telling the compiler to view an expression as a *different compile-time* type.
+      #+begin_src java :classname 
+        public static Dog maxDog(Dog d1, Dog d2) { ... }
+      #+end_src
+      #+begin_src java :classname 
+        Poodle frank = new Poodle("Frank", 5);
+        Poodle frankJr = new Poodle("Frank Jr.", 15);
 
+        Dog largerDog = maxDog(frank, frankJr);
+        Poodle largerPoodle = maxDog(frank, frankJr); //does not compile! RHS has compile-time type Dog
+        Poodle largerPoodle = (Poodle) maxDog(frank, frankJr); // compiles! Right hand side has compile-time type Poodle after casting
+      #+end_src
+      - Casting allows to pass at *compile-time*: ~Poodle largerPoodle = (Poodle) maxDog(frank, frankJr);~, and this code won't raise exception at *run-time* due to ~frank~ and ~frankJr~ are both ~Poodle~
+      - Casting may raise ~ClassCastException~ at *run-time*
+        #+begin_src java :classname 
+          Poodle frank = new Poodle("Frank", 5);
+          Malamute frankSr = new Malamute("Frank Sr.", 100);
 
+          Poodle largerPoodle = (Poodle) maxDog(frank, frankSr); // runtime exception when frankSr (Malamute can't be casted to Poodle)
+        #+end_src
+        - Casting allows to pass ~Poodle largerPoodle = (Poodle) maxDog(frank, frankSr);~ at *compile-time* 
+        - ~ClassCastException~ raised at *run-time* when ~frankSr~ returned: ~Malamute~ can't be casted to ~Poodle~ 
+*** Higher Order Functions
+    Using *interface inheritance* to define higher order functions
+    #+begin_src java :classname 
+      public interface IntUnaryFunction {
+          int apply(int x);
+      }
+    #+end_src 
+    #+begin_src java :classname 
+      public class TenX implements IntUnaryFunction {
+          /* Returns ten times the argument. */
+          public int apply(int x) {
+              return 10 * x;
+          }
+      }
+    #+end_src 
+    #+begin_src java :classname 
+      public class HoFDemo {
+          public static int do_twice(IntUnaryFunction f, int x) {
+              return f.apply(f.apply(x));
+          }
 
+          public static void main(String[] args) {
+              System.out.println(do_twice(new Tenx(), 2));
+          }
+      }
+    #+end_src 
+    ~System.out.println(do_twice(new TenX(), 2));~ 
+** 4.3 Subtype Polymorphism vs. HOFs
+*** Subtype Polymorphism
+    *Polymorphism* refers to how *objects* can have many *forms or types* in Java
+    - Explicit HoF Approach
+      #+begin_src python :results output
+        def print_larger(x, y, compare, stringify):
+            if compare(x, y):
+                return stringify(x)
+            return stringify(y)
+      #+end_src
+      - A common way to print out the larger of two objects
+    - Subtype Polymorphism Approach
+      #+begin_src python :results output
+        def print_larger(x, y):
+            if x.largerThan(y):
+                return x.str()
+            return y.str()
+      #+end_src
+      - Object itself makes the choices. The ~largerFunction~ that is called is *dependent* on what ~x~ and ~y~ actually are.
+*** Max Function
+    - ~max~ function
+      #+begin_src java :classname 
+        public static Object max(Object[] items) {
+            int maxDex = 0;
+            for (int i = 0; i < items.length; i += 1) {
+                if (items[i] > items[maxDex]) {
+                    maxDex = i;
+                }
+            }
+            return items[maxDex];
+        }
 
+        public static void main(String[] args) {
+            Dog[] dogs = {new Dog("Elyse", 3), new Dog("Sture", 9), new Dog("Benjamin", 15)};
+            Dog maxDog = (Dog) max(dogs);
+            maxDog.bark();
+      #+end_src
+      - ~items[i] > items[maxDex]~ raises error as ~>~ doesn't work with arbitrary Object types
+      - Java can't redefine ~>~ operator
+    - ~maxDog~ function in the ~Dog~ class
+      #+begin_src java :classname 
+        public static Dog maxDog(Dog[] dogs) {
+            if (dogs == null || dogs.length == 0) {
+                return null;
+            }
+            Dog maxDog = dogs[0];
+            for (Dog d : dogs) {
+                if (d.size > maxDog.size) {
+                    maxDog = d;
+                }
+            }
+            return maxDog;
+        }
+      #+end_src
+      - Can't be generalized to other class (~Birds~ ...) 
+    - Use interface inheritance to generalized ~max~ func
+      #+DOWNLOADED: https://joshhug.gitbooks.io/hug61b/content/assets/dog_comparable.png @ 2019-08-11 10:11:54
+      [[file:4._Inheritance,_Implements/dog_comparable_2019-08-11_10-11-54.png]]
+      #+begin_src java :classname 
+        public interface OurComparable {
+            public int compareTo(Object o);
+        }
+      #+end_src
+      - ~Object o~ can be implemented by all *Objects*  
+      #+begin_src java :classname 
+        public class Dog implements OurComparable {
+            private String name;
+            private int size;
 
-* 1. Intro, Hello World Java
+            public Dog(String n, int s) {
+                name = n;
+                size = s;
+            }
+
+            public void bark() {
+                System.out.println(name + " says: bark");
+            }
+
+            public int compareTo(Object o) {
+                Dog uddaDog = (Dog) o;
+                return this.size - uddaDog.size;
+            }
+        }
+      #+end_src
+      - ~(Dog) o~ to cast from ~Object~ to ~Dog~ 
+      #+begin_src java :classname 
+        public static OurComparable max(OurComparable[] items) {
+            int maxDex = 0;
+            for (int i = 0; i < items.length; i += 1) {
+                int cmp = items[i].compareTo(items[maxDex]);
+                if (cmp > 0) {
+                    maxDex = i;
+                }
+            }
+            return items[maxDex];
+        }
+      #+end_src
+      - ~items[i].compareTo(items[maxDex]);~ 
+    - Interfaces Quiz
+        #+begin_src java :classname 
+          public class DogLauncher {
+              public static void main(String[] args) {
+                  ...
+                  Dog[] dogs = new Dog[]{d1, d2, d3};
+                  System.out.println(Maximizer.max(dogs));
+              }
+          }
+
+          public class Dog implements OurComparable {
+              ...
+              public int compareTo(Object o) {
+                  Dog uddaDog = (Dog) o;
+                  if (this.size < uddaDog.size) {
+                      return -1;
+                  } else if (this.size == uddaDog.size) {
+                      return 0;
+                  }
+                  return 1;
+              }
+              ...
+          }
+
+          public class Maximizer {
+              public static OurComparable max(OurComparable[] items) {
+                  ...
+                  int cmp = items[i].compareTo(items[maxDex]);
+                  ...
+                      }
+          }
+        #+end_src
+      - If omitting the ~compareTo()~ method from the ~Dog~ class -> ~Dog~ class fails to compile as it doen't implement ~compareTo~
+      - If omitting ~implements OurComparable~ from the ~Dog~ class header -> ~DogLauncher~ class fails to compile due to ~System.out.println(Maximizer.max(dogs));~, cause ~max~ only accepts an array of ~OurComparable~ objects, not ~Dog~
+      - ~Maximizer~ operates at a higher level of abstraction, it should pass compile
+*** Comparables
+    #+DOWNLOADED: https://joshhug.gitbooks.io/hug61b/content/assets/comparable_interface.png @ 2019-08-11 11:11:02
+    [[file:4._Inheritance,_Implements/comparable_interface_2019-08-11_11-11-02.png]]
+    #+DOWNLOADED: https://joshhug.gitbooks.io/hug61b/content/assets/comparable.png @ 2019-08-11 11:12:01
+    [[file:4._Inheritance,_Implements/comparable_2019-08-11_11-12-01.png]]
+    #+begin_src java :classname 
+      public class Dog implements Comparable<Dog> {
+          ...
+          public int compareTo(Dog uddaDog) {
+              return this.size - uddaDog.size;
+          }
+      }
+    #+end_src
+    - ~Comparable<T>~ -> ~public class Dog implements Comparable<Dog>~ : built-in interface ~Comparable~ takes a *generic type* ~<T>~ , which avoids casting.
+*** Comparator
+    #+begin_src java :classname 
+      public interface Comparator<T> {
+          int compare(T o1, T o2);
+      }
+    #+end_src
+    #+begin_src java :classname 
+      import java.util.Comparator;
+
+      public class Dog implements Comparable<Dog> {
+          ...
+          public int compareTo(Dog uddaDog) {
+              return this.size - uddaDog.size;
+          }
+
+          private static class NameComparator implements Comparator<Dog> {
+              public int compare(Dog a, Dog b) {
+                  return a.name.compareTo(b.name);
+              }
+          }
+
+          public static Comparator<Dog> getNameComparator() {
+              return new NameComparator();
+          }
+      }
+    #+end_src
+    #+DOWNLOADED: https://joshhug.gitbooks.io/hug61b/content/assets/comparator.png @ 2019-08-11 13:35:10
+    [[file:4._Inheritance,_Implements/comparator_2019-08-11_13-35-10.png]]
+    - ~Comparable~ used to compare Objects in natural order, ~Comparator~ used to compare in other user-defined order
+    - About nexted ~private static class NameComparator implements Comparator<Dog>~
+      - ~Dog~ can only implements just one interface ~Comparable~
+      - ~Comparator~ is used to augment comparison order
+      - *Nested* because each ~class~ implements ~Comparator<T>~ can only compare 2 objects of class ~T~, it should be *nested* in ~class T~ according to *OOP*
+      - Each comparator is an *object*, not *class or method*
+      - ~static~ for no need to instantiate a ~Dog~ object, just ~Dog.NameComparator()~ to get a comparator
+      - ~private~ just for convention: ~Dog.NameComparator()~ -> ~Dog.getNameComparator()~ 
+    - To retrieve *NameComparator*: ~Comparator<Dog> nc = Dog.getNameComparator();~
+    - Use *NameComparator* to compare 2 ~Dog~ objects: ~nc.compare(dog1, dog2);~
+    - ~String~'s built-in ~compareTo~
+*** To summarize
+    - *Interfaces* in Java provide the ability to make *callbacks*. A *callback* function is the *helping* function (in the scenario, ~compareTo~). In some languages, this is accomplished using *explicit function passing*; in Java, by *wrapping* the *needed function* in an *interface*.
+      #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-11 14:23:33
+      [[file:4._Inheritance,_Implements/screenshot_2019-08-11_14-23-33.png]]
+    - A *Comparable* is an object's method compares itself to another object, it is imbedded *within the object itself*
+    - A *Comparator* is an independent object compares 2 objects to each other, its class is *defined within the class* and it's *independent of object*
+*** Question:                                              :TOLINK:QUESTIONS:
+    1. 怎样理解 To summarize (*link*) 里 Comparable 和 Comparator 的区别？分析的对吗？
+    2. Comparator (*link*) 中关于 nested 原因的分析对吗？为什么 Comparator 一定要是 Object？如下可以吗？
+       #+begin_src java :classname 
+         import java.util.Comparator;
+
+         public class Dog implements Comparable<Dog> {
+             ...
+             public int compareTo(Dog uddaDog) {
+                 return this.size - uddaDog.size;
+             }
+
+             public static class NameComparator implements Comparator<Dog> {
+                 public static int compare(Dog a, Dog b) {
+                     return a.name.compareTo(b.name);
+                 }
+             }
+
+         }
+       #+end_src
+       需要比较时直接 ~Dog.NameComparator.compare(dog1, dog2)~ 。
+    3. Comparator 不还是需要为每一种比较策略定义一个 nexted class 以及一个 getcomparator() ？这样做的意义？
+    4. Java8 之后是怎么显式传递函数作为参数或者把函数作为返回值？
+* 6. Exceptions, Iterators, Iterables, Object Methods
+** 6.1 Lists, Sets, ArraySet 
+*** Lists in Real Java Code
+    #+begin_src java :classname 
+      import java.util.List;
+      import java.util.ArrayList;
+
+      public class Example {
+          public static void main(String[] args) {
+              List<Integer> L = new ArrayList<>();
+              L.add(5);
+              L.add(10);
+              System.out.println(L);
+          }
+      }
+    #+end_src 
+*** Sets
+    - Java
+      #+begin_src java :classname 
+        import java.util.Set;
+        import java.util.HashSet;
+  
+        Set<String> s = new HashSet<>();
+        s.add("Tokyo");
+        s.add("Lagos");
+        System.out.println(S.contains("Tokyo")); // true
+      #+end_src
+    - Python
+      #+begin_src python :results output
+        s = set()
+        s.add("Tokyo")
+        s.add("Lagos")
+        print("Tokyo" in s) // True
+      #+end_src 
+*** ArraySet
+    #+begin_src java :classname 
+      import java.util.Iterator;
+
+      public class ArraySet<T> implements Iterable<T> {
+          private T[] items;
+          private int size; // the next item to be added will be at position size
+
+          public ArraySet() {
+              items = (T[]) new Object[100];
+              size = 0;
+          }
+
+          /* Returns true if this map contains a mapping for the specified key.
+           ,*/
+          public boolean contains(T x) {
+              for (int i = 0; i < size; i += 1) {
+                  if (items[i].equals(x)) {
+                      return true;
+                  }
+              }
+              return false;
+          }
+
+          /* Associates the specified value with the specified key in this map. */
+          public void add(T x) {
+              if (contains(x)) {
+                  return;
+              }
+              items[size] = x;
+              size += 1;
+          }
+
+          /* Returns the number of key-value mappings in this map. */
+          public int size() {
+              return size;
+          }
+      }
+    #+end_src 
+    - ~items = (T[]) new Object[100];~
+    - ~items[i].equals(x)~ 
+** 6.2 Throwing Exceptions
+   Throw an *exception* when a user tries to add ~null~ to ~ArraySet~: ~throw new ExceptionObject(parameter1, ...)~ 
+   #+begin_src java :classname 
+     /* Associates the specified value with the specified key in this map.
+        Throws an IllegalArgumentException if the key is null. */
+     public void add(T x) {
+         if (x == null) {
+             throw new IllegalArgumentException("can't add null");
+         }
+         if (contains(x)) {
+             return;
+         }
+         items[size] = x;
+         size += 1;
+     }
+   #+end_src 
+   - ~null.equals(x)~ -> ~NullPointerException~
+   - ~throw new IllegalArgumentException("can't add null");~
+   - Built-in set of strings cancontain a ~null~ in Java, below prints ~True~ 
+     #+begin_src java :classname 
+       Set<String> s = new HashSet<>();
+       s.add(null);
+       System.out.println(s.contains(null));
+     #+end_src 
+** 6.3 Iteration
+*** Enhanced For Loop
+    #+begin_src java :classname 
+      Set<String> s = new HashSet<>();
+      Set<String> s = new HashSet<>();
+      s.add("Tokyo");
+      s.add("Lagos");
+      for (String city : s) {
+          System.out.println(city);
+      }
+    #+end_src 
+    - Java knows that ~HashSet~ has a ~iterator()~ method
+    - ~ArraySet~ raises error because Java thinks it doesn't have an ~iterator()~ method
+      - To enable ~ArraySet~ *enhanced loop*
+        1. ~ArraySet~ need to have an ~iterator()~ method
+        2. ~ArraySet~ need to tell Java that it has an ~iterator()~ method
+    - Use ~iterator()~ method to a *ugly loop*
+      #+begin_src java :classname 
+        Set<String> s = new HashSet<>();
+        ...
+        Iterator<String> seer = s.iterator();
+        while (seer.hasNext()) {
+            String city = seer.next();
+            ...
+        }
+      #+end_src
+      - *Ugly loop* doesn't need to tell Java that ~iterator()~ method exists
+*** Implementing Iterators
+    - Skeleton for ~ArrayList~ 
+      The compiler need to confirm
+      - ~ArrayList~ class has an ~iterator()~ method and Java knows it
+        #+begin_src java :classname 
+          public interface Iterable<T> {
+              Iterator<T> iterator();
+          }
+        #+end_src
+        #+begin_src java :classname 
+          public interface List<T> extends Iterable<T> {
+              ...
+          }
+        #+end_src
+        #+begin_src java :classname 
+          public class ArrayList<T> implements List<T> {
+              ...
+              public Iterator<T> iterator() {
+                  ...
+              }
+          }
+        #+end_src
+        - ~public interface List<T> extends Iterable<T>~ and ~public class ArrayList<T> implements List<T>~ -> class ~ArrayList~ has an ~iterator()~ method and Java knows it: ~public Iterator<T> iterator()~ 
+      - ~Iterator~ interface have ~hasNext()~ and ~next()~
+          #+begin_src java :classname 
+            public interface Iterator<T> {
+                boolean hasNext();
+                T next();
+            }
+          #+end_src
+          #+begin_src java :classname 
+            private class ArrayListIterator<T> implements Iterator<T> {
+                public boolean hasNext() {
+                    ...
+                }
+                public T next() {
+                    ...
+                }
+                ...
+            }
+          #+end_src
+        - ~ArrayListIterator<T>~ is a nested class of ~ArrayList<T>~ 
+    - Full edition for ~ArraySet~ 
+      #+begin_src java :classname 
+        import java.util.Iterator;
+  
+        public class ArraySet<T> implements Iterable<T> {
+            private T[] items;
+            private int size; // the next item to be added will be at position size
+  
+            public ArraySet() {
+                items = (T[]) new Object[100];
+                size = 0;
+            }
+  
+            /* Returns true if this map contains a mapping for the specified key.
+             ,*/
+            public boolean contains(T x) {
+                for (int i = 0; i < size; i += 1) {
+                    if (items[i].equals(x)) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+  
+            /* Associates the specified value with the specified key in this map.
+               Throws an IllegalArgumentException if the key is null. */
+            public void add(T x) {
+                if (x == null) {
+                    throw new IllegalArgumentException("can't add null");
+                }
+                if (contains(x)) {
+                    return;
+                }
+                items[size] = x;
+                size += 1;
+            }
+  
+            /* Returns the number of key-value mappings in this map. */
+            public int size() {
+                return size;
+            }
+  
+            /** returns an iterator (a.k.a. seer) into ME */
+            public Iterator<T> iterator() {
+                return new ArraySetIterator();
+            }
+  
+            private class ArraySetIterator implements Iterator<T> {
+                private int wizPos;
+  
+                public ArraySetIterator() {
+                    wizPos = 0;
+                }
+  
+                public boolean hasNext() {
+                    return wizPos < size;
+                }
+  
+                public T next() {
+                    T returnItem = items[wizPos];
+                    wizPos += 1;
+                    return returnItem;
+                }
+            }
+  
+            public static void main(String[] args) {
+                ArraySet<Integer> aset = new ArraySet<>();
+                aset.add(5);
+                aset.add(23);
+                aset.add(42);
+  
+                //iteration
+                for (int i : aset) {
+                    System.out.println(i);
+                }
+            }
+  
+        }
+      #+end_src
+      - ~public Iterator<T> iterator()~ and ~private class ArraySetIterator implements Iterator<T>~ make ~ArraySet~ can use *ugly loop*
+      - ~public class ArraySet<T> implements Iterable<T>~ tells Java that ~ArraySet~ has a ~iterator()~ method, then can ~ArraySet~ use *enhanced loop* (~for (ArraySet<Integer> asee : aset) {}~)
+** 6.4 Object Methods
+   All classes inherit from the overarching Object class. The methods that are inherited are as follows:
+   - ~String toString()~
+   - ~boolean equals(Object obj)~
+   - ~Class <?> getClass()~
+   - ~int hashCode()~
+   - ~protected Objectclone()~
+   - ~protected void finalize()~
+   - ~void notify()~
+   - ~void notifyAll()~
+   - ~void wait()~
+   - ~void wait(long timeout)~
+   - ~void wait(long timeout, int nanos)~
+*** toString()
+    The ~toString()~ method provides a string representation of an object.
+    - ~System.out.println(dog)~
+      #+begin_src java :classname 
+        String s = dog.toString()
+        System.out.println(s)
+      #+end_src
+    - The default ~Object~ class' ~toString()~ method prints the *location* of the object in *memory* (hexidecimal string)
+      - Classes like ~Arraylist~ and ~Array~ have their own *overridden* versions of the ~toString()~ method
+      - Override ~toString()~ in ~ArraySet~ 
+        #+begin_src java :classname 
+          import java.util.Iterator;
+
+          public class ArraySet<T> implements Iterable<T> {
+              ...
+
+              @Override
+              public String toString() {
+                  String returnString = "{";
+                  for (int i = 0; i < size; i += 1) {
+                      returnString += keys[i];
+                      returnString += ", ";
+                  }
+                  returnString += "}";
+                  return returnString;
+              }
+              @Override
+              public String toString() {
+                  StringBuilder returnSB = new StringBuilder("{");
+                  for (int i = 0; i < size - 1; i += 1) {
+                      returnSB.append(items[i].toString());
+                      returnSB.append(", ");
+                  }
+                  returnSB.append(items[size - 1]);
+                  returnSB.append("}");
+                  return returnSB.toString();
+                  /* hmmm */
+              }
+
+              @Override
+              public String toString() {
+                  List<String> listOfItems = new ArrayList<>();
+                  for (T x : this) {
+                      listOfItems.add(x.toString());
+                  }
+                  return "{" + String.join(", ", listOfItems) + "}";
+              }
+
+              public static void main(String[] args) {
+                  ArraySet<Integer> aset = new ArraySet<>();
+                  aset.add(5);
+                  aset.add(23);
+                  aset.add(42);
+
+                  //toString
+                  System.out.println(aset);
+          }
+        #+end_src
+        - Use ~String~
+          - ~returnString += keys[i]~ *creates an entirely new string* first and then appends to ~returnString~, which is incredibly inefficient -> use ~StringBuilder~
+          - Say concatenating one character to a string takes 1 second, then ~toString({1, 2, 3, 4, 5})~ takes ~1 + 2 + 3 + 4 + ... + 11~ seconds
+        - Use ~StringBuilder~ whose objects are *mutable*: ~append~ instead of ~+=~ 
+          - ~StringBuilder returnSB = new StringBuilder("{")~
+          - ~returnSB.append(items[i].toString())~
+          - ~return returnSB.toString()~ 
+        - Use ~List<String>~
+          - ~List<String> listOfItems = new ArrayList<>()~
+          - ~for (T x : this) {listOfItems.add(x.toString());}~
+          - ~String.join(", ", listOfItems)~ 
+**** Question:                                                    :QUESTIONS:
+     1. 当 ~ArraySet<T>~ 中的 ~T~ 仍为 ~ArraySet~ 时，以上定义的 ~toString()~ 还能正常工作吗？是不是 ~T~ 只能为 *primitive type* ？如果可以，怎么实现 ~T~ 为 *reference type* 呢？
+     2. ~toString({1, 2, 3, 4, 5})~ 的分析对吗？为什么书上只有 ~1 + ... + 7~ ？
+*** equals()
+    ~equals()~ and ~==~ have different behaviors in Java. ~==~ Checks if two *objects* are actually the *same object in memory* (if *two boxes* hold the same thing)
+    - The default ~Object~ class' ~equals(Object o)~ acts like ~=~ in that it checks if the *memory address* of the ~this~ is the same as ~o~
+      - Override ~equals()~ in ~ArraySet~ 
+        #+begin_src java :classname 
+          import java.util.Iterator;
+
+          public class ArraySet<T> implements Iterable<T> {
+              ...
+              @Override
+              public boolean equals(Object other) {
+                  if (this == other) {
+                      return true;
+                  }
+                  if (other == null) {
+                      return false;
+                  }
+                  if (other.getClass() != this.getClass()) {
+                      return false;
+                  }
+                  ArraySet<T> o = (ArraySet<T>) other;
+                  if (o.size() != this.size()) {
+                      return false;
+                  }
+                  for (T item : this) {
+                      if (!o.contains(item)) {
+                          return false;
+                      }
+                  }
+                  return true;
+              }
+
+              public static void main(String[] args) {
+                  //equals
+                  ArraySet<Integer> aset2 = new ArraySet<>();
+                  aset2.add(5);
+                  aset2.add(23);
+                  aset2.add(42);
+
+                  System.out.println(aset.equals(aset2));
+                  System.out.println(aset.equals(null));
+                  System.out.println(aset.equals("fish"));
+                  System.out.println(aset.equals(aset));
+
+                  //EXTRA VIDEO CODE
+                  //ArraySet<String> asetOfStrings = ArraySet.of("hi", "I'm", "here");
+                  //System.out.println(asetOfStrings);
+              }
+
+          }
+        #+end_src
+        - ~public boolean equals(Object other)~ not ~public boolean equals(ArraySet<T> other)~ 
+        - ~other.getClass() != this.getClass()~
+        - ~ArraySet<T> o = (ArraySet<T>) other~ to cast ~Object~ to ~ArraySet<T>~ 
+        - Rules for Equals in Java
+          - ~equals~ must be an *equivalence* relation
+            - *reflexive*: ~x.equals(x)~ is ~true~
+            - *symmetric*: ~x.equals(y)~ if and only if *y.equals(x)*
+            - *transitive*: ~x.equals(y)~ and ~y.equals(z)~ implies ~x.equals(z)~
+          - It must take an Object argument, in order to *override* the original ~.equals()~ method
+          - It must be *consistent* if ~x.equals(y)~, then as long as ~x~ and ~y~ remain unchanged: ~x~ must continue to equal ~y~
+          - It is never ~true~ for ~null~ ~x.equals(null)~ must be ~false~
+*** of()
+    #+begin_src java :classname 
+      import java.util.Iterator;
+
+      public class ArraySet<T> implements Iterable<T> {
+          ...
+          public static <Glerp> ArraySet<Glerp> of(Glerp... stuff) {
+              ArraySet<Glerp> returnSet = new ArraySet<Glerp>();
+              for (Glerp x : stuff) {
+                  returnSet.add(x);
+              }
+              return returnSet;
+          }
+
+          public static void main(String[] args) {
+              ArraySet<String> asetOfStrings = ArraySet.of("hi", "I'm", "here");
+              System.out.println(asetOfStrings);
+          }
+
+      }
+    #+end_src 
+    - ~public static <Glerp> ArraySet<Glerp> of(Glerp... stuff)~ not ~public static ArraySet<T> of(T... stuff)~ because of it is ~static~, it can't find ~T~ in ~public class ArraySet<T> implements Iterable<T>~
+    - ~ArraySet<Glerp> returnSet = new ArraySet<Glerp>()~
+    - ~ArraySet<String> asetOfStrings = ArraySet.of("hi", "I'm", "here")~ 
+
+* 8. Efficient Programming
+** 8.1 Encapsulation, API's, ADT's
 * 2. Defining and Using Classes
 
