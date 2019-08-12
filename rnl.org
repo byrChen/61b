@@ -1994,7 +1994,7 @@
       - If omitting the ~compareTo()~ method from the ~Dog~ class -> ~Dog~ class fails to compile as it doen't implement ~compareTo~
       - If omitting ~implements OurComparable~ from the ~Dog~ class header -> ~DogLauncher~ class fails to compile due to ~System.out.println(Maximizer.max(dogs));~, cause ~max~ only accepts an array of ~OurComparable~ objects, not ~Dog~
       - ~Maximizer~ operates at a higher level of abstraction, it should pass compile
-*** Comparables
+*** Comparable
     #+DOWNLOADED: https://joshhug.gitbooks.io/hug61b/content/assets/comparable_interface.png @ 2019-08-11 11:11:02
     [[file:4._Inheritance,_Implements/comparable_interface_2019-08-11_11-11-02.png]]
     #+DOWNLOADED: https://joshhug.gitbooks.io/hug61b/content/assets/comparable.png @ 2019-08-11 11:12:01
@@ -2041,7 +2041,7 @@
       - ~Dog~ can only implements just one interface ~Comparable~
       - ~Comparator~ is used to augment comparison order
       - *Nested* because each ~class~ implements ~Comparator<T>~ can only compare 2 objects of class ~T~, it should be *nested* in ~class T~ according to *OOP*
-      - Each comparator is an *object*, not *class or method*
+      - Each comparator is an *object*, not *class or method* (In Java7 or earlier, can't take in or return *class or method*)
       - ~static~ for no need to instantiate a ~Dog~ object, just ~Dog.NameComparator()~ to get a comparator
       - ~private~ just for convention: ~Dog.NameComparator()~ -> ~Dog.getNameComparator()~ 
     - To retrieve *NameComparator*: ~Comparator<Dog> nc = Dog.getNameComparator();~
@@ -2325,6 +2325,10 @@
       #+end_src
       - ~public Iterator<T> iterator()~ and ~private class ArraySetIterator implements Iterator<T>~ make ~ArraySet~ can use *ugly loop*
       - ~public class ArraySet<T> implements Iterable<T>~ tells Java that ~ArraySet~ has a ~iterator()~ method, then can ~ArraySet~ use *enhanced loop* (~for (ArraySet<Integer> asee : aset) {}~)
+    - ~Comparable~ vs ~Comparator~ and ~Iterable~ vs ~Iterator~
+      - ~Comparable~ has method ~comparator()~ which returns a ~Comparator~ object, ~Iterable~ is similar.
+      - ~Comparable~ and ~Iterable~ are interfaced implemented by classes, describing a kind of classes' *attribute* (*comparable* and *iterable*)
+      - ~Comparator~ and ~Iterator~ are *nested classes* inside classes which implement ~Comparable~ and ~Iterable~, instances of them are objects whose methods can take in ~Comparable~ and ~Iterable~ objects as arguments
 ** 6.4 Object Methods
    All classes inherit from the overarching Object class. The methods that are inherited are as follows:
    - ~String toString()~
@@ -2499,5 +2503,11 @@
 
 * 8. Efficient Programming
 ** 8.1 Encapsulation, API's, ADT's
+*** Encapsulation
+    - Module: *A set of methods* that work together *as a whole* to perform some task or set of related tasks.
+    - Encapsulated: A module is said to be encapsulated if its *implementation is completely hidden*, and it can be accessed only through *a documented interface*.
+*** API's
+*** ADT's
 * 2. Defining and Using Classes
+
 
