@@ -1000,7 +1000,6 @@
           ...
       }
     #+end_src 
-
     - Exercise 2.3.1
       #+DOWNLOADED: /tmp/screenshot.png @ 2019-06-09 22:14:35
       [[file:2._Lists/screenshot_2019-06-09_22-14-35.png]]
@@ -2507,6 +2506,10 @@
     - Module: *A set of methods* that work together *as a whole* to perform some task or set of related tasks.
     - Encapsulated: A module is said to be encapsulated if its *implementation is completely hidden*, and it can be accessed only through *a documented interface*.
 *** API's
+    An API(Application Programming Interface) of an ADT is the list of *constructors and methods* and a short description of each.
+    API consists of syntactic and semantic specification.
+    - Compiler verifies that syntax is met.
+    - Tests help verify that semantics are correct.
 *** ADT's
 * 2. Defining and Using Classes
 
