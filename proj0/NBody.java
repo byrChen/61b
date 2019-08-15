@@ -18,7 +18,6 @@ public class NBody {
             double xxVel = in.readDouble();
             double yyVel = in.readDouble();
             double mass = in.readDouble();
-//            String imgFileName = "./images/" + in.readString();
             String imgFileName = in.readString();
             b[i] = new Planet(xxPos, yyPos, xxVel, yyVel, mass, imgFileName);
         }
@@ -29,8 +28,8 @@ public class NBody {
         double T = Double.parseDouble(args[0]);
         double dt = Double.parseDouble(args[1]);
         String filename = args[2];
-        double radius = readRadius("./data/" + filename);
-        Planet[] bodies = readPlanets("./data/" + filename);
+        double radius = readRadius("./images/" + filename);
+        Planet[] bodies = readPlanets("./images/" + filename);
         String backgroud = "./images/starfield.jpg";
         StdDraw.setScale(-radius, radius);
         StdDraw.enableDoubleBuffering();

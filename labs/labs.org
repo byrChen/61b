@@ -11,10 +11,8 @@
 **** Initializing Local Repositories
      ~git init~: Git creates a .git subdirectory. Inside this directory it will store a bunch of metadata, as well as old the actual snapshots of the files. 
 **** Tracked vs. Untracked Files
-
      #+DOWNLOADED: /tmp/screenshot.png @ 2019-03-08 15:59:57
-     [[file:lab01/screenshot_2019-03-08_15-59-57.png]]
-
+     [[file:pictures/lab01/screenshot_2019-03-08_15-59-57.png]]
      TWo main categories: *untracked files* and *tracked files*.
      ~git status~: Determining the exact status(untracked, unmodified, modified staged) of each file in your repository.
 **** Staging & Committing
@@ -254,4 +252,7 @@
      }
    #+end_src 
    - ~int~ is a *primitive* data type while ~Integer~ is a ~Wrapper~ class
+
+
+
 

@@ -18,7 +18,7 @@
     *The most common way to execute a Java pg*: Compiler ~javac~ --> Interpreter ~java~
 
     #+DOWNLOADED: https://joshhug.gitbooks.io/hug61b/content/assets/compilation_figure.svg @ 2019-03-01 10:36:13
-    [[file:1.%20Introduction%20to%20Java/compilation_figure_2019-03-01_10-36-13.svg]]
+    [[file:pictures/1.%20Introduction%20to%20Java/compilation_figure_2019-03-01_10-36-13.svg]]
 
     #+begin_src sh 
       javac HelloWorld.java 
@@ -386,7 +386,7 @@
         #+end_src
         - Env analysis and output
           #+DOWNLOADED: /tmp/screenshot.png @ 2019-03-17 14:43:29
-          [[file:1.%20Introduction%20to%20Java/screenshot_2019-03-17_14-43-29.png]]
+          [[file:pictures/1.%20Introduction%20to%20Java/screenshot_2019-03-17_14-43-29.png]]
           #+begin_example
             bark. bark.
             woof!
@@ -482,7 +482,7 @@
     #+end_src 
     - Env analysis
       #+DOWNLOADED: /tmp/screenshot.png @ 2019-03-19 23:37:17
-      [[file:2.%20Lists/screenshot_2019-03-19_23-37-17.png]]
+      [[file:pictures/2.%20Lists/screenshot_2019-03-19_23-37-17.png]]
 *** Bits
     72 and 'H' both stored as 01001000 *in memory*, interpreter differs them by *type*.
     8 primitive types of Java: byte, short, int, long, float, double, boolean, and char.
@@ -502,13 +502,13 @@
       double y;
     #+end_src 
     #+DOWNLOADED: /tmp/screenshot.png @ 2019-03-20 00:12:16
-    [[file:2.%20Lists/screenshot_2019-03-20_00-12-16.png]]
+    [[file:pictures/2.%20Lists/screenshot_2019-03-20_00-12-16.png]]
     #+begin_src java :classname 
       x = -1431195969;
       y = 567213.112;
     #+end_src 
     #+DOWNLOADED: /tmp/screenshot.png @ 2019-03-20 00:12:55
-    [[file:2.%20Lists/screenshot_2019-03-20_00-12-55.png]]
+    [[file:pictures/2.%20Lists/screenshot_2019-03-20_00-12-55.png]]
     - When you *declare* a variable of a certain type, Java finds a *contiguous* block with exactly enough bits to hold a thing of that type.
     - In addition to setting aside memory, the Java interpreter also *creates an entry* in an *internal table* that *maps each variable name to the location of the first bit* in the box.
     - the *exact memory address* is *below the level of abstraction accessible* to us in Java
@@ -516,7 +516,7 @@
      
     - Simplified Box Notation
       #+DOWNLOADED: /tmp/screenshot.png @ 2019-03-20 15:05:29
-      [[file:2.%20Lists/screenshot_2019-03-20_15-05-29.png]]
+      [[file:pictures/2.%20Lists/screenshot_2019-03-20_15-05-29.png]]
 *** The Golden Rule of Equals (GRoE)
     In Java, ~=~ for *any* assignment means *interpreter copying bits* from A into B.
 *** Reference Types
@@ -537,7 +537,7 @@
       #+end_src 
       Use ~new Walrus(1000, 8.3)~ 
       #+DOWNLOADED: /tmp/screenshot.png @ 2019-03-31 23:08:50
-      [[file:2.%20Lists/screenshot_2019-03-31_23-08-50.png]]
+      [[file:pictures/2.%20Lists/screenshot_2019-03-31_23-08-50.png]]
       In *real implementations* of the Java programming language, there is actually some *additional overhead* for any object, so a Walrus takes somewhat more than 96 bits. 
     - Reference Variable Declaration
       When a variable of *any reference type declared*, Java allocates *a box of 64 bits* to store the *address(fist bit)* of the variable *in memory*.
@@ -545,13 +545,13 @@
       2. ~someWalrus = new Walrus(1000, 8.3)~: Creating a new ~Walrus~ and return its *address* by the ~new~ operator.
          - If Walrus ~weight~ is stored starting at bit ~5051956592385990207~ and ~tuskSize~ at ~5051956592385990239~ (more 32 bits than ~weight~, which is ~int~):
            #+DOWNLOADED: /tmp/screenshot.png @ 2019-03-31 23:39:47
-           [[file:2.%20Lists/screenshot_2019-03-31_23-39-47.png]]
+           [[file:pictures/2.%20Lists/screenshot_2019-03-31_23-39-47.png]]
          - Assigning ~null~ to a *reference variable* (such as ~someWalrus~):
            #+DOWNLOADED: /tmp/screenshot.png @ 2019-03-31 23:41:47
-           [[file:2.%20Lists/screenshot_2019-03-31_23-41-47.png]]
+           [[file:pictures/2.%20Lists/screenshot_2019-03-31_23-41-47.png]]
     - Box and Pointer Notation
       #+DOWNLOADED: /tmp/screenshot.png @ 2019-03-31 23:45:22
-      [[file:2.%20Lists/screenshot_2019-03-31_23-45-22.png]]
+      [[file:pictures/2.%20Lists/screenshot_2019-03-31_23-45-22.png]]
     - Resolving the Mystery of the Walrus
       #+begin_src java :classname 
         Walrus a = new Walrus(1000, 8.3);
@@ -559,7 +559,7 @@
         b = a;
       #+end_src 
       #+DOWNLOADED: /tmp/screenshot.png @ 2019-04-01 00:28:59
-      [[file:2.%20Lists/screenshot_2019-04-01_00-28-59.png]]
+      [[file:pictures/2.%20Lists/screenshot_2019-04-01_00-28-59.png]]
 **** Question:                                                    :QUESTIONS:
      1. ~primitive type~ 变量存的是值而 ~reference type~ 变量存的是地址？
 *** Parameter Passing
@@ -718,7 +718,7 @@
       int x = L.getFirst()
     #+end_src 
     #+DOWNLOADED: /tmp/screenshot.png @ 2019-05-30 23:43:42
-    [[file:2._Lists/screenshot_2019-05-30_23-43-42.png]]
+    [[file:pictures/2._Lists/screenshot_2019-05-30_23-43-42.png]]
     - ~SLList~ class acts as a *middleman* between the *list user* and the *naked recursive data structure*
     - ~IntList~ user may have a potentially *undesireable* possibility to have *extra* variables that point to the middle of the ~IntList~
       #+begin_src java :classname 
@@ -758,7 +758,7 @@
       L.first.next.next = L.first.next;
     #+end_src 
     #+DOWNLOADED: /tmp/screenshot.png @ 2019-05-31 00:15:38
-    [[file:2._Lists/screenshot_2019-05-31_00-15-38.png]]
+    [[file:pictures/2._Lists/screenshot_2019-05-31_00-15-38.png]]
     - This results in a malformed list with an infinite loop -> to deal with, change ~public IntNode first~ to ~private IntNode first~
     - ~Private~ *variables and methods* can only be accessed by code inside the *same* ~.java~ file
 *** Improvement #4: Nested Classes
@@ -970,10 +970,10 @@
     #+end_src 
     - Empty list created by ~SLList L = new SLList()~
       #+DOWNLOADED: /tmp/screenshot.png @ 2019-06-06 00:18:33
-      [[file:2._Lists/screenshot_2019-06-06_00-18-33.png]]
+      [[file:pictures/2._Lists/screenshot_2019-06-06_00-18-33.png]]
     - a ~SLList~ with 5, 10, 15
       #+DOWNLOADED: /tmp/screenshot.png @ 2019-06-06 00:19:26
-      [[file:2._Lists/screenshot_2019-06-06_00-19-26.png]]
+      [[file:pictures/2._Lists/screenshot_2019-06-06_00-19-26.png]]
     - ~sentinel = new IntNode(random, Null)~
 **** Question:                                                    :QUESTIONS:
      1.在哪里定义 ~sentinel~ ？ ~sentinel~ 与 ~first~ 和 ~addFirst~ 怎么串联起来？   
@@ -1002,7 +1002,7 @@
     #+end_src 
     - Exercise 2.3.1
       #+DOWNLOADED: /tmp/screenshot.png @ 2019-06-09 22:14:35
-      [[file:2._Lists/screenshot_2019-06-09_22-14-35.png]]
+      [[file:pictures/2._Lists/screenshot_2019-06-09_22-14-35.png]]
      ~addLast~ and ~getLast~ *rapid*, ~removeLast~ slow   
 *** SecondToLast
     Adding a ~secondToLast~ 
@@ -1016,15 +1016,15 @@
       }
     #+end_src 
     #+DOWNLOADED: /tmp/screenshot.png @ 2019-06-09 22:51:21
-    [[file:2._Lists/screenshot_2019-06-09_22-51-21.png]]
+    [[file:pictures/2._Lists/screenshot_2019-06-09_22-51-21.png]]
 *** Improvement #8: Sentinel Upgrade
     ~last~ sometimes points at the ~sentinel~ node, and sometimes at a real node ->
     - Adding a *second sentinel* node to the back of the list
       #+DOWNLOADED: /tmp/screenshot.png @ 2019-06-09 23:08:50
-      [[file:2._Lists/screenshot_2019-06-09_23-08-50.png]]
+      [[file:pictures/2._Lists/screenshot_2019-06-09_23-08-50.png]]
     - Implementing the list so that it is *circular*, with the *front and back* pointers sharing the *same sentinel* node
       #+DOWNLOADED: /tmp/screenshot.png @ 2019-06-09 23:09:34
-      [[file:2._Lists/screenshot_2019-06-09_23-09-34.png]]
+      [[file:pictures/2._Lists/screenshot_2019-06-09_23-09-34.png]]
 *** Generic DLLists
     Creating data structures that hold any ~reference~ type 
     - Adding ~<>~ to define generic ~DLList~ 
@@ -1084,7 +1084,7 @@
       }
     #+end_src 
     #+DOWNLOADED: /tmp/screenshot.png @ 2019-06-11 21:03:11
-    [[file:2._Lists/screenshot_2019-06-11_21-03-11.png]]
+    [[file:pictures/2._Lists/screenshot_2019-06-11_21-03-11.png]]
     - ~System.arraycopy(b, 0, x, 3, 2)~ = ~x[3:5] = b[0:2]~ in python
       - ~b~: The array to use as a source
       - ~0~: Where to start in the source array
@@ -1117,7 +1117,7 @@
       } 
     #+end_src 
     #+DOWNLOADED: /tmp/screenshot.png @ 2019-06-11 21:26:52
-    [[file:2._Lists/screenshot_2019-06-11_21-26-52.png]]
+    [[file:pictures/2._Lists/screenshot_2019-06-11_21-26-52.png]]
 
     - Exercise 2.4.1
       #+begin_src java :classname 
@@ -1142,7 +1142,7 @@
         } 
       #+end_src 
       #+DOWNLOADED: /tmp/screenshot.png @ 2019-06-11 21:31:26
-      [[file:2._Lists/screenshot_2019-06-11_21-31-26.png]]
+      [[file:pictures/2._Lists/screenshot_2019-06-11_21-31-26.png]]
       - ~z[i] = x[i]~ will make ~z[i]~ and ~x[i]~ point to the same array (the *same memory box*), so any operations on the one will have the *same effect* on the other
       - ~System.arraycopy~ will *create new memory box* and just copy the *value* from *src array to des array*. 
 *** Arrays vs. Classes
@@ -1263,7 +1263,7 @@
     - Only if ~size == items.length~ would call ~resize~ 
 *** Analyzing the Naive Resizing Array
     #+DOWNLOADED: https://joshhug.gitbooks.io/hug61b/content/chap2/fig25/insert_experiment.png @ 2019-08-06 12:08:11
-    [[file:2._Lists/insert_experiment_2019-08-06_12-08-10.png]]
+    [[file:pictures/2._Lists/insert_experiment_2019-08-06_12-08-10.png]]
     - ~add~ in ~SLList~ takes the same additional amount of time
     - ~addLast~ in ~AList~ 
       - *Creating* all those memory boxes and *recopying* their contents takes time
@@ -1513,7 +1513,7 @@
       }
     #+end_src 
     #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-09 14:20:51
-    [[file:3._Testing/screenshot_2019-08-09_14-20-51.png]]
+    [[file:pictures/3._Testing/screenshot_2019-08-09_14-20-51.png]]
 *** Recursive Helper Methods
     Considering only a subset of a larger array -> create a *private helper* method that has an *additional parameter* (or parameters) that delineate which part of the array to consider.
     #+begin_src java :classname 
@@ -1593,7 +1593,7 @@
         }
       #+end_src
     #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-09 14:32:18
-    [[file:3._Testing/screenshot_2019-08-09_14-32-18.png]]
+    [[file:pictures/3._Testing/screenshot_2019-08-09_14-32-18.png]]
 ** Reflections on the Development Process
    Small units' function --> small units' tests --> writing small units to pass --> gathering small units and get bugs --> revising small units' tests and small units --> continue debuging
 ** Better JUnit
@@ -1625,7 +1625,7 @@
     - Many disadvantages
 *** Hypernyms, Hyponyms, and Interface
     #+DOWNLOADED: https://joshhug.gitbooks.io/hug61b/content/assets/subclass.png @ 2019-08-09 17:37:17
-    [[file:4._Inheritance,_Implements/subclass_2019-08-09_17-37-17.png]]
+    [[file:pictures/4._Inheritance,_Implements/subclass_2019-08-09_17-37-17.png]]
     - To express relationship above
       1. Define a *interface* (superclass or hyernym)
          #+begin_src java :classname 
@@ -1715,7 +1715,7 @@
 *** Extends
     - ~RotatingSLList~ 
       #+DOWNLOADED: https://joshhug.gitbooks.io/hug61b/content/assets/list_subclasses.png @ 2019-08-10 09:28:03
-      [[file:4._Inheritance,_Implements/list_subclasses_2019-08-10_09-28-03.png]]
+      [[file:pictures/4._Inheritance,_Implements/list_subclasses_2019-08-10_09-28-03.png]]
       #+begin_src java :classname 
         public class RotatingSLList<Item> extends SLList<Item> {
             public void rotateRight() {
@@ -1807,7 +1807,7 @@
 *** Type Checking and Casting
     - Type Checking
       #+DOWNLOADED: https://joshhug.gitbooks.io/hug61b/content/assets/dynamic_selection.png @ 2019-08-10 18:43:46
-      [[file:4._Inheritance,_Implements/dynamic_selection_2019-08-10_18-43-46.png]]
+      [[file:pictures/4._Inheritance,_Implements/dynamic_selection_2019-08-10_18-43-46.png]]
       - ~sl.printLostItems();~ and ~VengefulSLList<Integer> vsl2 = sl;~ both result in *compile-time error*
       - In general, the compiler only allows *method calls* and *assignments* based on *compile-time* types (*declared* type)
     - Casting
@@ -1917,7 +1917,7 @@
       - Can't be generalized to other class (~Birds~ ...) 
     - Use interface inheritance to generalized ~max~ func
       #+DOWNLOADED: https://joshhug.gitbooks.io/hug61b/content/assets/dog_comparable.png @ 2019-08-11 10:11:54
-      [[file:4._Inheritance,_Implements/dog_comparable_2019-08-11_10-11-54.png]]
+      [[file:pictures/4._Inheritance,_Implements/dog_comparable_2019-08-11_10-11-54.png]]
       #+begin_src java :classname 
         public interface OurComparable {
             public int compareTo(Object o);
@@ -1995,9 +1995,9 @@
       - ~Maximizer~ operates at a higher level of abstraction, it should pass compile
 *** Comparable
     #+DOWNLOADED: https://joshhug.gitbooks.io/hug61b/content/assets/comparable_interface.png @ 2019-08-11 11:11:02
-    [[file:4._Inheritance,_Implements/comparable_interface_2019-08-11_11-11-02.png]]
+    [[file:pictures/4._Inheritance,_Implements/comparable_interface_2019-08-11_11-11-02.png]]
     #+DOWNLOADED: https://joshhug.gitbooks.io/hug61b/content/assets/comparable.png @ 2019-08-11 11:12:01
-    [[file:4._Inheritance,_Implements/comparable_2019-08-11_11-12-01.png]]
+    [[file:pictures/4._Inheritance,_Implements/comparable_2019-08-11_11-12-01.png]]
     #+begin_src java :classname 
       public class Dog implements Comparable<Dog> {
           ...
@@ -2034,7 +2034,7 @@
       }
     #+end_src
     #+DOWNLOADED: https://joshhug.gitbooks.io/hug61b/content/assets/comparator.png @ 2019-08-11 13:35:10
-    [[file:4._Inheritance,_Implements/comparator_2019-08-11_13-35-10.png]]
+    [[file:pictures/4._Inheritance,_Implements/comparator_2019-08-11_13-35-10.png]]
     - ~Comparable~ used to compare Objects in natural order, ~Comparator~ used to compare in other user-defined order
     - About nexted ~private static class NameComparator implements Comparator<Dog>~
       - ~Dog~ can only implements just one interface ~Comparable~
@@ -2049,7 +2049,7 @@
 *** To summarize
     - *Interfaces* in Java provide the ability to make *callbacks*. A *callback* function is the *helping* function (in the scenario, ~compareTo~). In some languages, this is accomplished using *explicit function passing*; in Java, by *wrapping* the *needed function* in an *interface*.
       #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-11 14:23:33
-      [[file:4._Inheritance,_Implements/screenshot_2019-08-11_14-23-33.png]]
+      [[file:pictures/4._Inheritance,_Implements/screenshot_2019-08-11_14-23-33.png]]
     - A *Comparable* is an object's method compares itself to another object, it is imbedded *within the object itself*
     - A *Comparator* is an independent object compares 2 objects to each other, its class is *defined within the class* and it's *independent of object*
 *** Question:                                              :TOLINK:QUESTIONS:

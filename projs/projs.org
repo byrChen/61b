@@ -129,6 +129,16 @@
 ** Extra for Experts                                                  :EXTRA:
 *** Adding Audio                                                :OUTSTANDING:
 *** Gold Points                                                 :OUTSTANDING:
+** Gradescope
+   #+begin_src java :classname 
+     public class Body {
+         ...
+         private static final double G = 6.67e-11;
+         ...
+     }
+   #+end_src 
+   - ~public class Body~
+   - ~private static final~ 
 * Proj 1A Data Structures
 ** LinkedListDeque 
    #+begin_src java :classname 

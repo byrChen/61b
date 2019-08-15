@@ -95,12 +95,6 @@ public class IntList {
 
     }
 
-    /**
-     *
-     * @param A
-     * @param B
-     * @return
-     */
     public static IntList dcatenateRecursive(IntList A, IntList B) {
         if (A == null) {
             return B;
@@ -144,13 +138,10 @@ public class IntList {
             return C;
         }
     }
-
-    /**
-     *
-     * @param A
-     * @return
+    /*
+    destructive reverse
      */
-    public static IntList dreverse(IntList A) {
+    public static IntList reverse(IntList A) {
         IntList reverseList, B;
         for (reverseList = null; A != null; A = B) {
             B = A.rest;
@@ -160,12 +151,10 @@ public class IntList {
         return  reverseList;
     }
 
-    /**
-     *
-     * @param A
-     * @return
+    /*
+    Non-destructive reverse
      */
-    public static IntList reverse(IntList A) {
+    public static IntList ndreverse(IntList A) {
         IntList reverseList;
         for (reverseList = null; A != null; A = A.rest) {
             reverseList = new IntList(A.first, reverseList);
@@ -173,12 +162,6 @@ public class IntList {
         A = reverseList;
         return reverseList;
     }
-
-
-
-
-
-
 
 
 
