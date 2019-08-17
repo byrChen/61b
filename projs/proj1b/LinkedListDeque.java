@@ -1,6 +1,6 @@
 import java.io.NotActiveException;
 
-public class LinkedListDeque<T> {
+public class LinkedListDeque<T> implements Deque<T> {
 
     private Node<T> sentinel;
     private int size;
@@ -46,6 +46,7 @@ public class LinkedListDeque<T> {
         return copyLLD.getRecursive(index - 1);
     }
 
+    @Override
     public void addFirst(T item) {
         Node<T> node = new Node<>(item, null, null);
         if (isEmpty()) {
@@ -63,6 +64,7 @@ public class LinkedListDeque<T> {
         sentinel.next = node;
     }
 
+    @Override
     public void addLast(T item) {
         Node<T> node = new Node<>(item, null, null);
         if (isEmpty()) {
@@ -80,14 +82,12 @@ public class LinkedListDeque<T> {
         size = size + 1;
     }
 
-    public boolean isEmpty() {
-        return size == 0;
-    }
-
+    @Override
     public int size() {
         return size;
     }
 
+    @Override
     public void printDeque() {
         Node p = sentinel;
         for (int i = 0; i < size; i++) {
@@ -98,6 +98,7 @@ public class LinkedListDeque<T> {
         System.out.println();
     }
 
+    @Override
     public T removeFirst() {
         if (isEmpty()) {
             return null;
@@ -109,6 +110,7 @@ public class LinkedListDeque<T> {
         return first.item;
     }
 
+    @Override
     public T removeLast() {
         if (isEmpty()) {
             return null;
@@ -120,6 +122,7 @@ public class LinkedListDeque<T> {
         return last.item;
     }
 
+    @Override
     public T get(int index) {
         if (isEmpty() || index < 0) {
             return null;

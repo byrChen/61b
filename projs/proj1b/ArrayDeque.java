@@ -1,6 +1,6 @@
 import java.util.TreeMap;
 
-public class ArrayDeque<T> {
+public class ArrayDeque<T> implements Deque<T> {
 
     private T[] items;
     private int size;
@@ -25,6 +25,7 @@ public class ArrayDeque<T> {
         ratio = 0.25;
     }
 
+    @Override
     public void addFirst(T item) {
         items[nextFirst] = item;
         nextFirst = minusOne(nextFirst);
@@ -35,6 +36,7 @@ public class ArrayDeque<T> {
         }
     }
 
+    @Override
     public void addLast(T item) {
         items[nextLast] = item;
         nextLast = plusOne(nextLast);
@@ -45,10 +47,12 @@ public class ArrayDeque<T> {
         }
     }
 
+    @Override
     public int size() {
         return size;
     }
 
+    @Override
     public void printDeque() {
         for (int i = 0; i < size; i++) {
             System.out.print(get(i) + " ");
@@ -56,6 +60,7 @@ public class ArrayDeque<T> {
         System.out.println();
     }
 
+    @Override
     public T removeFirst() {
         if (isEmpty()) {
             return null;
@@ -71,6 +76,7 @@ public class ArrayDeque<T> {
         return x;
     }
 
+    @Override
     public T removeLast() {
         if (isEmpty()) {
             return null;
@@ -86,6 +92,7 @@ public class ArrayDeque<T> {
         return x;
     }
 
+    @Override
     public T get(int index) {
         if (index < 0 || index >= size) {
             return  null;
@@ -145,10 +152,6 @@ public class ArrayDeque<T> {
 
     private int plusOne(int index) {
         return (index + 1) % items.length;
-    }
-
-    public boolean isEmpty() {
-        return size == 0;
     }
 
     private boolean isFull() {

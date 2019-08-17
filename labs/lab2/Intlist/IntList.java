@@ -11,11 +11,11 @@ public class IntList {
     /**
      * First element of list.
      */
-    public int first;
+    private int first;
     /**
      * Remaining elements of list.
      */
-    public IntList rest;
+    private IntList rest;
 
     /**
      * A List with first FIRST0 and rest REST0.
@@ -82,12 +82,11 @@ public class IntList {
 
     public static IntList dcatenateIterative(IntList A, IntList B) {
         //TODO:  fill in method
-        if (A == null){
+        if (A == null) {
             return B;
-        }
-        else {
+        } else {
             IntList C = A;
-            while (C.rest != null){
+            while (C.rest != null) {
                 C = C.rest;
             }
             C.rest = B;
@@ -98,10 +97,9 @@ public class IntList {
 
     public static IntList dcatenateRecursive(IntList A, IntList B) {
         //TODO:  fill in method
-        if (A == null){
+        if (A == null) {
             return B;
-        }
-        else {
+        } else {
             IntList C = dcatenateIterative(A.rest, B);
             A.rest = C;
             return A;
@@ -114,20 +112,19 @@ public class IntList {
      */
     public static IntList catenateIterative(IntList A, IntList B) {
         //TODO:  fill in method
-         if (A == null){
+        if (A == null) {
             return B;
-         }
-         else {
-             IntList C = new IntList(A.first, null);
-             IntList D = C;
-             while (A.rest != null) {
-                 D.rest = new IntList(A.rest.first, null);
-                 D = D.rest;
-                 A = A.rest;
-             }
-             D.rest = B;
-             return C;
-         }
+        } else {
+            IntList C = new IntList(A.first, null);
+            IntList D = C;
+            while (A.rest != null) {
+                D.rest = new IntList(A.rest.first, null);
+                D = D.rest;
+                A = A.rest;
+            }
+            D.rest = B;
+            return C;
+        }
     }
 
 
@@ -137,13 +134,12 @@ public class IntList {
      */
     public static IntList catenateRecursive(IntList A, IntList B) {
         //TODO:  fill in method
-         if (A == null){
+        if (A == null) {
             return B;
-         }
-         else {
-             IntList C = new IntList(A.first, catenateIterative(A.rest, B));
-             return C;
-         }
+        } else {
+            IntList C = new IntList(A.first, catenateIterative(A.rest, B));
+            return C;
+        }
     }
 
 

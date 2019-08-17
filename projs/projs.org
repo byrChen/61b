@@ -149,15 +149,15 @@
          private Node<T> sentinel;
          private int size;
 
-         public class Node<T> {
-             public Node<T> prev;
-             public Node<T> next;
-             public T item;
+         private class Node<T> {
+             private Node<T> prev;
+             private Node<T> next;
+             private T item;
 
-             public Node(T ITEM, Node PREV, Node NEXT) {
-                 item = ITEM;
-                 prev = PREV;
-                 next = NEXT;
+             public Node(T iteM, Node preV, Node nexT) {
+                 this.item = iteM;
+                 this.prev = preV;
+                 this.next = nexT;
              }
          }
 
@@ -167,19 +167,20 @@
          }
 
          public  LinkedListDeque(LinkedListDeque other) {
-             Node<T> p = other.sentinel;
-             LinkedListDeque<T> copyLLD = new LinkedListDeque<>();
-             while (p.next != null) {
-                 copyLLD.addLast(p.next.item);
+             sentinel = new Node(0, null, null);
+             size = 0;
+             Node<T> p = other.sentinel.next;
+     //        LinkedListDeque<T> popyLLD = new LinkedListDeque<>();
+             for (int i = 0; i < other.size; i++) {
+                 this.addLast(p.item);
                  p = p.next;
              }
-             sentinel = copyLLD.sentinel;
          }
 
          public T getRecursive(int index) {
              LinkedListDeque<T> copyLLD = new LinkedListDeque<>(this);
              Node<T> p = copyLLD.sentinel;
-             if (p == null) {
+             if (p == null || index >= size) {
                  return null;
              }
              if (index == 0) {
@@ -264,63 +265,98 @@
          }
 
          public T get(int index) {
-             if (isEmpty()) {
+             if (isEmpty() || index < 0) {
                  return null;
              }
              Node<T> p = sentinel;
-             for (int i = 0; i < index; i++) {
+             for (int i = 0; i < index + 1; i++) {
                  p = p.next;
              }
              return p.item;
          }
      }
    #+end_src 
+** LLDTest
+   #+begin_src java :classname 
+     import org.junit.Test;
+     import static org.junit.Assert.*;
 
+     public class LLDTest {
+
+         @Test
+         public void getTest() {
+             LinkedListDeque<Integer> llD = new LinkedListDeque<>();
+             llD.addFirst(0);
+             llD.addLast(1);
+             assertEquals(1, (long) llD.removeLast());
+             assertEquals(0, (long) llD.removeLast());
+             llD.addLast(5);
+             assertEquals(5, (long) llD.get(0));
+         }
+
+         @Test
+         public void getRecursiveTest() {
+             LinkedListDeque<Integer> llD = new LinkedListDeque<>();
+             assertNull(llD.getRecursive(0));
+             assertNull(llD.getRecursive(1));
+             llD.addLast(0);
+             assertEquals(0, (long) llD.getRecursive(0));
+             llD.removeLast();
+             assertNull(llD.getRecursive(0));
+             llD.addFirst(1);
+             assertEquals(1, (long) llD.getRecursive(0));
+             llD.removeFirst();
+             assertNull(llD.getRecursive(0));
+         }
+     }
+   #+end_src 
 ** ArrayDeque
    #+begin_src java :classname 
+     import java.util.TreeMap;
+
      public class ArrayDeque<T> {
 
-         private T[] Items;
+         private T[] items;
          private int size;
          private int nextFirst;
          private int nextLast;
          private double ratio;
 
-
          public ArrayDeque() {
              size = 0;
-             Items = (T[]) new Object[8];
-             nextFirst = 0;
-             nextLast = 1;
+             items = (T[]) new Object[8];
+             nextFirst = 7;
+             nextLast = 0;
              ratio = 0.25;
          }
 
          public ArrayDeque(ArrayDeque other) {
-             Items = (T[]) new Object[other.Items.length];
-             System.arraycopy(other.Items, 0, Items, 0, other.Items.length);
+             items = (T[]) new Object[other.items.length];
+             System.arraycopy(other.items, 0, items, 0, other.items.length);
              size = other.size;
              nextFirst = other.nextFirst;
              nextLast = other.nextLast;
              ratio = 0.25;
          }
 
-
          public void addFirst(T item) {
+             items[nextFirst] = item;
+             nextFirst = minusOne(nextFirst);
+             size += 1;
+
              if (isFull()) {
                  this.resize(size * 2);
              }
-             Items[nextFirst] = item;
-             nextFirst = minusOne(nextFirst);
-             size += 1;
          }
 
          public void addLast(T item) {
+             items[nextLast] = item;
+             nextLast = plusOne(nextLast);
+             size += 1;
+
              if (isFull()) {
                  this.resize(size * 2);
              }
-             Items[nextLast] = item;
-             nextLast = plusOne(nextLast);
-             size += 1;
          }
 
          public int size() {
@@ -328,8 +364,8 @@
          }
 
          public void printDeque() {
-             for (int index = plusOne(nextFirst); index != minusOne(nextLast); index = plusOne(index)) {
-                 System.out.print(Items[index] + " ");
+             for (int i = 0; i < size; i++) {
+                 System.out.print(get(i) + " ");
              }
              System.out.println();
          }
@@ -339,12 +375,12 @@
                  return null;
              }
              int index = plusOne(nextFirst);
-             T x = Items[index];
-             Items[index] = null;
-             nextFirst = plusOne(nextFirst);
+             T x = items[index];
+             items[index] = null;
+             nextFirst = index;
              size -= 1;
              if (isWaste()) {
-                 resize(Items.length / 2);
+                 resize(items.length / 2);
              }
              return x;
          }
@@ -353,56 +389,253 @@
              if (isEmpty()) {
                  return null;
              }
-             int index = minusOne(nextFirst);
-             T x = Items[index];
-             Items[index] = null;
-             nextLast = minusOne(nextLast);
+             int index = minusOne(nextLast);
+             T x = items[index];
+             items[index] = null;
+             nextLast = index;
              size -= 1;
              if (isWaste()) {
-                 resize(Items.length / 2);
+                 resize(items.length / 2);
              }
              return x;
          }
 
          public T get(int index) {
-             return Items[index];
+             if (index < 0 || index >= size) {
+                 return  null;
+             }
+             return items[plusOne(index + nextFirst)];
          }
 
-         public void resize(int capacity) {
+         private void resize(int capacity) {
+
              T[] newItems = (T []) new Object[capacity];
-             if (nextFirst >= nextLast) {
-                 int firstEnd = minusOne(nextLast);
-                 int secondStart = plusOne(nextFirst);
-                 System.arraycopy(Items, 0, newItems, 0, firstEnd + 1);
-                 System.arraycopy(Items, secondStart, newItems, firstEnd + 1, Items.length - secondStart);
-             } else {
-                 System.arraycopy(Items, 0, newItems, 0, size);
+             int firstSize = items.length - nextFirst - 1;
+             int start = plusOne(nextFirst);
+             int secondSize = nextLast;
+
+             if (isFull()) {
+                 if (nextFirst == nextLast - 1) {
+                     System.arraycopy(items, start, newItems, 0, firstSize);
+                     System.arraycopy(items, 0, newItems, firstSize, secondSize);
+                 } else {
+                     System.arraycopy(items, start, newItems, 0, size);
+                 }
              }
+
+             if (isWaste()) {
+                 if (nextLast > nextFirst) {
+                     System.arraycopy(items, start, newItems, 0, size);
+                 } else {
+                     System.arraycopy(items, start, newItems, 0, firstSize);
+                     System.arraycopy(items, 0, newItems, firstSize, secondSize);
+                 }
+             }
+
              nextFirst = capacity - 1;
              nextLast = size;
-             Items = newItems;
+             items = newItems;
          }
 
-         public int minusOne(int Index) {
-             return (Index + Items.length - 1) % Items.length;
+         public Object[] items() {
+             return items;
          }
 
-         public int plusOne(int Index) {
-             return (Index + 1) % Items.length;
+         public int nextFirst() {
+             return nextFirst;
+         }
+
+         public int nextLast() {
+             return nextLast;
+         }
+
+         public int itemsLength() {
+             return items.length;
+         }
+
+         private int minusOne(int index) {
+             return (index + items.length - 1) % items.length;
+         }
+
+         private int plusOne(int index) {
+             return (index + 1) % items.length;
          }
 
          public boolean isEmpty() {
              return size == 0;
          }
 
-         public boolean isFull() {
-             return size == Items.length;
+         private boolean isFull() {
+             return size == items.length;
          }
 
-         public boolean isWaste() {
-             return Items.length >= 16 && size / Items.length < ratio;
+         private boolean isWaste() {
+             return items.length >= 16 && (float) size / items.length < ratio;
          }
-
      }
    #+end_src 
+
+** ADTest
+   #+begin_src java :classname 
+     import org.junit.Test;
+     import static org.junit.Assert.*;
+
+     public class ADTest {
+         @Test
+         public void constructorTest() {
+             ArrayDeque<String> aD = new ArrayDeque<>();
+             assertEquals(8,  aD.itemsLength());
+             assertEquals(7, aD.nextFirst());
+             assertEquals(0, aD.nextLast());
+             ArrayDeque<String> newaD = new ArrayDeque<>(aD);
+             assertEquals(aD.itemsLength(), newaD.itemsLength());
+             assertEquals(aD.nextFirst(), newaD.nextFirst());
+             assertEquals(aD.nextLast(), newaD.nextLast());
+             assertArrayEquals(aD.items(), newaD.items());
+             assertNotEquals(aD, newaD);
+         }
+         @Test
+         public void addTest() {
+             ArrayDeque<Integer> aD = new ArrayDeque<>();
+             assertNull(aD.get(0));
+             aD.addFirst(1);
+             aD.addFirst(0);
+             aD.addLast(2);
+             Integer[] expect = {2, null, null, null, null, null, 0, 1};
+             assertArrayEquals(expect, aD.items());
+             assertEquals(5, aD.nextFirst());
+             assertEquals(1, aD.nextLast());
+             assertEquals(3, aD.size());
+         }
+         @Test
+         public void removeTest() {
+             ArrayDeque<Integer> aD = new ArrayDeque<>();
+             assertNull(aD.removeFirst());
+             assertNull(aD.removeLast());
+             for (int i = 0; i < 7; i++) {
+                 aD.addLast(i);
+             }
+             assertEquals(0, (long) aD.removeFirst());
+             assertEquals(6, (long) aD.removeLast());
+             Integer[] expect = {null, 1, 2, 3, 4, 5, null, null};
+             assertArrayEquals(expect, aD.items());
+             assertEquals(0, aD.nextFirst());
+             assertEquals(6, aD.nextLast());
+             assertEquals(5, aD.size());
+         }
+         @Test
+         public void resizeTestF() {
+
+             /* always addLast to full */
+             ArrayDeque<Integer> aD1 = new ArrayDeque<>();
+             for (int i = 0; i < 8; i++) {
+                 aD1.addLast(i);
+             }
+             Integer[] expectF = {0, 1, 2, 3, 4, 5, 6, 7, null, null,
+                     null, null, null, null, null, null};
+             assertArrayEquals(expectF, aD1.items());
+             aD1.addLast(8);
+             expectF[8] = 8;
+             assertArrayEquals(expectF, aD1.items());
+             assertEquals(15, aD1.nextFirst());
+             assertEquals(9, aD1.nextLast());
+             assertEquals(9, aD1.size());
+
+             /* always addFirst to full */
+             ArrayDeque<Integer> aD2 = new ArrayDeque<>();
+             for (int i = 7; i >= 0; i--) {
+                 aD2.addFirst(i);
+             }
+             aD2.addLast(8);
+             assertArrayEquals(aD1.items(), aD2.items());
+             assertEquals(aD1.nextFirst(), aD2.nextFirst());
+             assertEquals(aD1.nextLast(), aD2.nextLast());
+             assertEquals(aD1.size(), aD2.size());
+
+             /* addLast and addFirst (nextFirst = nextLast - 1) to full */
+             ArrayDeque<Integer> aD3 = new ArrayDeque<>();
+             for (int i = 3; i >= 0; i--) {
+                 aD3.addFirst(i);
+             }
+             for (int i = 4; i < 8; i++) {
+                 aD3.addLast(i);
+             }
+             aD3.addLast(8);
+             assertArrayEquals(aD1.items(), aD3.items());
+             assertEquals(aD1.nextFirst(), aD3.nextFirst());
+             assertEquals(aD1.nextLast(), aD3.nextLast());
+             assertEquals(aD1.size(), aD3.size());
+         }
+
+         @Test
+         public void resizeTestW() {
+
+             Integer[] expectF = {0, 1, 2, 3, 4, 5, 6, 7, 8, null,
+                     null, null, null, null, null, null};
+             ArrayDeque<Integer> aD3 = new ArrayDeque<>();
+             for (int i = 0; i < 9; i++) {
+                 aD3.addLast(i);
+             }
+
+             /* nextFirst = 15 to waste, copy left */
+             Integer[] expectW = {0, 1, 2, null, null, null, null, null};
+             ArrayDeque<Integer> aD4 = new ArrayDeque<>(aD3);
+             for (int i = 0; i < 6; i++) {
+                 aD4.removeLast();
+             }
+             assertArrayEquals(expectW, aD4.items());
+             assertEquals(3, aD4.size());
+             assertEquals(3, aD4.nextLast());
+             assertEquals(7, aD4.nextFirst());
+
+             /* nextLast = 0 to waste, copy right */
+             ArrayDeque<Integer> aD5 = new ArrayDeque<>(aD3);
+             for (int i = 0; i < 3; i++) {
+                 aD5.addFirst(2 - i);
+                 expectF[15 - i] = 2 - i;
+             }
+             assertArrayEquals(expectF, aD5.items());
+             for (int i = 0; i < 9; i++) {
+                 aD5.removeLast();
+             }
+             assertArrayEquals(expectW, aD5.items());
+             assertEquals(3, aD5.size());
+             assertEquals(3, aD5.nextLast());
+             assertEquals(7, aD5.nextFirst());
+
+             /* nextLast != 0 and nextFirst !=0
+             and nextFirst > nextLast, copy two sides */
+             ArrayDeque<Integer> aD6 = new ArrayDeque<>(aD3);
+             for (int i = 0; i < 2; i++) {
+                 aD6.addFirst(1 - i);
+                 expectF[15 - i] = 1 - i;
+             }
+             expectF[13] = null;
+             assertArrayEquals(expectF, aD6.items());
+             for (int i = 0; i < 8; i++) {
+                 aD6.removeLast();
+             }
+             expectW[2] = 0;
+             assertArrayEquals(expectW, aD6.items());
+             assertEquals(3, aD6.size());
+             assertEquals(3, aD6.nextLast());
+             assertEquals(7, aD6.nextFirst());
+
+             /* nextLast != 0 and nextFirst !=0
+             and nextFirst < nextLast, copy middle */
+             ArrayDeque<Integer> aD7 = new ArrayDeque<>(aD3);
+             for (int i = 0; i < 6; i++) {
+                 aD7.removeFirst();
+             }
+             expectW[0] = 6;
+             expectW[1] = 7;
+             expectW[2] = 8;
+             assertArrayEquals(expectW, aD7.items());
+             assertEquals(3, aD7.size());
+             assertEquals(3, aD7.nextLast());
+             assertEquals(7, aD7.nextFirst());
+         }
+     }
+   #+end_src 
+* Project 1B Applying and Testing Data Structures version 1.0
 
