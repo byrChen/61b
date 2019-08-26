@@ -8,9 +8,8 @@ public class NBody {
 
     public static Body[] readBodies(String filePath) {
         In in = new In(filePath);
-        int firstItemInFile = in.readInt();
+        int N = in.readInt();
         double radius = in.readDouble();
-        int N = 5;
         Body[] b = new Body[N];
         for (int i = 0; i < N; i++) {
             double xxPos = in.readDouble();

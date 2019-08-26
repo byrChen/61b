@@ -24,7 +24,6 @@
      - ~git add [forgotten-file]~ + ~git commit --amend~: Amend latest commit (changing commit message or add forgotten files).
      - ~git checkout -- [file]~: Revert a file to its state at the time of the most recent commit.
      - ~git chechout commitnumber repository/file~: Revert a file to a specific commit.
-        
 *** D. Remote Repositories
     - ~git clone [remote-repo-URL]~: Makes a copy of the specified repository, but on your local computer. Also creates a working directory that has files arranged exactly like the most recent snapshot in the download repository. Also records the URL of the remote repository for subsequent network data transfers, and gives it the special remote-repo-name “origin”.
     - ~git remote add [remote-repo-name]~: Records a new location for network data transfers.
@@ -254,5 +253,112 @@
    - ~int~ is a *primitive* data type while ~Integer~ is a ~Wrapper~ class
 
 
+* Lab 5 Huglife
+** Plip
+*** Basic Plip functionality
+    - Code
+      #+begin_src java :classname 
+        public void move() {
+            // TODO
+            energy -= 0.15;
+            if (energy <= 0) {
+                energy = 0;
+                return;
+            }
+        }
+  
+  
+        /**
+         ,* Plips gain 0.2 energy when staying due to photosynthesis.
+         ,*/
+        public void stay() {
+            // TODO
+            energy += 0.2;
+            if (energy >= 2) {
+                energy = 2;
+                return;
+            }
+        }
+      #+end_src 
+      - ~if~ in the end 
+*** chooseAction method
+    #+begin_src java :classname 
+      public Action chooseAction(Map<Direction, Occupant> neighbors) {
+          // Rule 1
+          Deque<Direction> emptyNeighbors = new ArrayDeque<>();
+          boolean anyClorus = false;
+          // TODO
+          // (Google: Enhanced for-loop over keys of NEIGHBORS?)
+          // for () {...}
+          for (Map.Entry<Direction, Occupant> entry : neighbors.entrySet()) {
+              if (entry.getValue().name().equals("empty")) {
+                  emptyNeighbors.add(entry.getKey());
+              }
+              if (entry.getValue().equals("clorus")) {
+                  anyClorus = true;
+              }
+          }
 
+          if (emptyNeighbors.isEmpty()) {
+              // TODO
+              return new Action(Action.ActionType.STAY);
+          }
+
+          if (energy >= 1) {
+              int indexToMove = StdRandom.uniform(0, emptyNeighbors.size());
+              Direction dir = (Direction) emptyNeighbors.toArray()[indexToMove];
+              return new Action(Action.ActionType.REPLICATE, dir);
+          }
+
+          if (anyClorus && StdRandom.uniform(2) == 0) {
+              int indexToMove = StdRandom.uniform(0, emptyNeighbors.size());
+              Direction dir = (Direction) emptyNeighbors.toArray()[indexToMove];
+              return new Action(Action.ActionType.MOVE, dir);
+          }
+
+          return new Action(Action.ActionType.STAY);
+      }
+    #+end_src
+    - Create an ~ArrayDeque~ object: ~Deque<Direction> emptyNeighbors = new ArrayDeque<>()~
+    - Iterate on ~Map~: ~for (Map.Entry<Direction, Occupant> entry : neighbors.entrySet())~, ~entry.getValue()~ and ~entry.getKey()~
+    - Return a random entry in ~ArrayDeque~: ~StdRandom.uniform(0, emptyNeighbors.size())~ and ~(Direction) emptyNeighbors.toArray()[indexToMove]~
+    - Compare ~Object~ objects: ~obj1.equals(obj2)~
+    - 50% possibility to move: ~if (anyClorus && StdRandom.uniform(2) == 0)~ 
+** Clorus
+*** chooseAction method 
+    #+begin_src java :classname 
+      public Action chooseAction(Map<Direction, Occupant> neighbors) {
+          Deque<Direction> emptyNeighbors = new ArrayDeque<>();
+          Deque<Direction> plipNeighbors = new ArrayDeque<>();
+
+          for (Map.Entry<Direction, Occupant> entry : neighbors.entrySet()) {
+
+              if (entry.getValue().name().equals("empty")) {
+                  emptyNeighbors.add(entry.getKey());
+              }
+
+              if (entry.getValue().name().equals("plip")) {
+                  plipNeighbors.add(entry.getKey());
+              }
+          }
+
+          if (emptyNeighbors.isEmpty()) {
+              return new Action(Action.ActionType.STAY);
+          }
+
+          if (!plipNeighbors.isEmpty()) {
+              int index = StdRandom.uniform(0, plipNeighbors.size());
+              Direction dir = (Direction) plipNeighbors.toArray()[index];
+              return new Action(Action.ActionType.ATTACK, dir);
+          } else {
+              int index = StdRandom.uniform(0, emptyNeighbors.size());
+              Direction dir = (Direction) emptyNeighbors.toArray()[index];
+              if (energy >= 1) {
+                  return new Action(Action.ActionType.REPLICATE, dir);
+              }
+              return new Action(Action.ActionType.MOVE, dir);
+          }
+      }
+    #+end_src 
+    - Store ~Plip~ objects' directions: ~Deque<Direction> plipNeighbors = new ArrayDeque<>()~
 

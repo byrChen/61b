@@ -60,9 +60,8 @@
     #+begin_src java :classname 
       public static Body[] readBodies(String filePath) {
           In in = new In(filePath);
-          int firstItemInFile = in.readInt();
+          int N = in.readInt();
           double radius = in.readDouble();
-          int N = 25;
           Body[] b = new Body[N];
           for (int i = 0; i < N; i++) {
               double xxPos = in.readDouble();
@@ -139,7 +138,7 @@
    #+end_src 
    - ~public class Body~
    - ~private static final~ 
-* Proj 1A Data Structures
+* Proj 1A Data Structures                                           :TOBEORG:
 ** LinkedListDeque 
    #+begin_src java :classname 
      import java.io.NotActiveException;
@@ -155,9 +154,9 @@
              private T item;
 
              public Node(T iteM, Node preV, Node nexT) {
-                 this.item = iteM;
-                 this.prev = preV;
-                 this.next = nexT;
+                 item = iteM;
+                 prev = preV;
+                 next = nexT;
              }
          }
 
@@ -474,7 +473,6 @@
          }
      }
    #+end_src 
-
 ** ADTest
    #+begin_src java :classname 
      import org.junit.Test;
@@ -637,5 +635,213 @@
          }
      }
    #+end_src 
-* Project 1B Applying and Testing Data Structures version 1.0
+* Project 1B Applying and Testing Data Structures version 1.0       :TOBEORG:
+** Deque Interface 
+   #+begin_src java :classname 
+     interface Deque<T> {
+
+         void addFirst(T item);
+
+         void addLast(T item);
+
+         default boolean isEmpty() {
+             return size() == 0;
+         }
+
+         int size();
+
+         void printDeque();
+
+         T removeFirst();
+
+         T removeLast();
+
+         T get(int index);
+     }
+   #+end_src 
+
+** wordToDeque
+   #+begin_src java :classname 
+     public class Palindrome {
+
+         public Deque<Character> wordToDeque(String word) {
+
+             Deque<Character> deQue = new LinkedListDeque<>();
+             for (int i = word.length() - 1; i >= 0; i--) {
+                 deQue.addFirst(word.charAt(i));
+             }
+             return deQue;
+         }
+
+         ...
+     }
+   #+end_src 
+
+** isPalindrome
+*** isPalindrome Testing
+    #+begin_src java :classname 
+      import org.junit.Test;
+      import static org.junit.Assert.*;
+
+      public class TestPalindrome {
+          // You must use this palindrome, and not instantiate
+          // new Palindromes, or the autograder might be upset.
+          static Palindrome palindrome = new Palindrome();
+
+          @Test
+          public void testWordToDeque() {
+              Deque d = palindrome.wordToDeque("persiflage");
+              String actual = "";
+              for (int i = 0; i < "persiflage".length(); i++) {
+                  actual += d.removeFirst();
+              }
+              assertEquals("persiflage", actual);
+          }
+          @Test
+          public void testisPalindrome() {
+              assertTrue(palindrome.isPalindrome("a"));
+              assertTrue(palindrome.isPalindrome(""));
+              assertTrue(palindrome.isPalindrome("aka"));
+              assertFalse(palindrome.isPalindrome("akd"));
+          }
+      }
+    #+end_src 
+*** isPalindrome
+    #+begin_src java :classname 
+      public boolean isPalindrome(String word) {
+          if (word.length() == 1 || word.length() == 0) {
+              return true;
+          }
+
+          for (int i = 0; i < (word.length() / 2); i++) {
+              if (word.charAt(i) != word.charAt(word.length() - i - 1)) {
+                  return false;
+              }
+          }
+
+          return true;
+
+          // use wordToDeque
+          //        Deque<Character> d = wordToDeque(word);
+          //        String reverse = "";
+          //        for (int i = 0; i < word.length(); i++) {
+          //            reverse += d.removeLast();
+          //        }
+          //        return reverse.equals(word);
+      }
+    #+end_src 
+
+** Generalized Palindrome and OffByOne
+*** OffByOne
+    #+begin_src java :classname 
+      /** This interface defines a method for determining equality of characters. */
+      public interface CharacterComparator {
+          /** Returns true if characters are equal by the rules of the implementing class. */
+          boolean equalChars(char x, char y);
+      }
+    #+end_src 
+    #+begin_src java :classname 
+      public class OffByOne implements CharacterComparator {
+          @Override
+          public boolean equalChars(char x, char y) {
+              int diff = (x - y < 0) ? (y - x) : (x - y);
+              return diff == 1;
+          }
+      }
+    #+end_src 
+*** Generalized Palindrome
+    #+begin_src java :classname 
+      public boolean isPalindrome(String s, CharacterComparator cc) {
+
+          if (s.length() == 0 || s.length() == 1) {
+              return true;
+          }
+
+          for (int i = 0; i < s.length() / 2; i++) {
+              if (!cc.equalChars(s.charAt(i), s.charAt(s.length() - i - 1))) {
+                  return false;
+              }
+          }
+
+          return true;
+      }
+    #+end_src 
+
+** OffByN
+   #+begin_src java :classname 
+     public class OffByN implements CharacterComparator {
+
+         private int expect;
+         public OffByN(int N) {
+             expect = N;
+         }
+         @Override
+         public boolean equalChars(char x, char y) {
+             int diff = (x - y) < 0 ? (y - x) : (x - y);
+             return diff == expect;
+         }
+     }
+   #+end_src 
+
+* Project 1 Gold
+  #+begin_src java :classname 
+    import static org.junit.Assert.*;
+    import org.junit.Test;
+
+    public class TestArrayDequeGold {
+
+        private StudentArrayDeque<Integer> stu = new StudentArrayDeque<>();
+        private ArrayDequeSolution<Integer> sol = new ArrayDequeSolution<>();
+        private String msg = "\n";
+        private int size = 0;
+
+        @Test
+        public void testDeque() {
+            // test addFirst
+            for (int i = 0; i < 100; i++) {
+                int flag = StdRandom.uniform(4);
+                int random = StdRandom.uniform(10);
+                switch (flag) {
+                    case 0:
+                        size += 1;
+                        sol.addFirst(random);
+                        stu.addFirst(random);
+                        msg = msg + "addFirst(" + random +")\n";
+    //                    assertEquals(msg, sol.get(0), stu.get(0));
+                        break;
+                    case 1:
+                        size += 1;
+                        sol.addLast(random);
+                        stu.addLast(random);
+                        msg = msg + "addLast(" + random +")\n";
+    //                    assertEquals(msg, (Integer) random, stu.get(size - 1));
+    //                    assertEquals(msg, (Integer) random, sol.get(size - 1));
+    //                    assertEquals(msg, sol.get(size - 1), stu.get(size - 1));
+                        break;
+                    case 2:
+                        if (size == 0) {
+                            break;
+                        }
+                        size -= 1;
+                        msg = msg + "removeFirst()\n";
+                        assertEquals(msg, sol.removeFirst(), stu.removeFirst());
+                        break;
+                    case 3:
+                        if (size == 0) {
+                            break;
+                        }
+                        size -= 1;
+                        msg = msg + "removeLast()\n";
+                        assertEquals(msg, sol.removeLast(), stu.removeLast());
+                        break;
+                }
+            }
+        }
+    }
+  #+end_src 
+  - Only use ~addFirst~, ~addLast~, ~removeFirst~ and ~removeLast~, as actually there is a bug in ~addLast~ or ~get~
+  - ~private String msg~ and ~private int size~ to trace
+  - ~StdRandom.uniform(n)~ and ~StdRandom.uniform(a, b)~
+  - ~switch~ and ~case~
+  - ~assertEquals(String msg, expect, actual)~ 
 

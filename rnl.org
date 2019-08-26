@@ -1,7 +1,6 @@
-#+TAGS: QUESTIONS(q) OUTSTANDING(o)
-
+#+TAGS: OUTSTANDING(o) QUESTIONS(q) TOBEORG(t)
 * 1. Introduction to Java
-** 1.1 Essentials
+** Essentials
    #+begin_src java :classname HelloWorld
      public class HelloWorld {
          public static void main(String[] args) {
@@ -119,7 +118,7 @@
     - In python, funcs can be declared *anywhere*.
     - In java, java code is *part of a class*, funcs must defed *belong to some class* and called *methods*.
     - ~def~ in python, ~public static~ in java.  
-** 1.2 Objects
+** Objects
 *** Static vs. Non-Static Methods
     - Static Methods
      All code in Java must be *part of a class* (or something similar).
@@ -444,7 +443,7 @@
         : 21
         - ~Integer.parseInt(String)~: Convert ~String~ to a *primitive* ~int~ and *return* it.
 * 2. Lists
-** 2.1 Mystery of the Walrus
+** Mystery of the Walrus
    ~List~ could easily change the number of object after the simulation had begun.
 *** The Mystery of the Walrus
     #+begin_src java :classname PollQuestions
@@ -657,7 +656,7 @@
       #+end_src 
 **** Question:                                                    :QUESTIONS:
      1. 如果获取函数 ~get(-1)~ 该怎么处理
-** 2.2 The SLList
+** The SLList
    ~IntList~ is a *naked recursive* data structure 
 *** Improvement #1: Rebranding
     #+begin_src java :classname 
@@ -983,7 +982,7 @@
     - The ~sentinel~ reference always points to a *sentinel node*.
     - The *front item* (if it exists), is always at ~sentinel.next.item~.
     - The ~size~ variable is always the total number of items that have been added.
-** 2.3 The DLList
+** The DLList
 *** addLast
     Previous ~addLast~ is *slow* for long lists -> adding a ~last~ variable 
     #+begin_src java :classname 
@@ -1052,7 +1051,7 @@
         DLList<Integer> d1 = new DLList<>(5);
         d1.insertFront(10);
       #+end_src 
-** 2.4 Arrays
+** Arrays
 *** Array Creation
     Three valid notations for array creation
     #+begin_src java :classname 
@@ -1193,7 +1192,7 @@
     - Cannot be *shrunk or expanded* (such as in Ruby).
     - Do not have *member methods* (such as in Javascript).
     - Must contain values only of the *same type* (unlike Python).
-** 2.5 The AList
+** The AList
    Unlike the ~DLList~, the ~AList~ will use *arrays* to store data instead of a *linked list*.
    ~int get(int i)~ in ~DLList~ costs $n/2$ times in worst case -> accessing ~array[i]~ takes *constant* time -> *array-based* list instead of *linked*-list  
 *** Our First Attempt: The Naive Array Based List
@@ -1606,7 +1605,7 @@
        - ~@org.junit.Test~ -> ~@Test~
        - Omit ~org.junit.Assert.~ 
 * 4. Inheritance, Implements
-** 4.1 Intro, Hello World Java
+** Intro, Hello World Java
 *** Method overloading
     #+begin_src java :classname 
       public static String longest(SLList<String> list) {
@@ -1711,7 +1710,7 @@
     - Interface Inheritance (*what*): Simply tells *what* the subclasses should be able to do.
     - Implementation inheritance (*how*): Tells the subclasses *how* they should behave.
     - Common: "is-a" not "has-"
-** 4.2 Extends, Casting, Higher Order Function
+** Extends, Casting, Higher Order Function
 *** Extends
     - ~RotatingSLList~ 
       #+DOWNLOADED: https://joshhug.gitbooks.io/hug61b/content/assets/list_subclasses.png @ 2019-08-10 09:28:03
@@ -1860,7 +1859,7 @@
       }
     #+end_src 
     ~System.out.println(do_twice(new TenX(), 2));~ 
-** 4.3 Subtype Polymorphism vs. HOFs
+** Subtype Polymorphism vs. HOFs
 *** Subtype Polymorphism
     *Polymorphism* refers to how *objects* can have many *forms or types* in Java
     - Explicit HoF Approach
@@ -2075,8 +2074,10 @@
        需要比较时直接 ~Dog.NameComparator.compare(dog1, dog2)~ 。
     3. Comparator 不还是需要为每一种比较策略定义一个 nexted class 以及一个 getcomparator() ？这样做的意义？
     4. Java8 之后是怎么显式传递函数作为参数或者把函数作为返回值？
+** Java libraries and packages                                :UNCOVERED:
+* 5. Generics and Autoboxing                                      :UNCOVERED:
 * 6. Exceptions, Iterators, Iterables, Object Methods
-** 6.1 Lists, Sets, ArraySet 
+** Lists, Sets, ArraySet 
 *** Lists in Real Java Code
     #+begin_src java :classname 
       import java.util.List;
@@ -2150,7 +2151,7 @@
     #+end_src 
     - ~items = (T[]) new Object[100];~
     - ~items[i].equals(x)~ 
-** 6.2 Throwing Exceptions
+** Throwing Exceptions
    Throw an *exception* when a user tries to add ~null~ to ~ArraySet~: ~throw new ExceptionObject(parameter1, ...)~ 
    #+begin_src java :classname 
      /* Associates the specified value with the specified key in this map.
@@ -2174,7 +2175,7 @@
        s.add(null);
        System.out.println(s.contains(null));
      #+end_src 
-** 6.3 Iteration
+** Iteration
 *** Enhanced For Loop
     #+begin_src java :classname 
       Set<String> s = new HashSet<>();
@@ -2328,7 +2329,7 @@
       - ~Comparable~ has method ~comparator()~ which returns a ~Comparator~ object, ~Iterable~ is similar.
       - ~Comparable~ and ~Iterable~ are interfaced implemented by classes, describing a kind of classes' *attribute* (*comparable* and *iterable*)
       - ~Comparator~ and ~Iterator~ are *nested classes* inside classes which implement ~Comparable~ and ~Iterable~, instances of them are objects whose methods can take in ~Comparable~ and ~Iterable~ objects as arguments
-** 6.4 Object Methods
+** Object Methods
    All classes inherit from the overarching Object class. The methods that are inherited are as follows:
    - ~String toString()~
    - ~boolean equals(Object obj)~
@@ -2500,8 +2501,12 @@
     - ~ArraySet<Glerp> returnSet = new ArraySet<Glerp>()~
     - ~ArraySet<String> asetOfStrings = ArraySet.of("hi", "I'm", "here")~ 
 
+** Throwing Exceptions (legacy)                                   :UNCOVERED:
+** Checked vs. Unchecked exception (legacy)                       :UNCOVERED:
+** Iteration (legacy)                                             :UNCOVERED:
+* 7. Packages and Access Control                                  :UNCOVERED:
 * 8. Efficient Programming
-** 8.1 Encapsulation, API's, ADT's
+** Encapsulation, API's, ADT's
 *** Encapsulation
     - Module: *A set of methods* that work together *as a whole* to perform some task or set of related tasks.
     - Encapsulated: A module is said to be encapsulated if its *implementation is completely hidden*, and it can be accessed only through *a documented interface*.
@@ -2511,6 +2516,623 @@
     - Compiler verifies that syntax is met.
     - Tests help verify that semantics are correct.
 *** ADT's
-* 2. Defining and Using Classes
+    ADT's (Abstract Data Structures) are high-level types that are defined by their *behaviors*, not their *implementations*.
+    - Delegation vs Extension: Write a *Stack* class using a *Linked List* as its underlying data structure
+      - Extension: inheriting from parent class
+        #+begin_src java :classname 
+          public class ExtensionStack<Item> extends LinkedList<Item> {
+              public void push(Item x) {
+                  add(x);
+              }
+          }
+        #+end_src
+      - Delegation: delegating another class to perform some actions
+        #+begin_src java :classname 
+          public class DelegationStack<Item> {
+              private LinkedList<Item> L = new LinkedList<Item>();
+              public void push(Item x) {
+                  L.add(x);
+              }
+          }
+        #+end_src
+        #+begin_src java :classname 
+          public class DelegationStack<Item> {
+              private LinkedList<Item> L = new LinkedList<Item>();
+              public void push(Item x) {
+                  L.add(x);
+              }
+          }
+        #+end_src
+        - Can use *any class* that implements the *List* interface (LinkedList, ArrayList, etc).
+    - View: Use ~subList(a, b)~ to reverse only part of the list
+      Views are an alternative representation of an *existed object*. Views essentially *limit the access* to the underlying object but *mutate* the underlying object
+      #+begin_src java :classname 
+        public class List<T> {
+            ...
+            public List<Item> sublist(int start, int end) {
+                return new this.Sublist(start,end);
+            }
+
+            private class Sublist extends AbstractList<Item>{
+                private int start, end;
+                public Sublist(inst start, int end) {...}
+                public T get(int k) {return AbstractList.this.get(start+k);}
+                public void add(int l, T x) {AbstractList.this.add(start+k, x); end+=1}
+            }
+        }
+      #+end_src
+      #+begin_src java :classname 
+        /** Create an ArrayList. */
+        List<String> L = new ArrayList<>();
+        /** Add some items. */
+        L.add(“at”);
+        L.add(“ax”);
+        ...
+
+        List<String> SL = L.subList(1, 3);
+        SL.reverse();
+      #+end_src
+      #+DOWNLOADED: https://joshhug.gitbooks.io/hug61b/content/assets/reverse_list1.png @ 2019-08-19 09:37:17
+      [[file:pictures/8._Efficient_Programming/reverse_list1_2019-08-19_09-37-17.png]]
+      #+DOWNLOADED: https://joshhug.gitbooks.io/hug61b/content/assets/reverse_list2.png @ 2019-08-19 09:37:39
+      [[file:pictures/8._Efficient_Programming/reverse_list2_2019-08-19_09-37-39.png]]
+** Asymptotics I
+*** $\Theta$ is a tight bound, including upper and lower bound correspond to worst and best case (can be reached)
+    $R(N) \in \Theta(f(N))$ means that there exists positive constants $k_{1}, k_{2}$ such that:
+    $k_{1} \cdot f(N) \leq R(N) \leq k_{2} \cdot f(N)$ ,  for all values of $N$ greater than some $N_{0}$
+*** $O$ is just an upper bound, it is not the same but often used as worst case (may not be able to reach) 
+    $R(N) \in O(f(N))$ means that there exists positive constants $k_{2}$ such that:
+    $R(N) \leq k_{2} \cdot f(N)$ ,  for all values of $N$ greater than some $N_{0}$
+** Asymptotics II
+*** Loop
+    #+begin_src java :classname 
+      int N = A.length;
+      for (int i = 0; i < N; i += 1)
+          for (int j = i + 1; j < N; j += 1)
+              if (A[i] == A[j])
+                  return true;
+      return false;
+    #+end_src 
+    - $\theta\left(N^{2}\right)$
+    #+begin_src java :classname 
+      public static void printParty(int N) {
+          for (int i = 1; i <= N; i = i * 2) {
+              for (int j = 0; j < i; j += 1) {
+                  System.out.println("hello");   
+                  int ZUG = 1 + 1;
+              }
+          }
+      }
+    #+end_src 
+    - $C(N)=1+2+4+\ldots+N=2 N-1$ (if N is a power of 2)
+    - Runtime (by definition) must also be *linear*
+      #+DOWNLOADED: https://joshhug.gitbooks.io/hug61b/content/assets/loops2_graph2.png @ 2019-08-19 15:09:42
+      [[file:pictures/8._Efficient_Programming/loops2_graph2_2019-08-19_15-09-42.png]]
+*** Recursion
+    #+begin_src java :classname 
+      public static int f3(int n) {
+          if (n <= 1) 
+              return 1;
+          return f3(n-1) + f3(n-1);
+      }
+    #+end_src 
+    - $\theta\left(2^{N}\right)$
+*** Binary Search: $\theta\left(\log _{2}(n)\right)$
+*** Merge Sort: $\theta\left(n \log _{2}(n)\right)$
+** Omega and Amortized Analysis (extra)
+*** $\Omega$ 
+    1. Used to prove $\Theta$ : $R(N)=O(f(N))$ and $R(N)=\Omega(f(N))$ -> $R(N)=\Theta(f(N))$
+    2. Used to prove the difficulty of a problem.
+    #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-20 13:56:31
+    [[file:pictures/8._Efficient_Programming/screenshot_2019-08-20_13-56-31.png]]
+*** Amortized Analysis (Rigurous Explanation) 
+    For length-1 *ArrayList*, 
+    - Cost model: only consider array reads and writes
+    - Compute the cost of a sequence of array adds and their average (*amortized*) cost
+      #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-20 15:18:53
+      [[file:pictures/8._Efficient_Programming/screenshot_2019-08-20_15-18-53.png]]
+      \begin{aligned} S(N)=1+(2\times1+1)+(2\times2+1)+1+...+a_{N-1}+a_{N}=\frac{(1+2+...+2^{\lfloor log_{2}^N \rfloor})\times2+\lfloor log_{2}^N \rfloor+1+N-(\lfloor log_{2}^N \rfloor+1)}{N}=\frac{4\times2^{\lfloor log_{2}^N \rfloor}+N}{N} \end{aligned}
+      \begin{aligned} \lim_{n \to \infty}S(N) = \lim_{n \to \infty} \frac{4\times2^{\lfloor log_{2}^N \rfloor}+N}{N} \leq 5\end{aligned}
+    - Average (*amortized*) cost is bounded by 5
+**** Question:                                                    :QUESTIONS:
+     1. 怎么理解 amortized ？怎么翻译，直观上理解？
+* 9. Disjoint Sets
+  #+begin_src java :classname 
+    public interface DisjointSets {
+        /** connects two items P and Q */
+        void connect(int p, int q);
+
+        /** checks to see if two items are connected */
+        boolean isConnected(int p, int q); 
+    }
+  #+end_src 
+** Quick Find
+*** ListOfsets: ~List<Set<Integer>>~ like ~[{0}, {1}, {2}, {3}, {4}, {5}, {6}]~
+*** QuickFind
+    - The *indices* of the array represent the *elements* of the set.
+    - The *value* at an index is the *set number* it belongs to.
+    #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-20 09:41:37
+    [[file:pictures/9._Disjoint_Sets/screenshot_2019-08-20_09-41-37.png]]
+    #+begin_src java :classname 
+      public class QuickFindDS implements DisjointSets {
+  
+          private int[] id;
+  
+          /* Θ(N) */
+          public QuickFindDS(int N){
+              id = new int[N];
+              for (int i = 0; i < N; i++){
+                  id[i] = i;
+              }
+          }
+  
+          /* need to iterate through the array => Θ(N) */
+          public void connect(int p, int q){
+              int pid = id[p];
+              int qid = id[q];
+              for (int i = 0; i < id.length; i++){
+                  if (id[i] == pid){
+                      id[i] = qid;
+                  }
+              }
+          }
+  
+          /* Θ(1) */
+          public boolean isConnected(int p, int q){
+              return (id[p] == id[q]);
+          }
+      }
+    #+end_src 
+    - ~connect~ too slow, unpractical
+*** Summary
+    #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-20 09:11:19
+    [[file:pictures/9._Disjoint_Sets/screenshot_2019-08-20_09-11-19.png]]
+ 
+** Quick Union
+   Instead of an id, assign each item *the index of its parent*. -1 for no parent *'root'* items
+   #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-20 09:42:13
+   [[file:pictures/9._Disjoint_Sets/screenshot_2019-08-20_09-42-13.png]]
+   #+begin_src java :classname 
+     public class QuickUnionDS implements DisjointSets {
+         private int[] parent;
+
+         public QuickUnionDS(int num) {
+             parent = new int[num];
+             for (int i = 0; i < num; i++) {
+                 parent[i] = i;
+             }
+         }
+
+         private int find(int p) {
+             while (parent[p] >= 0) {
+                 p = parent[p];
+             }
+             return p;
+         }
+
+         @Override
+         public void connect(int p, int q) {
+             int i = find(p);
+             int j= find(q);
+             parent[i] = j;
+         }
+
+         @Override
+         public boolean isConnected(int p, int q) {
+             return find(p) == find(q);
+         }
+     }
+   #+end_src 
+   - Finding the root of an item (~find(item)~) becomes very expensive when the tree becomes too long
+*** Summary
+    #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-20 09:43:37
+    [[file:pictures/9._Disjoint_Sets/screenshot_2019-08-20_09-43-37.png]]
+ 
+** Weighted Quick Union (WQU)
+   When calling ~connect~, always link the root of the *smaller* tree to the *larger* tree 
+   #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-20 09:58:30
+   [[file:pictures/9._Disjoint_Sets/screenshot_2019-08-20_09-58-30.png]]
+   - Option 2 is better
+   - ~connect~ need to track the tree's size: number of items in that tree
+   - Maximum height = maximum ~connect~ times = runtime upper = $\Theta (log^N)$ (actually $log_{2}^N$ here)
+*** Summary
+    #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-20 10:11:29
+    [[file:pictures/9._Disjoint_Sets/screenshot_2019-08-20_10-11-29.png]]
+** WQU with Path Compression
+   Connect all the items along ~find~ to the root when calling ~connect~ and ~isConnected~
+*** Summary
+    #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-20 10:40:49
+    [[file:pictures/9._Disjoint_Sets/screenshot_2019-08-20_10-40-49.png]]
+    #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-20 10:29:31
+    [[file:pictures/9._Disjoint_Sets/screenshot_2019-08-20_10-29-31.png]]
+    For M operations (~connect~ or ~isConnected~) on N elements
+    #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-20 10:38:40
+    [[file:pictures/9._Disjoint_Sets/screenshot_2019-08-20_10-38-40.png]]
+    - $O(N+NM) = O((N+1)M) = O(NM)$ : *construction* + *actions* (~connect~ or ~isConnected~), similar for others
+    - *Amortized runtime* and *iterated logarithm*: $\alpha(N)$ = $log^*(N)$ = constant in long term. ( $log^*(N) = 5$ for $N=2^{65536}$ )
+ 
+* 10. ADTs
+  An Abstract Data Type (ADT) is defined only by its *operations*, not by its *implementation*
+  #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-20 16:34:58
+  [[file:pictures/10._ADTs/screenshot_2019-08-20_16-34-58.png]]
+  #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-20 16:32:24
+  [[file:pictures/10._ADTs/screenshot_2019-08-20_16-32-24.png]]
+  - Interfaces are in white, classes are in blue.
+** Binary Search Trees (BSTs)
+   #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-20 16:59:28
+   [[file:pictures/10._ADTs/screenshot_2019-08-20_16-59-28.png]]
+   #+begin_src java :classname 
+     private class BST<Key> {
+         private Key key;
+         private BST left;
+         private BST right;
+
+         public BST(Key key, BST left, BST Right) {
+             this.key = key;
+             this.left = left;
+             this.right = right;
+         }
+
+         public BST(Key key) {
+             this.key = key;
+         }
+     }
+   #+end_src 
+*** Operations
+    - Search
+      #+begin_src java :classname 
+        static BST find(BST T, Key sk) {
+            if (T == null)
+                return null;
+            if (sk.equals(T.key))
+                return T;
+            else if (sk ≺ T.key)
+                return find(T.left, sk);
+            else
+                return find(T.right, sk);
+        }
+      #+end_src
+    - Insert
+      Always insert at a *leaf node*
+      #+begin_src java :classname 
+        static BST insert(BST T, Key ik) {
+            if (T == null)
+                return new BST(ik);
+            if (ik ≺ T.key)
+                T.left = insert(T.left, ik);
+            else if (ik ≻ T.key)
+                T.right = insert(T.right, ik);
+            return T;
+        }
+      #+end_src
+    - Delete
+      Hibbard deletion
+      - No children
+        #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-21 10:07:36
+        [[file:pictures/10._ADTs/screenshot_2019-08-21_10-07-36.png]]
+      - One children
+        #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-21 10:23:26
+        [[file:pictures/10._ADTs/screenshot_2019-08-21_10-23-26.png]]
+      - Two children
+        #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-21 10:24:03
+        [[file:pictures/10._ADTs/screenshot_2019-08-21_10-24-03.png]]
+*** BSTs as Sets and Maps
+    - Sets
+      #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-21 10:32:02
+      [[file:pictures/10._ADTs/screenshot_2019-08-21_10-32-02.png]]
+      - One BST for one set
+      - ~contains~ costs $O(n)$ in ArraySet while $log(n)$ in BSTSet
+    - Maps
+      #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-21 10:39:38
+      [[file:pictures/10._ADTs/screenshot_2019-08-21_10-39-38.png]]
+      - No efficient way to look up by value: $O(n)$
+** Question:                                                      :QUESTIONS:
+   1. 关于 ADT 与 interface 的关系？ ADT 一定是 interface 但 interface 不一定是 ADT ？(~default~ implement)
+   2. BST 只适合表示一个 set 吧？如果是 Sets 呢？（比如 Disjoint Sets ）
+* 11. Balanced Trees
+** Intro to B-Trees
+*** BST Performance
+    #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-21 10:56:01
+    [[file:pictures/11._Balanced_Trees/screenshot_2019-08-21_10-56-01.png]]
+    - depth
+    - height
+    - average depth
+*** BST insertion order
+    #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-21 10:56:52
+    [[file:pictures/11._Balanced_Trees/screenshot_2019-08-21_10-56-52.png]]
+    Random trees are bushy, not spindly
+    #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-21 11:08:39
+    [[file:pictures/11._Balanced_Trees/screenshot_2019-08-21_11-08-39.png]]
+ 
+** B-Trees
+   Including 2-3-4/2-3 trees, below is a 2-3-4 tree
+   #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-21 11:33:07
+    [[file:pictures/11._Balanced_Trees/screenshot_2019-08-21_11-33-07.png]]
+   #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-21 11:33:26
+   [[file:pictures/11._Balanced_Trees/screenshot_2019-08-21_11-33-26.png]]
+   #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-21 11:33:48
+   [[file:pictures/11._Balanced_Trees/screenshot_2019-08-21_11-33-48.png]]
+   #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-21 11:35:03
+   [[file:pictures/11._Balanced_Trees/screenshot_2019-08-21_11-35-03.png]]
+   1. Inserting into a leaf node
+   2. If the new node has 4 nodes (for 2-3-4 tree, while 3 for 2-3 tree),  then pop up the *middle left* node to parent node and re-arrange the children accordingly
+   3. If step 2 results in the parent node having 4 nodes, then repeat step 2 *at parent node*
+   4. Repeat step 2 and 3 until the parent node can accommodate 
+** B-Tree invariants and runtime
+*** Invariants
+    Invariants of a B-tree guarantees the B-tree *must be bushy*, while *inserting order* may decide the *height*
+    - All leaves must be the same distance from the source.
+    - A non-leaf node with $k$ items must have exactly $k+1$ children
+    #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-21 18:05:47
+    [[file:pictures/11._Balanced_Trees/screenshot_2019-08-21_18-05-47.png]]
+    - 1,2,3,4,5,6,7 order
+    #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-21 18:06:16
+    file:pictures/11._Balanced_Trees/screenshot_2019-08-21_18-06-16.png]]
+    - 2,3,4,5,6,1,7 order
+*** Runtime analysis
+    - Height: Between $log_{L+1}(N)$ and $log_{2}(N)$ -> $\Theta(logN)$
+    - Runtime for ~contain~ and ~add~: $O(H+1)L$ -> $O(HL)$ -> $O(LlogN)$
+*** Summary
+    - BSTs have best case height $\Theta (\log N)$, and worst case height $\Theta (N)$
+    - B-Trees are a *modification* of the binary search tree that avoids $\Theta (N)$ worst case
+** Rotating Trees
+   B-trees are difficult to implement. Besides insertion, rotating can also yield different structures for the same BST
+   - ~rotateLeft(G)~: Let ~x~ be the *right* child of ~G~. Make ~G~ the *new left* child of ~x~.
+     #+begin_src java :classname 
+       // make a right-leaning link lean to the left
+       private Node rotateLeft(Node h) {
+           // assert (h != null) && isRed(h.right);
+           Node x = h.right;
+           h.right = x.left;
+           x.left = h;
+           return x;
+       }
+     #+end_src
+     #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-22 09:15:31
+     [[file:pictures/11._Balanced_Trees/screenshot_2019-08-22_09-15-31.png]]
+   - ~rotateRight(G)~: Let ~x~ be the *left* child of ~G~. Make G the new *right* child of ~x~.
+     #+begin_src java :classname 
+       private Node rotateRight(Node h) {
+           // assert (h != null) && isRed(h.left);
+           Node x = h.left;
+           h.left = x.right;
+           x.right = h;
+           return x;
+       }
+     #+end_src
+     #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-22 09:18:02
+     [[file:pictures/11._Balanced_Trees/screenshot_2019-08-22_09-18-02.png]]
+** Red-Black Trees
+   Creating a tree that is *implemented using a BST*, but is *structurally identical to a 2-3 tree* and thus stays *balanced* -> *left-leaning red-black trees (LLRB)*
+   #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-22 09:34:23
+   [[file:pictures/11._Balanced_Trees/screenshot_2019-08-22_09-34-23.png]]
+   Red for *glue* link, black for normal links
+*** Properties of LLRB's
+    - *1-1* correspondence with 2-3 trees, Every 2-3 tree has a *unique* LLRB red-black tree associated with it (As for 2-3-4 trees, they maintain correspondence with *standard Red-Black trees*)
+    - No node has *2* red links (max number of items per node is 2)
+    - There are no red right-links.
+    - Every path from *root to leaf* has same number of *black links* (because 2-3 trees have same number of links to every leaf). LLRBS are therefore *balanced*
+    - Height is *no more than 2x* height of corresponding 2-3 tree. In actual $2H+1$: H(black)+H(children'red)+1(root's red))
+*** Insertion of LLRB
+    Inserting into the LLRB as a normal BST (which could break its 1-1 mapping to a 2-3 tree) and use rotations to massage the tree back into a proper structure.
+    Performing Task 1-4 if the LLRB tree does not satisfy the *1-1 correspondence* with a 2-3 tree or breaks the *LLRB invariants* until a legal LLRB
+    - Task 1: Insertion Color
+      #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-22 11:00:34
+      [[file:pictures/11._Balanced_Trees/screenshot_2019-08-22_11-00-34.png]]
+    - Task 2: Insertion on the *Right* -> *Left Leaning Violation* -> Rotate *left* the appropriate node to fix.
+      #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-22 11:02:22
+      [[file:pictures/11._Balanced_Trees/screenshot_2019-08-22_11-02-22.png]]
+      - New Rule: Representation of *Temporary 4-Nodes*
+        #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-22 11:03:43
+        [[file:pictures/11._Balanced_Trees/screenshot_2019-08-22_11-03-43.png]]
+    - Task 3: *Double* Insertion on the *Left* -> *Incorrect 4-Node Violation* -> Rotate *right* the appropriate node to fix.
+      #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-22 11:04:52
+      [[file:pictures/11._Balanced_Trees/screenshot_2019-08-22_11-04-52.png]]
+    - Task 4: Splitting *Temporary 4-Nodes*
+      #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-22 11:07:02
+      [[file:pictures/11._Balanced_Trees/screenshot_2019-08-22_11-07-02.png]]
+*** Runtime
+    Same as 2-3 tree: $logN$
+    #+begin_src java :classname 
+      private Node put(Node h, Key key, Value val) {
+          if (h == null) { return new Node(key, val, RED); }
+
+          int cmp = key.compareTo(h.key);
+          if (cmp < 0)      { h.left  = put(h.left,  key, val); }
+          else if (cmp > 0) { h.right = put(h.right, key, val); }
+          else              { h.val   = val;                    }
+
+          if (isRed(h.right) && !isRed(h.left))      { h = rotateLeft(h);  }
+          if (isRed(h.left)  &&  isRed(h.left.left)) { h = rotateRight(h); }
+          if (isRed(h.left)  &&  isRed(h.right))     { flipColors(h);      } 
+
+          return h;
+      }
+    #+end_src 
+*** Summary
+    - BSTs are *simple*, but they are subject to *imbalance*.
+    - 2-3 Trees (B-Trees) are *balanced*, but painful to implement and relatively slow.
+    - LLRBs *insertion* is simple to implement (but *deletion* is hard).
+      - Works by maintaining *mathematical bijection* with a *2-3 trees*.
+    - Java’s ~TreeMap~ is a red-black tree (not left leaning).
+      - Maintains correspondence with *2-3-4 tree* (is *not a 1-1 correspondence*).
+      - Allows glue links on either side
+      - More complex implementation, but significantly (?) faster.
+    - Beyond
+      #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-22 11:29:01
+      [[file:pictures/11._Balanced_Trees/screenshot_2019-08-22_11-29-01.png]]
+* L19 Hashing
+  Limitations of BSTs and B-Trees
+  1. Requiring items to be *comparable*
+  2. Complexity of $\Theta(logN)$
+** DataIndexedIntegerSet
+   #+begin_src java :classname 
+     public class DataIndexedIntegerSet {
+         private boolean[] present;
+
+         public DataIndexedIntegerSet() {
+             present = new boolean[2000000000];
+         }
+
+         public void add(int x) {
+             present[i] = true;
+         }
+
+         public boolean contains(int x) {
+             return present[i];
+         }
+   #+end_src 
+   - ~add~ and ~contains~ both take $\Theta(1)$ time
+   - Extremely wasteful
+   - Can't insert a ~String~ 
+** DataIndexedEnglishWordSet
+   #+begin_src java :classname 
+     public class DataIndexedEnglishWordSet {
+         private boolean[] present;
+ 
+         public DataIndexedEnglishWordSet() {
+             present = new boolean[2000000000];
+         }
+ 
+         public void add(String s) {
+             present[englishToInt(s)] = true;
+         }
+ 
+         public boolean contains(int i) {
+             return present[englishToInt(s)];
+         }
+
+         /** Converts ith character of String to a letter number.
+          ,* e.g. 'a' -> 1, 'b' -> 2, 'z' -> 26 */
+         public static int letterNum(String s, int i) {
+             int ithChar = s.charAt(i);
+             if ((ithChar < 'a') || (ithChar > 'z'))
+                 { throw new IllegalArgumentException(); }
+             return ithChar - 'a' + 1;
+         }
+
+         public static int englishToInt(String s) {
+             int intRep = 0;
+             for (int i = 0; i < s.length(); i += 1) {           
+                 intRep = intRep * 27;
+                 intRep = intRep + letterNum(s, i);
+             }
+             return intRep;
+         }
+     }
+
+   #+end_src 
+   - Can't use uppercase characters
+   - 27 >= 26
+** DataIndexedStringSet
+   #+begin_src java :classname 
+     public static int asciiToInt(String s) {
+         int intRep = 0;
+         for (int i = 0; i < s.length(); i += 1) {           
+             intRep = intRep * 126;
+             intRep = intRep + s.charAt(i);
+         }
+         return intRep;
+     }
+   #+end_src 
+** Integer Overflow and Hash Codes
+*** Integer Overflow 
+    In Java, the largest possible integer is 2,147,483,647, the next number after 2,147,483,647 is -2,147,483,648 -> collisions
+*** Hash Codes
+    A hash code “projects a value from a set with *many (or even an infinite number of)* members to a value from a set with a *fixed number of (fewer)* members.”
+    - Target set: set of Java integers, which is of size 4294967296
+    - Pigeonhole principle: items more than 4294967296 will share the same *hash code* -> Collsions are inevitable
+    - Two fundamental challenges: collision handling and computing a hashcode
+** Hash Tables: Handling Collisions
+*** Resolving Ambiguity: separate chaining data indexed array
+    ~true~ and ~false~ -> *separate* chaining data indexed array
+    #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-23 15:22:15
+    [[file:pictures/L19_Hashing/screenshot_2019-08-23_15-22-15.png]]
+    - Still wasteful
+*** Hash Table
+    #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-23 15:30:47
+    [[file:pictures/L19_Hashing/screenshot_2019-08-23_15-30-47.png]]
+    - Data --*hash function*--> an *integer representation* called a *hash code*.
+    - Hash code --*reduce* (usually modulus operator)--> a valid index
+    - Downside: chains could be very long
+** Hash Table Performance
+   #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-23 16:54:11
+   [[file:pictures/L19_Hashing/screenshot_2019-08-23_16-54-11.png]]
+   - With no resizing
+     - Longest list's length = $N/5$ in the best case and $N$ in the worst case -> $Q(N)$ is $\Theta(N)$ -> Runtimes = $\Theta(Q)$ = $\Theta(N)$
+     - Less memory but more runtimes $\Theta(N)$ > $\Theta(1)$
+   - With resizing
+     - Even lists' length $Q=N/M$ -> To make $\Theta(Q) = \Theta(N/M) = \Theta(1)$ -> make $N/M = \Theta(1)$ -> *resize* $M$ when $N/M \geq a, a>1$ (such as 1.5)
+     - Most ~add~ operations will be $\Theta(1)$. Some will be $\Theta(N)$ time (to *resize*), as long as resizing by a *multiplicative factor*, the *average runtime* will still be $\Theta(1)$ (similar to ~AList~)
+     - Two demands: Resizing by a *multiplicative factor* and *evenly* distributed
+** Hash Tables in Java
+   #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-24 10:53:51
+   [[file:pictures/L19_Hashing/screenshot_2019-08-24_10-53-51.png]]
+   - ~hashCode()~: Default implementation simply returns the *memory address* of the object.
+   - ~Math.floorMod()~: Reduce hash code to a valid index
+   - 2 important warnings which both may result in items getting lost:
+     - Never store objects that *can change* in a HashSet or HashMap
+     - Never override *equals* without also overriding *hashCode*
+** Good HashCodes
+   Multiplying data by powers of some *base* as ensuring that all the data gets scrambled together into a seemingly *random integer*.
+*** Typical Base 
+    A typical hash code base is a *small prime*.
+    - Prime: 
+      - Never even: Avoids the overflow issue
+        - Base 126: Any string that ends in the same *last 32* characters has the same hash code: $126^{32}=126^{33}=...=0$ -> overflow
+      - Lower chance of resulting hashCode having a bad relationship with the number of buckets
+    - Small: 
+      - Lower cost to compute
+      - Real hash codes don't care about uniqueness
+*** Example
+    - Java 8 hash code for strings
+      #+begin_src java :classname 
+        @Override
+        public int hashCode() {
+            int h = cachedHashValue;
+            if (h == 0 && this.length() > 0) {
+                for (int i = 0; i < this.length(); i++) {
+                    h = 31 * h + this.charAt(i);
+                }
+                cachedHashValue = h;
+            }
+            return h;
+        }
+      #+end_src
+      - Caches calculated hash code so future ~hashCode~ calls are faster
+    - Hashing a Collection
+      #+begin_src java :classname 
+        @Override
+        public int hashCode() {
+            int hashCode = 1;
+            for (Object o : this) {
+                hashCode = hashCode * 31;
+                hashCode = hashCode + o.hashCode();
+            }
+            return hashCode;
+        }
+      #+end_src
+      - To save time hashing: Look at only first few items. (Higher chance of collisions but things will still work.)
+    - Hashing a Recursive Data Structure (binary tree hashCode, assuming sentinel leaves) 
+      #+begin_src java :classname 
+        @Override
+        public int hashCode() {
+            if (this.value == null) {
+                return 0;
+            }
+            return  this.value.hashCode() +
+                31 * this.left.hashCode() +
+                31 * 31 * this.right.hashCode();
+        }
+      #+end_src
+      - Computation of the hashCode of a recursive data structure involves *recursive computation*.
 
 
+*** Question:                                                     :QUESTIONS:
+    1. 为什么真的哈希码不关心唯一性？那数据冲突了怎么办？
+** Summary
+   #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-24 11:26:20
+   [[file:pictures/L19_Hashing/screenshot_2019-08-24_11-26-20.png]]
+ 
+* L20 Heaps and PQs
+** Heaps

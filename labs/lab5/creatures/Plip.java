@@ -1,5 +1,6 @@
 package creatures;
 
+import edu.princeton.cs.algs4.StdRandom;
 import huglife.Creature;
 import huglife.Direction;
 import huglife.Action;
@@ -35,10 +36,10 @@ public class Plip extends Creature {
      */
     public Plip(double e) {
         super("plip");
-        r = 0;
-        g = 0;
-        b = 0;
         energy = e;
+        r = 99;
+        g = (int) (63 + 96 * energy);
+        b = 76;
     }
 
     /**
@@ -57,7 +58,6 @@ public class Plip extends Creature {
      * that you get this exactly correct.
      */
     public Color color() {
-        g = 63;
         return color(r, g, b);
     }
 
@@ -75,6 +75,10 @@ public class Plip extends Creature {
      */
     public void move() {
         // TODO
+        energy -= 0.15;
+        if (energy <= 0) {
+            energy = 0;
+        }
     }
 
 
@@ -83,15 +87,21 @@ public class Plip extends Creature {
      */
     public void stay() {
         // TODO
+        energy += 0.2;
+        if (energy >= 2) {
+            energy = 2;
+        }
     }
 
     /**
-     * Plips and their offspring each get 50% of the energy, with none
+     * Plips and their copy each get 50% of the energy, with none
      * lost to the process. Now that's efficiency! Returns a baby
      * Plip.
      */
     public Plip replicate() {
-        return this;
+        Plip copy = new Plip(energy / 2);
+        energy = energy / 2;
+        return copy;
     }
 
     /**
@@ -114,17 +124,32 @@ public class Plip extends Creature {
         // TODO
         // (Google: Enhanced for-loop over keys of NEIGHBORS?)
         // for () {...}
-
-        if (false) { // FIXME
-            // TODO
+        for (Map.Entry<Direction, Occupant> entry : neighbors.entrySet()) {
+            if (entry.getValue().name().equals("empty")) {
+                emptyNeighbors.add(entry.getKey());
+            }
+            if (entry.getValue().name().equals("clorus")) {
+                anyClorus = true;
+            }
         }
 
-        // Rule 2
-        // HINT: randomEntry(emptyNeighbors)
+        if (emptyNeighbors.isEmpty()) {
+            // TODO
+            return new Action(Action.ActionType.STAY);
+        }
 
-        // Rule 3
+        if (energy >= 1) {
+            int index = StdRandom.uniform(0, emptyNeighbors.size());
+            Direction dir = (Direction) emptyNeighbors.toArray()[index];
+            return new Action(Action.ActionType.REPLICATE, dir);
+        }
 
-        // Rule 4
+        if (anyClorus && StdRandom.uniform(2) == 0) {
+            int index = StdRandom.uniform(0, emptyNeighbors.size());
+            Direction dir = (Direction) emptyNeighbors.toArray()[index];
+            return new Action(Action.ActionType.MOVE, dir);
+        }
+
         return new Action(Action.ActionType.STAY);
     }
 }

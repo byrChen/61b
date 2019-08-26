@@ -9,6 +9,8 @@ import huglife.Occupant;
 import huglife.Impassible;
 import huglife.Empty;
 
+import javax.swing.*;
+
 /** Tests the plip class
  *  @authr FIXME
  */
@@ -33,14 +35,20 @@ public class TestPlip {
     @Test
     public void testReplicate() {
         // TODO
+        Plip p = new Plip(2);
+        assertEquals(2, p.energy(), 0.01);
+        Plip copy = p.replicate();
+        assertEquals(1, p.energy(), 0.01);
+        assertEquals(1, copy.energy(), 0.01);
+        assertNotEquals(p, copy);
     }
 
-    //@Test
+    @Test
     public void testChoose() {
 
         // No empty adjacent spaces; stay.
         Plip p = new Plip(1.2);
-        HashMap<Direction, Occupant> surrounded = new HashMap<Direction, Occupant>();
+        HashMap<Direction, Occupant> surrounded = new HashMap<>();
         surrounded.put(Direction.TOP, new Impassible());
         surrounded.put(Direction.BOTTOM, new Impassible());
         surrounded.put(Direction.LEFT, new Impassible());
@@ -98,6 +106,24 @@ public class TestPlip {
         assertEquals(expected, actual);
 
 
-        // We don't have Cloruses yet, so we can't test behavior for when they are nearby right now.
+        // Energy <= 1, clorus nearby and 1 empty bottom; stay or move.
+        p = new Plip(0.5);
+        HashMap<Direction, Occupant> topClorus = new HashMap<Direction, Occupant>();
+        topClorus.put(Direction.TOP, new Clorus(2));
+        topClorus.put(Direction.BOTTOM, new Empty());
+        topClorus.put(Direction.LEFT, new Impassible());
+        topClorus.put(Direction.RIGHT, new Impassible());
+
+        Action expected1 = new Action(Action.ActionType.STAY);
+        Action expected2 = new Action(Action.ActionType.MOVE, Direction.BOTTOM);
+        for (int i = 0; i < 50; i++) {
+            actual = p.chooseAction(topClorus);
+            if (actual.equals(expected1)) {
+                System.out.println("STAY");
+            }
+            if (actual.equals(expected2)) {
+                System.out.println("MOVE TO BOTTOM");
+            }
+        }
     }
 }
