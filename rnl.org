@@ -2035,7 +2035,7 @@
     #+DOWNLOADED: https://joshhug.gitbooks.io/hug61b/content/assets/comparator.png @ 2019-08-11 13:35:10
     [[file:pictures/4._Inheritance,_Implements/comparator_2019-08-11_13-35-10.png]]
     - ~Comparable~ used to compare Objects in natural order, ~Comparator~ used to compare in other user-defined order
-    - About nexted ~private static class NameComparator implements Comparator<Dog>~
+    - About nexted ~private static class NameComparator implements Comparator<Dog>~ <<2>>
       - ~Dog~ can only implements just one interface ~Comparable~
       - ~Comparator~ is used to augment comparison order
       - *Nested* because each ~class~ implements ~Comparator<T>~ can only compare 2 objects of class ~T~, it should be *nested* in ~class T~ according to *OOP*
@@ -2045,15 +2045,15 @@
     - To retrieve *NameComparator*: ~Comparator<Dog> nc = Dog.getNameComparator();~
     - Use *NameComparator* to compare 2 ~Dog~ objects: ~nc.compare(dog1, dog2);~
     - ~String~'s built-in ~compareTo~
-*** To summarize
+*** To summarize <<1>>
     - *Interfaces* in Java provide the ability to make *callbacks*. A *callback* function is the *helping* function (in the scenario, ~compareTo~). In some languages, this is accomplished using *explicit function passing*; in Java, by *wrapping* the *needed function* in an *interface*.
       #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-11 14:23:33
       [[file:pictures/4._Inheritance,_Implements/screenshot_2019-08-11_14-23-33.png]]
     - A *Comparable* is an object's method compares itself to another object, it is imbedded *within the object itself*
     - A *Comparator* is an independent object compares 2 objects to each other, its class is *defined within the class* and it's *independent of object*
-*** Question:                                              :TOLINK:QUESTIONS:
-    1. 怎样理解 To summarize (*link*) 里 Comparable 和 Comparator 的区别？分析的对吗？
-    2. Comparator (*link*) 中关于 nested 原因的分析对吗？为什么 Comparator 一定要是 Object？如下可以吗？
+*** Question:                                                     :QUESTIONS:
+    1. 怎样理解 [[1]] Comparable 和 Comparator 的区别？分析的对吗？
+    2. [[2]] 中关于 nested 原因的分析对吗？为什么 Comparator 一定要是 Object？如下可以吗？
        #+begin_src java :classname 
          import java.util.Comparator;
 
@@ -2729,11 +2729,11 @@
     [[file:pictures/9._Disjoint_Sets/screenshot_2019-08-20_09-43-37.png]]
  
 ** Weighted Quick Union (WQU)
-   When calling ~connect~, always link the root of the *smaller* tree to the *larger* tree 
+   When calling ~connect~, always link the root of the *smaller weight* tree to the *larger weight* tree
    #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-20 09:58:30
    [[file:pictures/9._Disjoint_Sets/screenshot_2019-08-20_09-58-30.png]]
    - Option 2 is better
-   - ~connect~ need to track the tree's size: number of items in that tree
+   - ~connect~ need to track the tree's weight: number of items in that tree
    - Maximum height = maximum ~connect~ times = runtime upper = $\Theta (log^N)$ (actually $log_{2}^N$ here)
 *** Summary
     #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-20 10:11:29
@@ -2750,7 +2750,6 @@
     [[file:pictures/9._Disjoint_Sets/screenshot_2019-08-20_10-38-40.png]]
     - $O(N+NM) = O((N+1)M) = O(NM)$ : *construction* + *actions* (~connect~ or ~isConnected~), similar for others
     - *Amortized runtime* and *iterated logarithm*: $\alpha(N)$ = $log^*(N)$ = constant in long term. ( $log^*(N) = 5$ for $N=2^{65536}$ )
- 
 * 10. ADTs
   An Abstract Data Type (ADT) is defined only by its *operations*, not by its *implementation*
   #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-20 16:34:58

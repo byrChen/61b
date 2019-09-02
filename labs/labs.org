@@ -251,36 +251,33 @@
      }
    #+end_src 
    - ~int~ is a *primitive* data type while ~Integer~ is a ~Wrapper~ class
-
-
 * Lab 5 Huglife
 ** Plip
 *** Basic Plip functionality
-    - Code
-      #+begin_src java :classname 
-        public void move() {
-            // TODO
-            energy -= 0.15;
-            if (energy <= 0) {
-                energy = 0;
-                return;
-            }
-        }
-  
-  
-        /**
-         ,* Plips gain 0.2 energy when staying due to photosynthesis.
-         ,*/
-        public void stay() {
-            // TODO
-            energy += 0.2;
-            if (energy >= 2) {
-                energy = 2;
-                return;
-            }
-        }
-      #+end_src 
-      - ~if~ in the end 
+    #+begin_src java :classname 
+      public void move() {
+          // TODO
+          energy -= 0.15;
+          if (energy <= 0) {
+              energy = 0;
+              return;
+          }
+      }
+
+
+      /**
+       ,* Plips gain 0.2 energy when staying due to photosynthesis.
+       ,*/
+      public void stay() {
+          // TODO
+          energy += 0.2;
+          if (energy >= 2) {
+              energy = 2;
+              return;
+          }
+      }
+    #+end_src 
+    - ~if~ in the end 
 *** chooseAction method
     #+begin_src java :classname 
       public Action chooseAction(Map<Direction, Occupant> neighbors) {
@@ -361,4 +358,112 @@
       }
     #+end_src 
     - Store ~Plip~ objects' directions: ~Deque<Direction> plipNeighbors = new ArrayDeque<>()~
+* Lab 6 Disjoint Sets
+** Weighted Quick Union with Path Compression 
+*** union
+    #+begin_src java :classname 
+      public void union(int v1, int v2) {
+          // TODO
+          validate(v1);
+          validate(v2);
+          if (!connected(v1, v2)) {
+              if (sizeOf(v1) <= sizeOf(v2)) {
+                  vertice[find(v2)] += vertice[find(v1)];
+                  vertice[find(v1)] = find(v2);
+              } else {
+                  vertice[find(v1)] += vertice[find(v2)];
+                  vertice[find(v2)] = find(v1);
+              }
+          }
+      }
+    #+end_src 
+    - ~validate~ --> ~connected~ --> connect
+    - ~vertice[find(v2)] += vertice[find(v1)];~ and ~vertice[find(v1)] = find(v2);~ 
+*** find and parent
+    #+begin_src java :classname 
+      public int find(int vertex) {
+          // TODO
+          return vertice[vertex] < 0 ? vertex : find(parent(vertex));
+      }
 
+      public int parent(int v1) {
+          // TODO
+          return vertice[v1] < 0 ? v1 : vertice[v1];
+      }
+    #+end_src 
+    - ~expression1 ? expression2 : expression3~ 
+*** conneted
+    #+begin_src java :classname 
+      public boolean connected(int v1, int v2) {
+          // TODO
+          int r1 = find(v1);
+          int r2 = find(v2);
+          int p1 = parent(v1);
+          int p2 = parent(v2);
+    
+          while (p1 != r1) {
+              vertice[v1] = r1;
+              v1 = p1;
+              p1 = parent(v1);
+          }
+          while (p2 != r2) {
+              vertice[v2] = r2;
+              v2 = p2;
+              p2 = parent(v2);
+          }
+    
+          return r1 == r2;
+      }
+    #+end_src 
+    - ~vertice[v1] = r1;~, ~v1 = p1~ and ~p1 = parent(v1)~ 
+
+** Tests
+*** TestUnionFind
+    #+begin_src java :classname 
+      @Test
+      public void testConstructor() {
+          UnionFind actual = new UnionFind(5);
+          int[] expect = new int[5];
+          Arrays.fill(expect, -1);
+          assertArrayEquals(expect, actual.getSet());
+      }
+
+      @Test
+      public void testUnion() {
+          UnionFind actual = new UnionFind(5);
+          actual.union(1, 0);
+          int[] expect1 = {-2, 0, -1, -1, -1};
+          assertArrayEquals(expect1, actual.getSet());
+          actual.union(3, 2);
+          int[] expect2 = {-2, 0, -2, 2, -1};
+          assertArrayEquals(expect2, actual.getSet());
+          actual.union(4, 3);
+          int[] expect3 = {-2, 0, -3, 2, 2};
+          assertArrayEquals(expect3, actual.getSet());
+          actual.union(0, 3);
+          int[] expect4 = {2, 0, -5, 2, 2};
+          assertArrayEquals(expect4, actual.getSet());
+          actual.union(0, 0);
+          actual.union(1, 1);
+          assertArrayEquals(expect4, actual.getSet());
+          actual.union(1, 3);
+          int[] expect5 = {2, 0, -5, 2, 2};
+          assertArrayEquals(expect5, actual.getSet());
+      }
+
+      @Test
+      public void testUnionPC() {
+          UnionFind actual = new UnionFind(5);
+          actual.union(1, 0);
+          actual.union(3, 2);
+          actual.union(4, 3);
+          actual.union(0, 3);
+          actual.union(0, 0);
+          actual.union(1, 1);
+          actual.union(1, 3);
+          int[] expect5 = {2, 2, -5, 2, 2};
+          assertArrayEquals(expect5, actual.getSet());
+      }
+    #+end_src 
+    - ~int[] expect = new int[5]~ and ~Arrays.fill(expect, -1)~, not ~int expect[]~ but ~int[] expect~ 
+* Challenge Lab 6 Falling Bubbles
