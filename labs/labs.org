@@ -1,3 +1,4 @@
+#+TAGS: UNRESOLVED(u) QUESTIONS(q) TOBEORG(t)
 * Lab 1 javac, java, git
 ** Using Git
 *** B. Local Repositories (Narrative Introduction)
@@ -466,4 +467,5 @@
       }
     #+end_src 
     - ~int[] expect = new int[5]~ and ~Arrays.fill(expect, -1)~, not ~int expect[]~ but ~int[] expect~ 
-* Challenge Lab 6 Falling Bubbles
+** Challenge Lab 6 Falling Bubbles                               :UNRESOLVED:
+* Lab 7 TreeMap
