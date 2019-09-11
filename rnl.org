@@ -2151,7 +2151,7 @@
     #+end_src 
     - ~items = (T[]) new Object[100];~
     - ~items[i].equals(x)~ 
-** Throwing Exceptions
+** Throwing Exceptions 
    Throw an *exception* when a user tries to add ~null~ to ~ArraySet~: ~throw new ExceptionObject(parameter1, ...)~ 
    #+begin_src java :classname 
      /* Associates the specified value with the specified key in this map.

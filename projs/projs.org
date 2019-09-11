@@ -1,3 +1,5 @@
+#+TAGS: UNRESOLVED(u) QUESTIONS(q) EXTRA(e) REQUIRED(r) TOBEORG(t)
+
 * Proj 0 NBody
 ** Writing the Body Class
 *** calcDistance
@@ -126,8 +128,8 @@
     1. ~StdOut~ 和 ~System.out~ 异同？对比c++里的 ~cout~ 和 ~stdout~ 
    
 ** Extra for Experts                                                  :EXTRA:
-*** Adding Audio                                                :OUTSTANDING:
-*** Gold Points                                                 :OUTSTANDING:
+*** Adding Audio                                                :UNRESOLVED:
+*** Gold Points                                                 :UNRESOLVED:
 * Proj 1A Data Structures                                           :TOBEORG:
 ** LinkedListDeque 
    #+begin_src java :classname 
