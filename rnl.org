@@ -244,7 +244,7 @@
               }
           }
         #+end_src 
-        - ~class[] var = new class[n]~ for lists
+        - ~class[] var = new class[n]~ for arrays
         - Two different ~new~:
           1. ~new Dog[2]~ to *create* an *array* that hold 2 ~Dog~ *objects(not instantiated)*.
           2. ~new Dog(8)~ to *instantiate* each ~Dog~ *object*.
@@ -316,7 +316,7 @@
             }
         }
       #+end_src 
-      - ~javac Dog.java~ output: *non-static variable* this *cannot* be referenced from a *static context*.
+      - ~javac Dog.java~ output: *non-static variable* (~weightInPounds~) this *cannot* be referenced from a *static context* (~maxDog~).
     - Static Variables
       #+begin_src java :classname Dog
         public class Dog {
@@ -1709,7 +1709,7 @@
 *** Interface Inheritance vs Implementation Inheritance
     - Interface Inheritance (*what*): Simply tells *what* the subclasses should be able to do.
     - Implementation inheritance (*how*): Tells the subclasses *how* they should behave.
-    - Common: "is-a" not "has-"
+    - Common: "is-a" not "has-a"
 ** Extends, Casting, Higher Order Function
 *** Extends
     - ~RotatingSLList~ 

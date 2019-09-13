@@ -241,7 +241,7 @@
    - ~import static org.junit.Assert.*;~ and ~import org.junit.Test;~
 *** Question:                                                     :QUESTIONS:
     1. ~dreverse~ 和 ~reverse~ 理解，特别是 ~dreverse~ 的思路？
-    2. ~A~ 作为实参传递到函数后，为何 ~A = A.rest~ 不是 destructive 而 ~A.rest = ...~ 往往是 destructive ？传 ~A~ 并不是引用传递而仍然是值传递？所以返回后 ~A~ 中存储的地址不会变， ~A~ 指向的 reference type object 也不会变？
+    2. ~A~ 作为实参传递到函数后，为何 ~A = A.rest~ 不是 destructive 而 ~A.rest = ...~ 往往是 destructive ？传 ~A~ 并不是引用传递而仍然是值传递？所以返回后 ~A~ 中存储的地址不会变， ~A~ 指向的 reference type object 也不会变？ 
     3. Java 里实参到形参的引用传递（地址传递）和值传递？
 ** Flik int vs Integer as formal paras
    #+begin_src java :classname 

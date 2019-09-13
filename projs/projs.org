@@ -651,7 +651,6 @@
          T get(int index);
      }
    #+end_src 
-
 ** wordToDeque
    #+begin_src java :classname 
      public class Palindrome {
