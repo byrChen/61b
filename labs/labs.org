@@ -469,3 +469,409 @@
     - ~int[] expect = new int[5]~ and ~Arrays.fill(expect, -1)~, not ~int expect[]~ but ~int[] expect~ 
 ** Challenge Lab 6 Falling Bubbles                               :UNRESOLVED:
 * Lab 7 TreeMap
+** BSTMap.java
+*** ~class Node~
+    #+begin_src java :classname 
+      private class Node {
+          private K key;
+          private V val;
+          private Node left, right;
+          private int size;
+
+          public Node(K key, V val, int size) {
+              this.key = key;
+              this.val = val;
+              this.size = size;
+          }
+      }
+    #+end_src 
+    - ~private~ 
+*** ~clear~ 
+    #+begin_src java :classname 
+      public void clear() {
+          root = null;
+      }
+
+      // not below
+      public void clear() {
+          clear(root);
+      }
+
+      public void clear(Node n) {
+          n = null;
+      }
+    #+end_src 
+    - ~n = root~ and ~n = nulll~ can not -> ~root = null~ 
+*** ~get~
+    #+begin_src java :classname 
+      public int size() {
+          return size(root);
+      }
+
+      public V get(Node n, K key) {
+          if (key == null) throw new IllegalArgumentException("calls get() with a null key");
+          if (n == null) return null;
+          int cmp = key.compareTo(n.key);
+          if      (cmp < 0) return get(n.left, key);
+          else if (cmp > 0) return get(n.right, key);
+          else              return n.val;
+      }
+    #+end_src 
+    - ~int cmp = key.compareTo(n.key)~
+    - Recursive: ~null~ + ~get(n.left, key)~ and ~get(n.right, key)~ 
+*** ~updateSize~
+    #+begin_src java :classname 
+      private int updateSize(Node n) {
+          if (n == null) return 0;
+          n.size = 1 + updateSize(n.left) + updateSize(n.right);
+          return n.size;
+      }
+    #+end_src 
+    - Recursive: ~n.size = 1 + updateSize(n.left) + updateSize(n.right)~ 
+*** ~put~ 
+    #+begin_src java :classname 
+      public void put(K key, V value) {
+          if (key == null) throw new IllegalArgumentException("calls put() with a null key");
+          root = put(root, key, value);
+      }
+
+      public Node put(Node n, K key, V val) {
+          if (n == null) return new Node(key, val, 1);
+          int cmp = key.compareTo(n.key);
+          if      (cmp < 0) n.left  = put(n.left,  key, val);
+          else if (cmp > 0) n.right = put(n.right, key, val);
+          else              n.val   = val;
+          n.size = updateSize(n);
+          return n;
+      }
+    #+end_src 
+    - Recursive: ~new Node(key, val, 1)~ + ~n.left  = put(n.left,  key, val)~ and ~n.right = put(n.right, key, val)~ 
+*** ~remove~ 
+    - ~remove~
+      #+begin_src java :classname 
+        public V remove(K key) {
+            return remove(key, root);
+        }
+
+        public V remove(K key, Node n) {
+            if (key == null) throw new IllegalArgumentException("calls delete() with a null key");
+            if (containsKey(key)) {
+                V result = get(key);
+                root = updateBST(key, n);
+                updateSize(n);
+                return result;
+            }
+            return null;
+        }
+
+        public Node updateBST(K key, Node n) {
+            int cmp = key.compareTo(n.key);
+            if (cmp < 0)        n.left = updateBST(key, n.left);
+            else if (cmp > 0)   n.right = updateBST(key, n.right);
+            else {
+                if      (size(n) == 1)      n = null;
+                else if (n.left == null)    n = n.right;
+                else if (n.right == null)   n = n.left;
+                else {
+                    Node max = maxNode(n.left);
+                    n.left = updateBST(max.key, n.left);
+                    n.key = max.key;
+                    n.val = max.val;
+                }
+            }
+            return n;
+        }
+
+        private Node maxNode(Node n) {
+            // if (n == null || n.right == null) return n;
+            if (n.right == null) return n;
+            return maxNode(n.right);
+        }
+      #+end_src
+      - ~Node updateBST~ to *update* the BST, and ~root = updateBST(key, n)~ to *redirect* ~root~ to the *updated* BST
+      - Recursive: ~n.left = updateBST(key, n.left)~, ~n.right = updateBST(key, n.right)~
+      - When ~size >= 3~ 
+        #+begin_src java :classname 
+          Node max = maxNode(n.left);
+          n.left = updateBST(max.key, n.left);
+          n.key = max.key;
+          n.val = max.val;
+        #+end_src 
+    - ~removeV~
+      #+begin_src java :classname 
+        public V removeV(K key, Node n) {
+            if (key == null) throw new IllegalArgumentException("calls delete() with a null key");
+            if (containsKey(key)) {
+                if (n.size == -1) return remove(key, n.right);
+                int cmp = key.compareTo(n.key);
+                if      (cmp > 0) return remove(key, n.right);
+                else if (cmp < 0) return remove(key, n.left);
+                else {
+                    V result = n.val;
+
+                    if (n == root) {
+                        Node tempP = new Node(n.key, n.val, -1);
+                        tempP.right = root;
+                        root = tempP;
+                        V tempV = remove(key, root);
+                        root = root.right;
+                    }
+
+                    else{
+
+                        Node p = getParent(n, root);
+
+                        if (size(n) == 1) {
+                            if (p.left == n) p.left = null;
+                            else             p.right = null;
+                        }
+
+                        else if (n.left == null) {
+                            if (p.left == n) p.left = n.right;
+                            else             p.right = n.right;
+                        }
+
+                        else if (n.right == null) {
+                            if (p.left == n) p.left = n.left;
+                            else             p.right = n.left;
+                        }
+
+                        else if (n.left.right == null) {
+                            n.left.right = n.right;
+                            if (p.left == n) p.left = n.left;
+                            else             p.right = n.left;
+                        }
+
+                        else if (n.right.left == null) {
+                            n.right.left = n.left;
+                            if (p.left == n) p.left = n.right;
+                            else             p.right = n.right;
+                        }
+
+                        else {
+                            Node max = maxNode(n.left);
+                            Node maxP = getParent(max, root);
+                            maxP.right = max.left;
+                            max.left = maxP;
+                            max.right = n.right;
+                            if (p.left == n) p.left = max;
+                            else             p.right = max;
+                        }
+                    }
+
+                    updateSize(root);
+                    return result;
+                }
+            }
+            return null;
+        }
+
+        private Node getParent(Node son, Node parent) {
+            if (son == parent.left || son == parent.right) return parent;
+            K compKey = parent.key;
+            Node max = maxNode(parent.left);
+            if (max != null) {
+                compKey = max.key;
+            }
+            int cmp = son.key.compareTo(compKey);
+            if (cmp > 0) return getParent(son, parent.right);
+            else return getParent(son, parent.left);
+        }
+      #+end_src
+      - When calling ~maxNode~, need ~if (n == null || n.right == null)~ not ~if (n.right == null || n == null)~ 
+*** ~keySet~ <<1>>
+    #+begin_src java :classname 
+      public Set<K> keySet() {
+          return keySet(root);
+      }
+
+      public Set<K> keySet(Node n) {
+          if (n == null) return Collections.emptySet();
+          Set<K> s = new HashSet<>();
+          s.addAll(keySet(n.left));
+          s.add(n.key);
+          s.addAll(keySet(n.right));
+          return s;
+      }
+    #+end_src 
+    - ~Collections.emptySet()~ for empty set
+    - ~s1.add(element)~ and ~s1.addAll(s2)~
+    - ~s.addAll(keySet(n.left))~ --> ~s.add(n.key)~ --> ~s.addAll(keySet(n.right))~ to get *sorted* ~keySet~ 
+*** ~iterator~ and ~printInOrder~
+    #+begin_src java :classname 
+      public Iterator<K> iterator() {
+          return keySet(root).iterator();
+      }
+    #+end_src 
+    #+begin_src java :classname 
+      public void printInOrder() {
+          for (K k : keySet(root)) {
+              System.out.println(k);
+          }
+      }
+    #+end_src 
+    - ~Set~ *implements* ~Collections~, while ~Collection~ *implements* ~Iterable~ -> ~Set~ is *iterable*, ~Set.iterator~ to return ~Iterator~ [[2]]
+    - ~for~ can be used on *iterables* [[file:~/csnds/cs/code/61b/rnl.org::2178][Iteration]]
+*** Question:                                                     :QUESTIONS:
+    1. 这种把方法定义全部以树为单位 与 以节点为单位的区别与优劣？而对于 ~size~ 又不是以树为单位，而是以节点为单位？
+    2. ~keySet~ 的直接实现or用额外实例变量 ~list~ 存储实现，与 ~printInOrder~ 和 ~iterator~ 在这两种实现下的不同？ [[1]] 直接实现对吗？用额外的 ~list~ 是否不好实现，因为存储结构不方便遍历树？什么情况下不方便直接实现而需要采用一种合适的结构间接实现呢？以及是否间接实现就要详细写 ~Iterator~ ？间接结构怎么选择？
+** Tests
+*** TestBSTMapExtra (~testkeySet~)
+    #+begin_src java :classname 
+      @Test 
+      public void testkeySet() {
+          BSTMap actual = new BSTMap();
+          actual.put("d", 1);
+          actual.put("b", 1);
+          actual.put("a", 1);
+          actual.put("c", 1);
+          actual.put("e", 1);
+          actual.put("f", 1);
+          actual.put("g", 1);
+          String[] c = {"a", "b", "c", "d", "e", "f", "g"};
+          Set<String> expect = new HashSet<>(Arrays.asList(c));
+          assertEquals(actual.keySet(), expect);
+          Iterator<String> seer = actual.iterator();
+          assertEquals(seer.next(), "a");
+          assertEquals(seer.next(), "b");
+          assertEquals(seer.next(), "c");
+          assertEquals(seer.next(), "d");
+          assertEquals(seer.next(), "e");
+          assertEquals(seer.next(), "f");
+          assertEquals(seer.next(), "g");
+      }
+    #+end_src 
+    - Comparison among ~Arrays~, ~List~ and ~Set~
+      - ~List~ and ~Set~ are *interfaces*, while ~Arrays~ is a *class*
+        - Interface: Both ~List~ and ~Set~ *implement* ~Collection~, while ~Collection~ *implements* ~Iterable~
+        - Class: ~Arrays~ *extends* ~Object~ 
+      - Convertion
+        - ~List~ <-> ~Arrays~
+          - ~Arrays~ -> ~List~ <<2>>
+            #+begin_src java :classname 
+              String[] s = new String[]{"A", "B", "C", "D","E"};
+              List<String> list = Arrays.asList(s);
+
+              s[0] ="AA";
+              System.out.println("list: " + list);
+
+              list: [AA, B, C, D, E]
+            #+end_src
+            - ~Arrays.asList(array)~
+            - Elements in ~list~ *equals* elements in ~s~: changes in ~s~ will affect ~list~ 
+          - ~List~ -> ~Arrays~ <<3>>
+            #+begin_src java :classname 
+              String[] dest = list.toArray(new String[0]);//new String[0]是指定返回数组的类型
+              System.out.println("dest: " + Arrays.toString(dest));
+
+              dest: [AA, B, C, D, E]
+
+              list.set(0, "Z");
+              System.out.println("modified list: " + list);
+              System.out.println("dest: " + Arrays.toString(dest));
+
+              modified list: [Z, B, C, D, E]
+              dest: [AA, B, C, D, E]
+            #+end_src
+            - ~list.toArray(Array type)~
+            - Elements in ~dest~ *not equals* elements in ~list~: changes in ~list~ won't affect ~dest~ 
+        - ~List~ <-> ~Set~ 
+          - ~List~ -> ~Set~: ~Set<String> set = new HashSet<>(list);~ 
+          - ~Set~ -> ~List~: ~List<String> list_1 = new ArrayList<>(set);~
+          - Same as ~toArray()~, changes won't affect
+          - Can also use ~addAll(Collection<? extends E> c)~ to convert
+        - ~Arrays~ <-> ~Set~ 
+          - ~Arrays~ -> ~Set~: ~set = new HashSet<>(Arrays.asList(s));~ 
+          - ~Set~ -> ~Arrays~: ~dest = set.toArray(new String[0]);~  
+      - ~Arrays.asList()~ and ~Collection.toArray()~
+        - ~Arrays.asList~
+          ~public static <T> List<T> asList(T... a)~: Returns a *fixed-size list* backed by the *specified array*.
+          #+begin_src java :classname 
+            public class Arrays {
+                ...
+
+                @SafeVarargs
+                @SuppressWarnings("varargs")
+                public static <T> List<T> asList(T... a) {
+                    return new ArrayList<>(a);
+                }
+                ...
+                 private static class ArrayList<E> extends AbstractList<E>
+                    implements RandomAccess, java.io.Serializable
+                {
+                    private static final long serialVersionUID = -2764017481108945198L;
+                    private final E[] a;
+
+                    ArrayList(E[] array) {
+                        a = Objects.requireNonNull(array);
+                    }
+
+                    ...
+                }
+            }
+          #+end_src
+          - ~ArrayList~ above is different from ~java.util.ArrayList~, it's a *nest class* of ~java.util.Arrays~ 
+          - ~list~ [[2]] is an *instance* of ~java.util.Arrays$ArrayList~, not ~java.util.ArrayList~
+          - Return of ~Arrays.asList~ is *fixed-size*, doesn't have ~resize~ as ~java.util.ArrayList~ 
+        - ~Collection.toArray()~
+          - ~Object[] toArray()~: Returns an *array* containing all of the elements in this *collection*
+            #+begin_src java :classname 
+              public abstract class AbstractCollection<E> implements Collection<E> {
+                  ...
+
+                  public Object[] toArray() {
+                      // Estimate size of array; be prepared to see more or fewer elements
+                      Object[] r = new Object[size()];
+                      Iterator<E> it = iterator();
+                      for (int i = 0; i < r.length; i++) {
+                          if (! it.hasNext()) // fewer elements than expected
+                              return Arrays.copyOf(r, i);
+                          r[i] = it.next();
+                      }
+                      return it.hasNext() ? finishToArray(r, it) : r;
+                  }
+              }
+            #+end_src
+          - ~<T> T[] toArray(T[] a)~: Returns an *array* containing all of the elements in this *collection*; the *runtime type* of the returned array is that of the specified array.
+            #+begin_src java :classname 
+              public abstract class AbstractCollection<E> implements Collection<E> {
+                  ...
+
+                  @SuppressWarnings("unchecked")
+                  public <T> T[] toArray(T[] a) {
+                      // Estimate size of array; be prepared to see more or fewer elements
+                      int size = size();
+                      T[] r = a.length >= size ? a :
+                                (T[])java.lang.reflect.Array
+                                .newInstance(a.getClass().getComponentType(), size);
+                      Iterator<E> it = iterator();
+
+                      for (int i = 0; i < r.length; i++) {
+                          if (! it.hasNext()) { // fewer elements than expected
+                              if (a == r) {
+                                  r[i] = null; // null-terminate
+                              } else if (a.length < i) {
+                                  return Arrays.copyOf(r, i);
+                              } else {
+                                  System.arraycopy(r, 0, a, 0, i);
+                                  if (a.length > i) {
+                                      a[i] = null;
+                                  }
+                              }
+                              return a;
+                          }
+                          r[i] = (T)it.next();
+                      }
+                      // more elements than expected
+                      return it.hasNext() ? finishToArray(r, it) : r;
+                  }
+
+                  ...
+              }
+            #+end_src
+            - *Runtime type* of ~dest~ [[3]] is ~String[]~, decided by ~new String[0]~  <<2>>
+**** Question:                                                   :QUESTIONS:
+     1. 是否 ~List~ 和 ~Set~ 都没有固定长度而 ~Arrays~ 的长度是指定的？
+     2. ~Arrays.asList~ 返回的 ~ArrayList~ 和 ~java.util.ArrayList~ 异同？除了固定长度还有啥？
+     3. ~Collection.toArray~ 返回的 ~Arrays~ 和 ~java.util.Arryas~ 异同？
+** Challenge BST Performance                                     :UNRESOLVED:

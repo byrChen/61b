@@ -1,3 +1,6 @@
+import java.nio.charset.Charset;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.HashSet;
 import static org.junit.Assert.*;
@@ -49,6 +52,7 @@ public class TestBSTMapExtra {
         assertTrue(q.containsKey("b"));
         assertTrue(q.containsKey("d"));
         assertTrue(q.containsKey("e"));
+        q.printInOrder();
     }
 
     /* Remove Test 2
@@ -76,6 +80,7 @@ public class TestBSTMapExtra {
         assertTrue(q.containsKey("a"));
         assertTrue(q.containsKey("b"));
         assertTrue(q.containsKey("f"));
+        q.printInOrder();
     }
 
     /* Remove Test 3
@@ -109,6 +114,29 @@ public class TestBSTMapExtra {
         assertTrue(((Integer) noChild.remove('Z')).equals(15));
         assertEquals(0, noChild.size());
         assertEquals(null, noChild.get('Z'));
+    }
+    
+    @Test 
+    public void testkeySet() {
+        BSTMap<String, Integer> actual = new BSTMap<String, Integer>();
+        actual.put("d", 1);
+        actual.put("b", 1);
+        actual.put("a", 1);
+        actual.put("c", 1);
+        actual.put("e", 1);
+        actual.put("f", 1);
+        actual.put("g", 1);
+        String[] c = {"a", "b", "c", "d", "e", "f", "g"};
+        Set<String> expect = new HashSet<>(Arrays.asList(c));
+        assertEquals(actual.keySet(), expect);
+        Iterator<String> seer = actual.iterator();
+        assertEquals(seer.next(), "a");
+        assertEquals(seer.next(), "b");
+        assertEquals(seer.next(), "c");
+        assertEquals(seer.next(), "d");
+        assertEquals(seer.next(), "e");
+        assertEquals(seer.next(), "f");
+        assertEquals(seer.next(), "g");
     }
 
     public static void main(String[] args) {

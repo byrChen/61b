@@ -2167,7 +2167,7 @@
          size += 1;
      }
    #+end_src 
-   - ~null.equals(x)~ -> ~NullPointerException~
+   - ~null.equals(x)~ causes ~NullPointerException~, use ~x == null~ 
    - ~throw new IllegalArgumentException("can't add null");~
    - Built-in set of strings cancontain a ~null~ in Java, below prints ~True~ 
      #+begin_src java :classname 
@@ -2327,7 +2327,7 @@
       - ~public class ArraySet<T> implements Iterable<T>~ tells Java that ~ArraySet~ has a ~iterator()~ method, then can ~ArraySet~ use *enhanced loop* (~for (ArraySet<Integer> asee : aset) {}~)
     - ~Comparable~ vs ~Comparator~ and ~Iterable~ vs ~Iterator~
       - ~Comparable~ has method ~comparator()~ which returns a ~Comparator~ object, ~Iterable~ is similar.
-      - ~Comparable~ and ~Iterable~ are interfaced implemented by classes, describing a kind of classes' *attribute* (*comparable* and *iterable*)
+      - ~Comparable~ and ~Iterable~ are interfaces implemented by classes, describing a kind of classes' *attribute* (*comparable* and *iterable*)
       - ~Comparator~ and ~Iterator~ are *nested classes* inside classes which implement ~Comparable~ and ~Iterable~, instances of them are objects whose methods can take in ~Comparable~ and ~Iterable~ objects as arguments
 ** Object Methods
    All classes inherit from the overarching Object class. The methods that are inherited are as follows:
@@ -2500,7 +2500,6 @@
     - ~public static <Glerp> ArraySet<Glerp> of(Glerp... stuff)~ not ~public static ArraySet<T> of(T... stuff)~ because of it is ~static~, it can't find ~T~ in ~public class ArraySet<T> implements Iterable<T>~
     - ~ArraySet<Glerp> returnSet = new ArraySet<Glerp>()~
     - ~ArraySet<String> asetOfStrings = ArraySet.of("hi", "I'm", "here")~ 
-
 ** Throwing Exceptions (legacy)                                   :UNCOVERED:
 ** Checked vs. Unchecked exception (legacy)                       :UNCOVERED:
 ** Iteration (legacy)                                             :UNCOVERED:
@@ -2536,8 +2535,12 @@
           }
         #+end_src
         #+begin_src java :classname 
-          public class DelegationStack<Item> {
-              private LinkedList<Item> L = new LinkedList<Item>();
+          public class StackAdapter<Item> {
+              private List L;
+              public StackAdapter(List<Item> worker) {
+                  L = worker;
+              }
+
               public void push(Item x) {
                   L.add(x);
               }
