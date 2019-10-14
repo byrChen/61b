@@ -88,7 +88,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         s.addAll(keySet(n.right));
         return s;
     }
-    
+
     public void printInOrder() {
         for (K k : keySet(root)) {
             System.out.println(k);
@@ -157,40 +157,28 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
                     root = tempP;
                     V tempV = remove(key, root);
                     root = root.right;
-                }
-
-                else{
+                } else {
 
                     Node p = getParent(n, root);
 
                     if (size(n) == 1) {
                         if (p.left == n) p.left = null;
                         else             p.right = null;
-                    }
-
-                    else if (n.left == null) {
+                    } else if (n.left == null) {
                         if (p.left == n) p.left = n.right;
                         else             p.right = n.right;
-                    }
-
-                    else if (n.right == null) {
+                    } else if (n.right == null) {
                         if (p.left == n) p.left = n.left;
                         else             p.right = n.left;
-                    }
-
-                    else if (n.left.right == null) {
+                    } else if (n.left.right == null) {
                         n.left.right = n.right;
                         if (p.left == n) p.left = n.left;
                         else             p.right = n.left;
-                    }
-
-                    else if (n.right.left == null) {
+                    } else if (n.right.left == null) {
                         n.right.left = n.left;
                         if (p.left == n) p.left = n.right;
                         else             p.right = n.right;
-                    }
-
-                    else {
+                    } else {
                         Node max = maxNode(n.left);
                         Node maxP = getParent(max, root);
                         maxP.right = max.left;

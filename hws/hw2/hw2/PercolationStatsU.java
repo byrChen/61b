@@ -3,17 +3,17 @@ package hw2;
 import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
 
-public class PercolationStats {
+public class PercolationStatsU {
     private int Times;
     private double m;
     private double s;
 
-    public PercolationStats(int N, int T, PercolationFactory pf) {
+    public PercolationStatsU(int N, int T, PercolationFactoryU pf) {
         if (N <= 0 || T <= 0) throw new IllegalArgumentException("Illegal input");
         Times = T;
         double[] x = new double[T];
         for (int i = 0; i < T; i++) {
-            Percolation p = pf.make(N);
+            PercolationU p = pf.make(N);
             while (!p.percolates()) {
                 int row = StdRandom.uniform(N);
                 int col = StdRandom.uniform(N);

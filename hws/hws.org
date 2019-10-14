@@ -172,3 +172,280 @@
      }
    #+end_src 
    - ~for (String s : a) {}~ 
+* HW2 Percolation
+** ~Percolation.java~ 
+*** ~Percolation~  
+    #+begin_src java :classname 
+      public class Percolation {
+          private boolean[][] grid;
+          private int[] tOpens;
+          private int[] bOpens;
+          private int indexT, indexB = 0;
+          private int openNum = 0;
+          private int Num;
+          private WeightedQuickUnionUF union;
+
+          public Percolation(int N) {
+              if (N <= 0) throw new IllegalArgumentException("Illegal number");
+              else {
+                  Num = N;
+                  grid = new boolean[N][N];
+                  tOpens = new int[N];
+                  bOpens = new int[N];
+                  for (int i = 0; i < N; i++) {
+                      for (int j = 0; j < N; j++) {
+                          grid[i][j] = false;
+                      }
+                  }
+                  union = new WeightedQuickUnionUF(Num * Num);
+              }
+          }
+          ...
+      }
+    #+end_src 
+    - ~type[] x = new type[N]~
+    - ~tOpens~ and ~bOpens~ to record opens on the top and bottom,respectively
+*** ~open~ 
+    #+begin_src java :classname 
+      public void open(int row, int col) {
+          if (validIndex(row, col)) {
+              if (!grid[row][col]) {
+                  grid[row][col] = true;
+                  openNum += 1;
+                  unionNeighbor(row, col);
+
+                  if (row == 0) {
+                      tOpens[indexT] = xyTo1D(row, col);
+                      indexT += 1;
+                  }
+                  if (row == Num - 1) {
+                      bOpens[indexB] = xyTo1D(row, col);
+                      indexB += 1;
+                  }
+              }
+          }
+          else throw new IndexOutOfBoundsException("Index should >= 0 and <= 4");
+      }
+
+      private void unionNeighbor(int row, int col) {
+          int u = xyTo1D(row, col);
+          if (validIndex(row, col-1) && isOpen(row, col-1)) {
+              union.union(xyTo1D(row, col-1), u);
+          }
+          if (validIndex(row, col+1) && isOpen(row, col+1)) {
+              union.union(xyTo1D(row, col+1), u);
+          }
+          if (validIndex(row-1, col) && isOpen(row-1, col)) {
+              union.union(xyTo1D(row-1, col), u);
+          }
+          if (validIndex(row+1, col) && isOpen(row+1, col)) {
+              union.union(xyTo1D(row+1, col), u);
+          }
+      }
+
+      private int xyTo1D(int row, int col) {
+          return row * Num + col;
+      }
+
+      private boolean validIndex(int row, int col) {
+          boolean v = (row-Num+1)*row <= 0 && (col-Num+1)*col <= 0;
+          return v;
+      }
+    #+end_src 
+    - In ~open~: ~grid[row][col] = true~ --> ~unionNeighbor~ --> update ~tOpens~ and ~bOpens~
+    - ~xyTo1D~ + ~union.union~ 
+*** ~isFull~ 
+    #+begin_src java :classname 
+      public boolean isFull(int row, int col) {
+          if (validIndex(row, col)) {
+              for (int i = 0; i < indexT; i++) {
+                  if (union.connected(tOpens[i], xyTo1D(row, col))) return true;
+              }
+              return false;
+          }
+          else throw new IndexOutOfBoundsException("Index should >= 0 and <= 4");
+      }
+    #+end_src 
+    - ~union.connected(tOpens[i], xyTo1D(row, col))~ 
+*** ~percolates~ 
+    #+begin_src java :classname 
+      public boolean percolates() {
+          int row = Num - 1;
+          for (int i = 0; i < indexB; i++) {
+              int col = bOpens[i] - row * Num;
+              if (isFull(row, col)) return true;
+          }
+          return false;
+      }
+    #+end_src 
+    - ~int col = bOpens[i] - row * Num~ and ~isFull(row, col)~ 
+** ~PercolationStats.java~ 
+   #+begin_src java :classname 
+     public class PercolationStats {
+         private int Times;
+         private double m;
+         private double s;
+
+         public PercolationStats(int N, int T, PercolationFactory pf) {
+             if (N <= 0 || T <= 0) throw new IllegalArgumentException("Illegal input");
+             Times = T;
+             double[] x = new double[T];
+             for (int i = 0; i < T; i++) {
+                 Percolation p = pf.make(N);
+                 while (!p.percolates()) {
+                     int row = StdRandom.uniform(N);
+                     int col = StdRandom.uniform(N);
+                     p.open(row, col);
+                 }
+                 x[i] = (double) p.numberOfOpenSites() / (N*N);
+             }
+             m = StdStats.mean(x);
+             s = StdStats.stddev(x);
+         }
+         ...
+     }
+   #+end_src 
+   - ~x[i] = (double) p.numberOfOpenSites() / (N*N)~ 
+** ~Analysis.java~ 
+   #+begin_src java :classname 
+     public class Analysis {
+    
+         public static void testW(int N, int T, PercolationFactory pf) {
+             Stopwatch s = new Stopwatch();
+             PercolationStats p = new PercolationStats(N, T, pf);
+             System.out.println(s.elapsedTime());
+         }
+
+         public static void testU(int N, int T, PercolationFactoryU pf) {
+             Stopwatch s = new Stopwatch();
+             PercolationStatsU p = new PercolationStatsU(N, T, pf);
+             System.out.println(s.elapsedTime());
+         }
+
+         public static void main(String[] args) {
+             int N = 5;
+             int T = 10000;
+             PercolationFactory pf = new PercolationFactory();
+             PercolationFactoryU pfU = new PercolationFactoryU();
+             Analysis.testW(N, T, pf);
+             Analysis.testU(N, T, pfU);
+
+             N = 10;
+             T = 10000;
+             pf = new PercolationFactory();
+             pfU = new PercolationFactoryU();
+             Analysis.testW(N, T, pf);
+             Analysis.testU(N, T, pfU);
+
+             N = 5;
+             T = 20000;
+             pf = new PercolationFactory();
+             pfU = new PercolationFactoryU();
+             Analysis.testW(N, T, pf);
+             Analysis.testU(N, T, pfU);
+         }
+     }
+   #+end_src 
+** Tests
+*** ~testPercolation~ 
+    #+begin_src java :classname 
+      @Test
+      public void testConstructor() {
+          try {
+              Percolation p = new Percolation(0);
+              fail("No exception thrown.");
+          } catch (Exception e) {
+              assertTrue(e.getMessage().contains("Illegal number"));
+          }
+
+          for (int i = 1; i < 101; i++) {
+              Percolation p = new Percolation(i);
+              boolean[][] expect = new boolean[i][i];
+              for (int j = 0; j < i; j++) {
+                  for (int k = 0; k < i; k++) {
+                      expect[j][k] = false;
+                  }
+              }
+              boolean[][] actual = p.getGrid();
+              assertArrayEquals(expect, actual);
+          }
+      }
+
+      @Test
+      public void testOpens() {
+          Percolation p = new Percolation(5);
+          try {
+              p.open(-1, 0);
+              p.open(0, -1);
+              p.open(-1, -1);
+              p.open(5, 0);
+              p.open(0, 5);
+              p.open(5, 5);
+              p.open(5, -1);
+              p.open(-1, 5);
+              p.isOpen(-1, 0);
+              p.isOpen(0, -1);
+              p.isOpen(-1, -1);
+              p.isOpen(5, 0);
+              p.isOpen(0, 5);
+              p.isOpen(5, 5);
+              p.isOpen(5, -1);
+              p.isOpen(-1, 5);
+              p.isFull(-1, 0);
+              p.isFull(0, -1);
+              p.isFull(-1, -1);
+              p.isFull(5, 0);
+              p.isFull(0, 5);
+              p.isFull(5, 5);
+              p.isFull(5, -1);
+              p.isFull(-1, 5);
+              fail("No exception thrown.");
+          } catch (IndexOutOfBoundsException e) {
+              assertTrue(e.getMessage().contains("Index should >= 0 and <= 4"));
+          }
+
+          p.open(0,1);
+          p.open(0,1);
+          p.open(1,1);
+          p.open(1,1);
+          assertTrue(p.getGrid()[0][1]);
+          assertTrue(p.getGrid()[1][1]);
+          assertFalse(p.getGrid()[2][1]);
+          assertFalse(p.getGrid()[3][1]);
+          assertTrue(p.isOpen(0, 1));
+          assertTrue(p.isOpen(1, 1));
+          assertFalse(p.isOpen(2, 1));
+          assertFalse(p.isOpen(3, 1));
+          assertTrue(p.isFull(0, 1));
+          assertTrue(p.isFull(1, 1));
+          assertFalse(p.isFull(2, 1));
+          assertFalse(p.isFull(3, 1));
+          assertTrue(p.numberOfOpenSites() == 2);
+
+          p.open(0,0);
+          p.open(2,1);
+          assertTrue(p.getUnion().connected(0, 1));
+          assertTrue(p.getUnion().connected(1, 6));
+          assertTrue(p.getUnion().connected(6, 11));
+          assertTrue(p.getUnion().connected(0, 11));
+          assertFalse(p.getUnion().connected(1, 3));
+      }
+
+      @Test
+      public void testPercolates() {
+          Percolation p = new Percolation(5);
+          p.open(0, 0);
+          p.open(0, 1);
+          assertFalse(p.percolates());
+          p.open(1,2);
+          p.open(2,2);
+          p.open(3,2);
+          p.open(4,3);
+          assertFalse(p.percolates());
+          p.open(0, 2);
+          p.open(4, 2);
+          assertTrue(p.percolates());
+      }
+    #+end_src 
+    - ~try {...; fail("string");} catch(Exception e) {...}~ 
+

@@ -1,17 +1,15 @@
 package hw2;
 
-import edu.princeton.cs.algs4.WeightedQuickUnionUF;
-
-public class Percolation {
+public class PercolationU {
     private boolean[][] grid;
     private int [] tOpens;
     private int [] bOpens;
     private int indexT, indexB = 0;
     private int openNum = 0;
     private int Num;
-    private WeightedQuickUnionUF union;
+    private UnionFind union;
 
-    public Percolation(int N) {
+    public PercolationU(int N) {
         if (N <= 0) throw new IllegalArgumentException("Illegal number");
         else {
             Num = N;
@@ -23,7 +21,7 @@ public class Percolation {
                     grid[i][j] = false;
                 }
             }
-            union = new WeightedQuickUnionUF(Num * Num);
+            union = new UnionFind(Num * Num);
         }
     }
 
@@ -31,7 +29,7 @@ public class Percolation {
         return grid;
     }
 
-    public WeightedQuickUnionUF getUnion() {
+    public UnionFind getUnion() {
         return union;
     }
 
@@ -54,7 +52,7 @@ public class Percolation {
         }
         else throw new IndexOutOfBoundsException("Index should >= 0 and <= 4");
     }
-    
+
     private void unionNeighbor(int row, int col) {
         int u = xyTo1D(row, col);
         if (validIndex(row, col-1) && isOpen(row, col-1)) {

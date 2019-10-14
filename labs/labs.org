@@ -615,40 +615,28 @@
                         root = tempP;
                         V tempV = remove(key, root);
                         root = root.right;
-                    }
-
-                    else{
+                    } else {
 
                         Node p = getParent(n, root);
 
                         if (size(n) == 1) {
                             if (p.left == n) p.left = null;
                             else             p.right = null;
-                        }
-
-                        else if (n.left == null) {
+                        } else if (n.left == null) {
                             if (p.left == n) p.left = n.right;
                             else             p.right = n.right;
-                        }
-
-                        else if (n.right == null) {
+                        } else if (n.right == null) {
                             if (p.left == n) p.left = n.left;
                             else             p.right = n.left;
-                        }
-
-                        else if (n.left.right == null) {
+                        } else if (n.left.right == null) {
                             n.left.right = n.right;
                             if (p.left == n) p.left = n.left;
                             else             p.right = n.left;
-                        }
-
-                        else if (n.right.left == null) {
+                        } else if (n.right.left == null) {
                             n.right.left = n.left;
                             if (p.left == n) p.left = n.right;
                             else             p.right = n.right;
-                        }
-
-                        else {
+                        } else {
                             Node max = maxNode(n.left);
                             Node maxP = getParent(max, root);
                             maxP.right = max.left;
@@ -665,19 +653,7 @@
             }
             return null;
         }
-
-        private Node getParent(Node son, Node parent) {
-            if (son == parent.left || son == parent.right) return parent;
-            K compKey = parent.key;
-            Node max = maxNode(parent.left);
-            if (max != null) {
-                compKey = max.key;
-            }
-            int cmp = son.key.compareTo(compKey);
-            if (cmp > 0) return getParent(son, parent.right);
-            else return getParent(son, parent.left);
-        }
-      #+end_src
+      #+end_src 
       - When calling ~maxNode~, need ~if (n == null || n.right == null)~ not ~if (n.right == null || n == null)~ 
 *** ~keySet~ <<1>>
     #+begin_src java :classname 
