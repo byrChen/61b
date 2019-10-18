@@ -668,58 +668,29 @@
      }
    #+end_src 
 ** isPalindrome
-*** isPalindrome Testing
-    #+begin_src java :classname 
-      import org.junit.Test;
-      import static org.junit.Assert.*;
+   #+begin_src java :classname 
+     public boolean isPalindrome(String word) {
+         if (word.length() == 1 || word.length() == 0) {
+             return true;
+         }
 
-      public class TestPalindrome {
-          // You must use this palindrome, and not instantiate
-          // new Palindromes, or the autograder might be upset.
-          static Palindrome palindrome = new Palindrome();
+         for (int i = 0; i < (word.length() / 2); i++) {
+             if (word.charAt(i) != word.charAt(word.length() - i - 1)) {
+                 return false;
+             }
+         }
 
-          @Test
-          public void testWordToDeque() {
-              Deque d = palindrome.wordToDeque("persiflage");
-              String actual = "";
-              for (int i = 0; i < "persiflage".length(); i++) {
-                  actual += d.removeFirst();
-              }
-              assertEquals("persiflage", actual);
-          }
-          @Test
-          public void testisPalindrome() {
-              assertTrue(palindrome.isPalindrome("a"));
-              assertTrue(palindrome.isPalindrome(""));
-              assertTrue(palindrome.isPalindrome("aka"));
-              assertFalse(palindrome.isPalindrome("akd"));
-          }
-      }
-    #+end_src 
-*** isPalindrome
-    #+begin_src java :classname 
-      public boolean isPalindrome(String word) {
-          if (word.length() == 1 || word.length() == 0) {
-              return true;
-          }
+         return true;
 
-          for (int i = 0; i < (word.length() / 2); i++) {
-              if (word.charAt(i) != word.charAt(word.length() - i - 1)) {
-                  return false;
-              }
-          }
-
-          return true;
-
-          // use wordToDeque
-          //        Deque<Character> d = wordToDeque(word);
-          //        String reverse = "";
-          //        for (int i = 0; i < word.length(); i++) {
-          //            reverse += d.removeLast();
-          //        }
-          //        return reverse.equals(word);
-      }
-    #+end_src 
+         // use wordToDeque
+         //        Deque<Character> d = wordToDeque(word);
+         //        String reverse = "";
+         //        for (int i = 0; i < word.length(); i++) {
+         //            reverse += d.removeLast();
+         //        }
+         //        return reverse.equals(word);
+     }
+   #+end_src 
 ** Generalized Palindrome and OffByOne
 *** OffByOne
     #+begin_src java :classname 
@@ -770,6 +741,35 @@
          }
      }
    #+end_src 
+** Tests
+*** isPalindrome Testing
+    #+begin_src java :classname 
+      import org.junit.Test;
+      import static org.junit.Assert.*;
+
+      public class TestPalindrome {
+          // You must use this palindrome, and not instantiate
+          // new Palindromes, or the autograder might be upset.
+          static Palindrome palindrome = new Palindrome();
+
+          @Test
+          public void testWordToDeque() {
+              Deque d = palindrome.wordToDeque("persiflage");
+              String actual = "";
+              for (int i = 0; i < "persiflage".length(); i++) {
+                  actual += d.removeFirst();
+              }
+              assertEquals("persiflage", actual);
+          }
+          @Test
+          public void testisPalindrome() {
+              assertTrue(palindrome.isPalindrome("a"));
+              assertTrue(palindrome.isPalindrome(""));
+              assertTrue(palindrome.isPalindrome("aka"));
+              assertFalse(palindrome.isPalindrome("akd"));
+          }
+      }
+    #+end_src 
 * Project 1 Gold
   #+begin_src java :classname 
     import static org.junit.Assert.*;

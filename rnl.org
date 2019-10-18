@@ -1289,7 +1289,7 @@
     #+end_src 
 *** Memory Performance
     Usage ratio R: size of the list / length of the ~items~ array, halve the size of the array when R falls to less than 0.25
-*** Generic ALists
+*** Generic ALists <<ilink3>>
     #+begin_src java :classname 
       public class AList<Glorp> {
           private Glorp[] items;
@@ -2035,9 +2035,9 @@
     #+DOWNLOADED: https://joshhug.gitbooks.io/hug61b/content/assets/comparator.png @ 2019-08-11 13:35:10
     [[file:pictures/4._Inheritance,_Implements/comparator_2019-08-11_13-35-10.png]]
     - ~Comparable~ used to compare Objects in natural order, ~Comparator~ used to compare in other user-defined order
-    - About nexted ~private static class NameComparator implements Comparator<Dog>~ <<2>>
+    - About nexted ~private static class NameComparator implements Comparator<Dog>~ <<ilink2>>
       - ~Dog~ can only implements just one interface ~Comparable~
-      - ~Comparator~ is used to augment comparison order
+      - ~Comparator~ is used to augment comparison order 
       - *Nested* because each ~class~ implements ~Comparator<T>~ can only compare 2 objects of class ~T~, it should be *nested* in ~class T~ according to *OOP*
       - Each comparator is an *object*, not *class or method* (In Java7 or earlier, can't take in or return *class or method*)
       - ~static~ for no need to instantiate a ~Dog~ object, just ~Dog.NameComparator()~ to get a comparator
@@ -2045,15 +2045,15 @@
     - To retrieve *NameComparator*: ~Comparator<Dog> nc = Dog.getNameComparator();~
     - Use *NameComparator* to compare 2 ~Dog~ objects: ~nc.compare(dog1, dog2);~
     - ~String~'s built-in ~compareTo~
-*** To summarize <<1>>
+*** To summarize <<ilink1>>
     - *Interfaces* in Java provide the ability to make *callbacks*. A *callback* function is the *helping* function (in the scenario, ~compareTo~). In some languages, this is accomplished using *explicit function passing*; in Java, by *wrapping* the *needed function* in an *interface*.
       #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-11 14:23:33
       [[file:pictures/4._Inheritance,_Implements/screenshot_2019-08-11_14-23-33.png]]
     - A *Comparable* is an object's method compares itself to another object, it is imbedded *within the object itself*
     - A *Comparator* is an independent object compares 2 objects to each other, its class is *defined within the class* and it's *independent of object*
 *** Question:                                                     :QUESTIONS:
-    1. 怎样理解 [[1]] Comparable 和 Comparator 的区别？分析的对吗？
-    2. [[2]] 中关于 nested 原因的分析对吗？为什么 Comparator 一定要是 Object？如下可以吗？
+    1. 怎样理解 [[ilink1]] Comparable 和 Comparator 的区别？分析的对吗？
+    2. [[ilink2]] 中关于 nested 原因的分析对吗？为什么 Comparator 一定要是 Object？如下可以吗？
        #+begin_src java :classname 
          import java.util.Comparator;
 
@@ -2690,7 +2690,6 @@
 *** Summary
     #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-20 09:11:19
     [[file:pictures/9._Disjoint_Sets/screenshot_2019-08-20_09-11-19.png]]
- 
 ** Quick Union
    Instead of an id, assign each item *the index of its parent*. -1 for no parent *'root'* items
    #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-20 09:42:13
@@ -2977,11 +2976,11 @@
          }
 
          public void add(int x) {
-             present[i] = true;
+             present[x] = true;
          }
 
          public boolean contains(int x) {
-             return present[i];
+             return present[x];
          }
    #+end_src 
    - ~add~ and ~contains~ both take $\Theta(1)$ time
@@ -3065,7 +3064,7 @@
      - Less memory but more runtimes $\Theta(N)$ > $\Theta(1)$
    - With resizing
      - Even lists' length $Q=N/M$ -> To make $\Theta(Q) = \Theta(N/M) = \Theta(1)$ -> make $N/M = \Theta(1)$ -> *resize* $M$ when $N/M \geq a, a>1$ (such as 1.5)
-     - Most ~add~ operations will be $\Theta(1)$. Some will be $\Theta(N)$ time (to *resize*), as long as resizing by a *multiplicative factor*, the *average runtime* will still be $\Theta(1)$ (similar to ~AList~)
+     - Most ~add~ operations will be $\Theta(1)$. Some will be $\Theta(N)$ time (to *resize*), as long as resizing by a *multiplicative factor*, the *average runtime* will still be $\Theta(1)$ (similar to ~AList~) [[ilink3]]
      - Two demands: Resizing by a *multiplicative factor* and *evenly* distributed
 ** Hash Tables in Java
    #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-24 10:53:51
@@ -3074,7 +3073,9 @@
    - ~Math.floorMod()~: Reduce hash code to a valid index
    - 2 important warnings which both may result in items getting lost:
      - Never store objects that *can change* in a HashSet or HashMap
-     - Never override *equals* without also overriding *hashCode*
+     - Never override ~equals~ without also overriding ~hashCode~
+*** Question:                                                     :QUESTIONS:
+    1. 为什么 override ~equals~ 必须 override ~hashCode~ ？
 ** Good HashCodes
    Multiplying data by powers of some *base* as ensuring that all the data gets scrambled together into a seemingly *random integer*.
 *** Typical Base 
@@ -3128,13 +3129,377 @@
         }
       #+end_src
       - Computation of the hashCode of a recursive data structure involves *recursive computation*.
-
-
 *** Question:                                                     :QUESTIONS:
     1. 为什么真的哈希码不关心唯一性？那数据冲突了怎么办？
 ** Summary
    #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-24 11:26:20
    [[file:pictures/L19_Hashing/screenshot_2019-08-24_11-26-20.png]]
- 
 * L20 Heaps and PQs
+** Priority Queues
+   #+begin_src java :classname 
+     /** (Min) Priority Queue: Allowing tracking and removal of the
+      ,* smallest item in a priority queue. */
+     public interface MinPQ<Item> {
+         /** Adds the item to the priority queue. */
+         public void add(Item x);
+         /** Returns the smallest item in the priority queue. */
+         public Item getSmallest();
+         /** Removes the smallest item from the priority queue. */
+         public Item removeSmallest();
+         /** Returns the size of the priority queue. */
+         public int size();
+     }
+   #+end_src 
+*** Unharmounious Texts
+    - Naive Implementation: *Store* and *Sort*
+      Create a *list* of all messages sent for the entire day. Sort it using your *comparator*. Return the M messages that are largest.
+      #+begin_src java :classname 
+        public List<String> unharmoniousTexts(Sniffer sniffer, int M) {
+            ArrayList<String> allMessages = new ArrayList<String>();
+
+            for (Timer timer = new Timer(); timer.hours() < 24; ) {
+                allMessages.add(sniffer.getNextMessage());
+            }
+
+            Comparator<String> cmptr = new HarmoniousnessComparator();
+            Collections.sort(allMessages, cmptr, Collections.reverseOrder());
+    
+            return allMessages.sublist(0, M);
+        }
+      #+end_src
+      - Potentially uses a huge amount of memory $\Theta(N)$, $N$ is number of texts -> using a ~MinPQ~ to reduce to $\Theta(M)$: ~MinPQ<String> unharmoniousTexts = new HeapMinPQ<Transaction>(cmptr)~ 
+    - Better Implementation: *Track* the M Best
+      #+begin_src java :classname 
+        public List<String> unharmoniousTexts(Sniffer sniffer, int M) {
+            Comparator<String> cmptr = new HarmoniousnessComparator();
+            MinPQ<String> unharmoniousTexts = new HeapMinPQ<Transaction>(cmptr);
+            for (Timer timer = new Timer(); timer.hours() < 24; ) {
+                unharmoniousTexts.add(sniffer.getNextMessage());
+                if (unharmoniousTexts.size() > M) 
+                    { unharmoniousTexts.removeSmallest(); }
+            }
+            ArrayList<String> textlist = new ArrayList<String>();
+            while (unharmoniousTexts.size() > 0) {
+                textlist.add(unharmoniousTexts.removeSmallest());
+            }
+            return textlist;
+        }
+      #+end_src
+      - Can *track* top $M$ transactions using only $M$ memory
+*** To implement a ~MinPQ~
+    - *Ordered* Array
+    - *Bushy* BST: Maintaining bushiness is annoying. Handling *duplicate* priorities is awkward.
+    - HashTable: No good! Items go into *random* places.
+    #+DOWNLOADED: /tmp/screenshot.png @ 2019-10-15 18:33:17
+    [[file:pictures/L20_Heaps_and_PQs/screenshot_2019-10-15_18-33-17.png]]
 ** Heaps
+   *Binary min-heap*: Binary tree that is *complete* and obeys *min-heap property*.
+   - *Min-heap*: Every node is *less than or equal* to both of its children.
+   - Complete: Missing items only at the bottom level (if any), all nodes are as far left as possible.
+   #+DOWNLOADED: /tmp/screenshot.png @ 2019-10-15 18:36:35
+   [[file:pictures/L20_Heaps_and_PQs/screenshot_2019-10-15_18-36-35.png]]
+** Tree Representations
+*** Approach 1: Create *mapping* from *node* to *children*
+    #+DOWNLOADED: /tmp/screenshot.png @ 2019-10-15 18:55:19
+    [[file:pictures/L20_Heaps_and_PQs/screenshot_2019-10-15_18-55-19.png]]
+    #+begin_src java :classname 
+      public class Tree1A<Key> {
+          Key k; // e.g. 0
+          Tree1A left;
+          Tree1A middle;
+          Tree1A right;
+          ...
+      }
+
+      public class Tree1B<Key> {
+          Key k; // e.g. 0
+          Tree1B[] children;
+          ...
+      }
+
+      public class Tree1C<Key> {
+          Key k; // e.g. 0
+          Tree1C favoredChild;
+          Tree1C sibling;
+          ...
+      }
+    #+end_src 
+*** Approach 2: Store *keys* in an *array*. Store *parentIDs* in an *array*.
+    #+DOWNLOADED: /tmp/screenshot.png @ 2019-10-15 19:01:49
+    [[file:pictures/L20_Heaps_and_PQs/screenshot_2019-10-15_19-01-49.png]]
+    #+begin_src java :classname 
+      public class Tree2<Key> {
+          Key[] keys;
+          int[] parents;
+          ...
+      }
+    #+end_src 
+*** Approach 3: Store *keys* in an *array*. *Don’t* store *structure* anywhere.
+    #+DOWNLOADED: /tmp/screenshot.png @ 2019-10-15 20:50:14
+    [[file:pictures/L20_Heaps_and_PQs/screenshot_2019-10-15_20-50-14.png]]
+    #+begin_src java :classname 
+      public class Tree3<Key> {
+          Key[] keys;
+          ...
+
+          public void swim(int k) {
+              if (keys[parent(k)] ≻ keys[k]) {
+                  swap(k, parent(k));
+                  swim(parent(k));              
+              }
+          }
+
+          public int parent(int k) {
+              return (k - 1) / 2;
+          }
+      }
+    #+end_src 
+    - Only works for *complete* trees
+    - Recursive: ~swap(k, parent(k))~ and ~swim(parent(k))~ 
+*** Approach 3B (book implementation): Leaving *One Empty Spot*
+    #+DOWNLOADED: /tmp/screenshot.png @ 2019-10-15 21:05:29
+    [[file:pictures/L20_Heaps_and_PQs/screenshot_2019-10-15_21-05-29.png]]
+*** Heap Implementation of a Priority Queue
+    #+DOWNLOADED: /tmp/screenshot.png @ 2019-10-15 21:21:22
+    [[file:pictures/L20_Heaps_and_PQs/screenshot_2019-10-15_21-21-22.png]]
+**** Question:                                                    :QUESTIONS:
+     1. 怎么理解上图红字，相同的优先级意味着什么？为什么 ~Heaps~ 比 Bushy ~BST~ 更适合相同的优先级的情况？
+     2. 怎么大体衡量 Array based heaps 比 approach 1a 表示法节约的空间？
+** Data Structures Summary
+*** Search Data Structures
+    #+DOWNLOADED: /tmp/screenshot.png @ 2019-10-15 22:11:04
+    [[file:pictures/L20_Heaps_and_PQs/screenshot_2019-10-15_22-11-04.png]]
+
+    #+DOWNLOADED: /tmp/screenshot.png @ 2019-10-15 22:11:45
+    [[file:pictures/L20_Heaps_and_PQs/screenshot_2019-10-15_22-11-45.png]]
+
+    #+DOWNLOADED: /tmp/screenshot.png @ 2019-10-15 22:12:04
+    [[file:pictures/L20_Heaps_and_PQs/screenshot_2019-10-15_22-12-04.png]]
+
+    #+DOWNLOADED: /tmp/screenshot.png @ 2019-10-15 22:12:37
+    [[file:pictures/L20_Heaps_and_PQs/screenshot_2019-10-15_22-12-37.png]]
+    - Abstraction often happens in layers!
+    
+    #+DOWNLOADED: /tmp/screenshot.png @ 2019-10-15 22:13:26
+    [[file:pictures/L20_Heaps_and_PQs/screenshot_2019-10-15_22-13-26.png]]
+**** Question:                                                    :QUESTIONS:
+     1. 怎么理解上面几张图？
+* L21 Prefix Operations and Tries
+** Tries
+*** Intro
+    - ADTs vs. Specific Implementations
+      #+DOWNLOADED: /tmp/screenshot.png @ 2019-10-15 23:56:27
+      [[file:pictures/L21_Tries/screenshot_2019-10-15_23-56-27.png]]
+    - Special cases to implement ~Set~ and ~Map~
+      Better than *BST* and *Hash Table* 
+      - Special Case 1: Character Keyed Map
+        Keys are always ASCII characters.
+        #+begin_src java :classname 
+          public class DataIndexedCharMap<V> {
+              private V[] items;
+              public DataIndexedCharMap(int R) {
+                  items = (V[]) new Object[R];
+              }
+              public void put(char c, V val) {
+                  items[c] = val;
+              }
+              public V get(char c) {
+                  return items[c];
+              }
+          }
+        #+end_src
+      - Special Case 2: String Keyed Map
+        Keys are always strings -> Basic idea: Store *each letter* of the string as a node in a tree -> Use data structure *Trie*
+      #+DOWNLOADED: /tmp/screenshot.png @ 2019-10-16 09:21:16
+      [[file:pictures/L21_Tries/screenshot_2019-10-16_09-21-16.png]]
+*** Tries for ~String~ keys
+    - Key ideas
+      - Every node stores only one letter.
+      - Nodes can be shared by multiple keys.
+    - Search *Hits* and *Misses*
+      Insert “sam”, “sad”, “sap”, “same”, “a”, and “awls”, not “aw”, “awl”, “sa”, etc.
+      #+DOWNLOADED: screenshot @ 2019-10-16 10:15:35
+      [[file:pictures/L21_Tries/screenshot_2019-10-16_10-15-35.png]]
+      - *Hits*: contained in the tree *and* the final code is blue
+      - *Misses*:
+        - If not contained 
+        - If contained but the final node is white
+    - Comparison with BST and HashSet
+      #+DOWNLOADED: screenshot @ 2019-10-16 10:26:44
+      [[file:pictures/L21_Tries/screenshot_2019-10-16_10-26-44.png]]
+*** Trie Maps
+    #+DOWNLOADED: screenshot @ 2019-10-16 10:28:21
+    j[[file:pictures/L21_Tries/screenshot_2019-10-16_10-28-21.png]]
+    - *Hits* only if *contained and blue and not null*
+** Trie Implementation and Performance
+*** Basic Implementations
+    #+begin_src java :classname 
+      public class TrieSet {
+          private static final int R = 128; // ASCII
+          private Node root;    // root of trie
+  
+          private static class Node {
+              private char ch;  
+              private boolean isKey;   
+              private DataIndexedCharMap next;
+              private Node(char c, boolean b, int R) {
+                  ch = c; isKey = b;
+                  next = new DataIndexedCharMap<Node>(R);
+              }
+          }
+  
+          private static class Node {
+              private boolean isKey;   
+              private DataIndexedCharMap next;
+              private Node(boolean b, int R) {
+                  isKey = b;
+                  next = new DataIndexedCharMap<Node>(R);
+              }
+          }
+      }
+  
+      public class DataIndexedCharMap<V> {
+          private V[] items;
+          public DataIndexedCharMap(int R) {
+              items = (V[]) new Object[R];
+          }
+          ...
+      }
+    #+end_src
+    #+DOWNLOADED: screenshot @ 2019-10-16 11:00:16
+    [[file:pictures/L21_Tries/screenshot_2019-10-16_11-00-16.png]]
+    #+DOWNLOADED: screenshot @ 2019-10-16 11:00:36
+    [[file:pictures/L21_Tries/screenshot_2019-10-16_11-00-36.png]]
+    - Do not store ~char ch~ in node
+*** Trie Performance in Terms of $N$
+    #+DOWNLOADED: screenshot @ 2019-10-16 11:03:00
+    [[file:pictures/L21_Tries/screenshot_2019-10-16_11-03-00.png]]
+    - $N$ is the num of *keys*, not nodes. $L$ is the length of the key
+    - Runtime <<ilink4>>
+      - ~add~ runtime
+        - Independent of $N$: $\Theta(1)$
+        - Dependent of $L$: $\Theta(L)$ <<ilink5>>
+      - ~contains~ runtime
+        - Independent of $N$: $\Theta(1)$
+        - Dependent of $L$: $O(L)$
+    - Huge memory waste of storing $R$ links per node
+**** Question:                                                    :QUESTIONS:
+     1. 分析复杂度时为什么不考虑插入 key 的长度 [[ilink4]]？为什么考虑 key 长度时 ~add~ 和 ~contains~ 复杂度不一样？ [[ilink5]]
+** Alternate Child Tracking Strategies
+   #+DOWNLOADED: screenshot @ 2019-10-16 12:47:41
+   [[file:pictures/L21_Tries/screenshot_2019-10-16_12-47-41.png]]
+   DataIndexedCharMap is very memory hungry, can use ANY kind of map from character to node, e.g.
+   - BST
+   - Hash Table
+*** Alternate Idea #1: The Hash-Table Based Trie
+    #+DOWNLOADED: screenshot @ 2019-10-16 12:49:05
+    [[file:pictures/L21_Tries/screenshot_2019-10-16_12-49-05.png]]
+*** Alternate Idea #2: The BST-Based Trie
+    #+DOWNLOADED: screenshot @ 2019-10-16 12:50:25
+    [[file:pictures/L21_Tries/screenshot_2019-10-16_12-50-25.png]]
+*** Comparison
+    - Using a BST or a Hash Table to store links to children will usually use *less memory*.
+      - DataIndexedCharMap: 128 links per node
+      - BST: C links per node, where C is the number of children.
+      - Hash Table: C links per node.
+      - Note: Cost per link is *higher* in BST and Hash Table
+    - Using a BST or a Hash Table will take *slightly more time*.
+      - DataIndexedCharMap: $\Theta(1)$
+      - BST: $O(logR)$
+      - Hash Table: $O(R)$, where $R$ is size of alphabet
+      - Since $R$ is fixed (e.g. 128), can think of all 3 as $\Theta(1)$
+    #+DOWNLOADED: screenshot @ 2019-10-16 13:20:05
+    [[file:pictures/L21_Tries/screenshot_2019-10-16_13-20-05.png]]
+** Trie String Operations
+   *main appeal* of tries is their ability to efficiently support *string specific operations* like *prefix matching*.
+*** Finding all keys that match a given prefix: ~keysWithPrefix(“sa”)~ -> ~[sad, sam, same, sap]~
+    - Collecting Trie Keys: ~collect()~ and ~colHelp(String s, List<String> x, Node n)~
+      #+DOWNLOADED: screenshot @ 2019-10-16 13:41:19
+      [[file:pictures/L21_Tries/screenshot_2019-10-16_13-41-19.png]]
+      - Recursive: ~colHelp(s + c, x, n.next.get(c))~, tree structures usually refer to recursive methods
+    - ~keysWithPrefix~
+      #+DOWNLOADED: screenshot @ 2019-10-16 13:42:44
+      [[file:pictures/L21_Tries/screenshot_2019-10-16_13-42-44.png]]
+*** Finding longest prefix of a string: ~longestPrefixOf(“sample”)~ -> ~sam~ 
+** Autocomplete
+   Create a *Trie based map* from *strings to values* --> type in a string ~s~ --> call ~keysWithPrefix(s)~ --> return the $n$ strings with the highest value.
+   - Value represents how important Google thinks that string is.
+   - Can store billions of strings efficiently since they share nodes.
+*** Top 3 matches example
+    - Basic
+      #+DOWNLOADED: screenshot @ 2019-10-16 14:13:38
+      [[file:pictures/L21_Tries/screenshot_2019-10-16_14-13-38.png]]
+      - The number of keys with the appropriate prefix will be *too big* for a *short string*, extremely *inefficient*
+    - More efficient
+      #+DOWNLOADED: screenshot @ 2019-10-16 14:15:08
+      [[file:pictures/L21_Tries/screenshot_2019-10-16_14-15-08.png]]
+    - Even more efficient
+      #+DOWNLOADED: screenshot @ 2019-10-16 14:16:29
+      [[file:pictures/L21_Tries/screenshot_2019-10-16_14-16-29.png]]
+** Trie Summary
+   #+DOWNLOADED: screenshot @ 2019-10-16 14:18:10
+   [[file:pictures/L21_Tries/screenshot_2019-10-16_14-18-10.png]]
+   - More generally, can sometimes take special advantage of *key type* to improve *sets and maps*, further types of *string sets/maps*
+     - Suffix Trees
+     - DAWG
+* L22 Range Searching and Multi-Dimensional Data
+** Multi-Dimensional Data
+*** Intro 
+    - Two fairly general implementations of sets and maps:
+      - *Hash Table*: Requires that keys can be *hashed*.
+      - *Search Tree*: Requires that keys can be *compared*.
+    - Two special case implementations:
+      - *Data Indexed Array*: Requires that keys are *small*
+      - *Trie*: Requires that keys are *strings*.
+    -> Map/Set for *Multi-dimensional keys*
+*** Motivation: 2D Range Finding and Nearest Neighbors (hash table)
+    #+DOWNLOADED: screenshot @ 2019-10-16 14:48:21
+    [[file:pictures/L22_Range_Searching_and_Multi-Dimensional_Data/screenshot_2019-10-16_14-48-21.png]]
+    - ~nearest()~ have to iterate over all $N$ items due to each item is *effectively random* (points are *evenly* spread out), $\Theta(N)$
+** Uniform Partitioning
+   #+DOWNLOADED: screenshot @ 2019-10-16 14:58:58
+   [[file:pictures/L22_Range_Searching_and_Multi-Dimensional_Data/screenshot_2019-10-16_14-58-58.png]]
+   - Runtime for ~nearest()~ in *spatial hashing* will be 16 times faster than original hashing -> still $\Theta(N)$
+*** Question:                                                     :QUESTIONS:
+    1. 上图中的第二点 "Typical implementation would ..." 怎么理解？
+** Quadtrees
+*** Trees vs. Hash Tables 
+    #+DOWNLOADED: screenshot @ 2019-10-16 15:44:45
+    [[file:pictures/L22_Range_Searching_and_Multi-Dimensional_Data/screenshot_2019-10-16_15-44-45.png]]
+*** Building Trees of Two Dimensional Data
+    *Hash table* in *uniform* partition -> *Quadtrees* in *Hierarchical* partition
+    #+DOWNLOADED: screenshot @ 2019-10-16 15:53:51
+    [[file:pictures/L22_Range_Searching_and_Multi-Dimensional_Data/screenshot_2019-10-16_15-53-51.png]]
+    #+DOWNLOADED: screenshot @ 2019-10-16 16:42:36
+    [[file:pictures/L22_Range_Searching_and_Multi-Dimensional_Data/screenshot_2019-10-16_16-42-36.png]]
+    #+DOWNLOADED: screenshot @ 2019-10-16 16:27:43
+    [[file:pictures/L22_Range_Searching_and_Multi-Dimensional_Data/screenshot_2019-10-16_16-27-43.png]]
+** Higher Dimensional Data
+*** Intro 
+    - 3D Data -> *Oct-tree*
+      #+DOWNLOADED: screenshot @ 2019-10-16 16:46:19
+      [[file:pictures/L22_Range_Searching_and_Multi-Dimensional_Data/screenshot_2019-10-16_16-46-19.png]]
+    - Higher Dimensional Data -> common solution *k-d tree*, can handle arbitrary numbers of dimensions
+*** K-d Trees
+    #+DOWNLOADED: screenshot @ 2019-10-17 09:41:40
+    [[file:pictures/L22_Range_Searching_and_Multi-Dimensional_Data/screenshot_2019-10-17_09-41-40.png]]
+
+    - ~nearest()~
+      - Inefficient pseudocode
+        #+DOWNLOADED: screenshot @ 2019-10-17 09:45:01
+        [[file:pictures/L22_Range_Searching_and_Multi-Dimensional_Data/screenshot_2019-10-17_09-45-01.png]]
+        - Optimization: Do not explore subspaces that can’t possible have a better answer than current best.
+      - Efficient pseudocode
+        #+DOWNLOADED: screenshot @ 2019-10-17 09:43:09
+        [[file:pictures/L22_Range_Searching_and_Multi-Dimensional_Data/screenshot_2019-10-17_09-43-09.png]]
+** Multi-Dimensional Data Summary
+   #+DOWNLOADED: screenshot @ 2019-10-17 09:52:04
+   [[file:pictures/L22_Range_Searching_and_Multi-Dimensional_Data/screenshot_2019-10-17_09-52-04.png]]
+* L23 Tree and Graph Traversals
+** Trees and Traversals 
+*** Trees implementations 
+    #+DOWNLOADED: screenshot @ 2019-10-17 11:14:52
+    [[file:pictures/L23_Tree_and_Graph_Traversals/screenshot_2019-10-17_11-14-52.png]]
+** Graphs
+** Depth-First Traversal
+** Tree Vs. Graph Traversals

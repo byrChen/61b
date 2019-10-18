@@ -1,3 +1,5 @@
+#+TAGS: UNRESOLVED(u) QUESTIONS(q) EXTRA(e) REQUIRED(r) TOBEORG(t)
+
 * HW0
 ** Creative Exercise 1a: Drawing a Triangle
    #+begin_src java :classname Test
@@ -172,6 +174,202 @@
      }
    #+end_src 
    - ~for (String s : a) {}~ 
+* HW1 Packages, Interfaces, Generics, Exceptions, Iteration
+** ~ArrayRingBuffer.java~  
+*** ~ArrayRingBuffer~ 
+    #+begin_src java :classname 
+      public class ArrayRingBuffer<T> implements BoundedQueue<T> {
+          /* Index for the next dequeue or peek. */
+          private int first;
+          /* Index for the next enqueue. */
+          private int last;
+          /* Variable for the fillCount. */
+          private int fillCount;
+          /* Array for storing the buffer data. */
+          private T[] rb;
+
+          /**
+           ,* Create a new ArrayRingBuffer with the given capacity.
+           ,*/
+          public ArrayRingBuffer(int capacity) {
+              // TODO: Create new array with capacity elements.
+              //       first, last, and fillCount should all be set to 0.
+              if (capacity <= 0) throw new IllegalArgumentException("capacity should > 0");
+              rb = (T[]) new Object[capacity];
+              first = 0;
+              last = 0;
+              fillCount = 0;
+          }
+          ...
+      }
+    #+end_src 
+    - ~public class ArrayRingBuffer<T> implements BoundedQueue<T>~ 
+    - ~(T[]) new Object[capacity]~ 
+*** ~iterator~ 
+    #+begin_src java :classname 
+      @Override
+      public Iterator<T> iterator() {
+          return new ARBIterator();
+      }
+
+      private class ARBIterator implements Iterator<T> {
+          private int index;
+          private int remain;
+
+          public ARBIterator() {
+              index = first;
+              remain = fillCount;
+          }
+
+          @Override
+          public boolean hasNext() {
+              return remain > 0;
+          }
+
+          @Override
+          public T next() {
+              T next = rb[index];
+              index = (index + 1) % capacity();
+              remain -= 1;
+              return next;
+          }
+      }
+    #+end_src 
+    - ~public Iterator<T> iterator~ and ~return new ARBIterator()~
+    - ~private class ARBIterator implements Iterator<T>~
+    - ~ARBIterator~, ~hasNext~ and ~next~ 
+*** ~equals~ 
+    #+begin_src java :classname 
+      @Override
+      public boolean equals(Object o) {
+          if (o instanceof ArrayRingBuffer) {
+              Iterator oiter = ((ArrayRingBuffer) o).iterator();
+              for (T r : rb) {
+                  if (!r.equals(oiter.next())) return false;
+              }
+              return true;
+          }
+          return false;
+      }
+    #+end_src 
+    - ~instance instanceof class~
+    - ~Iterator oiter = ((ArrayRingBuffer) o).iterator()~
+    - ~for (T r : rb)~ and ~r.equals(oiter.next())~ 
+*** Question:                                                     :QUESTIONS:
+    1. ~iterator~ 和 ~equals~ 的实现对吗？
+** ~GuitarString.java~ 
+*** ~GuitarString~ 
+    #+begin_src java :classname 
+      public class GuitarString {
+          /** Constants. Do not change. In case you're curious, the keyword final
+           ,* means the values cannot be changed at runtime. */
+          private static final int SR = 44100;      // Sampling Rate
+          private static final double DECAY = .996; // energy decay factor
+
+          /* Buffer for storing sound data. */
+          private BoundedQueue<Double> buffer;
+
+          /* Create a guitar string of the given frequency.  */
+          public GuitarString(double frequency) {
+              if (frequency <= 0) throw new IllegalArgumentException("Frequency should > 0");
+              int capacity = (int) Math.round(SR / frequency);
+              buffer = new ArrayRingBuffer<>(capacity);
+              for (int i = 0; i < capacity; i++) {
+                  buffer.enqueue(0.0);
+              }
+          }
+          ...
+      }
+    #+end_src 
+    - ~Math.round~
+    - ~buffer = new ArrayRingBuffer<>(capacity)~ will initial ~buffer.rb~ to all ~null~ 
+*** ~pluck~ 
+    #+begin_src java :classname 
+      public void pluck() {
+          //
+          //       Make sure that your random numbers are different from each
+          //       other.
+          double r;
+          for (int i = 0; i < buffer.capacity(); i++) {
+              buffer.dequeue();
+              r = Math.random() - 0.5;
+              buffer.enqueue(r);
+          }
+      }
+    #+end_src 
+    - ~dequeue()~ first and then ~enqueue()~ 
+** ~GuitarHero~                                            :UNRESOLVED:EXTRA:
+** For Fun                                                 :UNRESOLVED:EXTRA:
+*** ~TTFAF.java~ and ~GuitarPlayer.java~ 
+*** More Fun
+** Tests
+*** ~TestArrayRingBuffer.java~ 
+    #+begin_src java :classname 
+      @Test
+      public void testConstructor() {
+          try {
+              ArrayRingBuffer arb1 = new ArrayRingBuffer(0);
+              ArrayRingBuffer arb2 = new ArrayRingBuffer(-1);
+              fail();
+          } catch (Exception e) {
+              assertTrue(e.getMessage().contains("capacity should > 0"));
+          }
+          ArrayRingBuffer<Integer> arbI = new ArrayRingBuffer<>(10);
+          Integer[] expectI = new Integer[10];
+          assertEquals(10, arbI.capacity());
+          assertEquals(0, arbI.fillCount());
+          assertEquals(0, arbI.getfirst());
+          assertEquals(0, arbI.getlast());
+          assertArrayEquals(expectI, arbI.getrb());
+      }
+
+      @Test
+      public void testEnqueue() {
+          ArrayRingBuffer<Integer> arb = new ArrayRingBuffer<>(5);
+          for (int i = 0; i < 5; i++) {
+              arb.enqueue(i+1);
+              assertEquals((i+1)%5, arb.getlast());
+              assertEquals(i+1, arb.fillCount());
+          }
+
+          Integer[] expect = {1, 2, 3, 4, 5};
+          assertArrayEquals(expect, arb.getrb());
+
+          try {
+              arb.enqueue(6);
+              fail();
+          } catch (Exception e) {
+              assertTrue(e.getMessage().contains("Can't enqueue to a full arb"));
+          }
+
+          assertEquals(0, arb.getlast());
+          assertArrayEquals(expect, arb.getrb());
+      }
+
+      @Test
+      public void testDequeue() {
+          ArrayRingBuffer<Integer> arb = new ArrayRingBuffer<>(5);
+          try {
+              arb.dequeue();
+              fail();
+          } catch (Exception e) {
+              assertTrue(e.getMessage().contains("Can't dequeue to an empty arb"));
+          }
+
+          for (int i = 0; i < 5; i++) {
+              arb.enqueue(i + 1);
+          }
+
+          for (int i = 0; i < 5; i++) {
+              assertEquals((Integer) (i+1), arb.dequeue());
+              assertEquals(4-i, arb.fillCount());
+              assertEquals((i+1)%5, arb.getfirst());
+          }
+
+          Integer[] expect = new Integer[5];
+          assertArrayEquals(expect, arb.getrb());
+      }
+    #+end_src 
 * HW2 Percolation
 ** ~Percolation.java~ 
 *** ~Percolation~  
@@ -306,48 +504,62 @@
      }
    #+end_src 
    - ~x[i] = (double) p.numberOfOpenSites() / (N*N)~ 
-** ~Analysis.java~ 
+** ~Analysis.java~ <<1>>
    #+begin_src java :classname 
      public class Analysis {
     
-         public static void testW(int N, int T, PercolationFactory pf) {
+         public static double testW(int N, int T, PercolationFactory pf) {
              Stopwatch s = new Stopwatch();
              PercolationStats p = new PercolationStats(N, T, pf);
-             System.out.println(s.elapsedTime());
+             return s.elapsedTime();
          }
 
-         public static void testU(int N, int T, PercolationFactoryU pf) {
+         public static double testU(int N, int T, PercolationFactoryU pf) {
              Stopwatch s = new Stopwatch();
              PercolationStatsU p = new PercolationStatsU(N, T, pf);
-             System.out.println(s.elapsedTime());
+             return s.elapsedTime();
          }
 
          public static void main(String[] args) {
-             int N = 5;
-             int T = 10000;
+             int N = 200;
+             int T = 30;
              PercolationFactory pf = new PercolationFactory();
              PercolationFactoryU pfU = new PercolationFactoryU();
-             Analysis.testW(N, T, pf);
-             Analysis.testU(N, T, pfU);
+             double rW = Analysis.testW(N, T, pf);
+             double rU = Analysis.testU(N, T, pfU);
+             System.out.println("N = " + N + ", T =" + T +", the runtime of WeightedQuickUnionUF.class is " + rW);
+             System.out.println("N = " + N + ", T =" + T +", the runtime of UnionFind.class is " + rU);
 
-             N = 10;
-             T = 10000;
-             pf = new PercolationFactory();
-             pfU = new PercolationFactoryU();
-             Analysis.testW(N, T, pf);
-             Analysis.testU(N, T, pfU);
+             N = 100;
+             T = 30;
+             rW = Analysis.testW(N, T, pf);
+             rU = Analysis.testU(N, T, pfU);
+             System.out.println("N = " + N + ", T =" + T +", the runtime of WeightedQuickUnionUF.class is " + rW);
+             System.out.println("N = " + N + ", T =" + T +", the runtime of UnionFind.class is " + rU);
 
-             N = 5;
-             T = 20000;
-             pf = new PercolationFactory();
-             pfU = new PercolationFactoryU();
-             Analysis.testW(N, T, pf);
-             Analysis.testU(N, T, pfU);
+             N = 100;
+             T = 60;
+             rW = Analysis.testW(N, T, pf);
+             rU = Analysis.testU(N, T, pfU);
+             System.out.println("N = " + N + ", T =" + T +", the runtime of WeightedQuickUnionUF.class is " + rW);
+             System.out.println("N = " + N + ", T =" + T +", the runtime of UnionFind.class is " + rU);
+
+             N = 200;
+             T = 60;
+             rW = Analysis.testW(N, T, pf);
+             rU = Analysis.testU(N, T, pfU);
+             System.out.println("N = " + N + ", T =" + T +", the runtime of WeightedQuickUnionUF.class is " + rW);
+             System.out.println("N = " + N + ", T =" + T +", the runtime of UnionFind.class is " + rU);
          }
      }
    #+end_src 
+   - $rU = 2 * rW$
+   - Runtime ~ $N^2T$
+*** Question:                                                     :QUESTIONS:
+    1. 代码精简设计：怎么设计子类或者接口来尽可能的重用代码？只是 ~WeightQuickUnionUF union~ 和 ~UnionFind union~ 的区别而已
+    2. 为什么 ~UnionFind~ 会比 ~WeightedQuickUnionUF~ 慢？二者比较
 ** Tests
-*** ~testPercolation~ 
+*** ~testPercolation.java~ 
     #+begin_src java :classname 
       @Test
       public void testConstructor() {
@@ -448,4 +660,129 @@
       }
     #+end_src 
     - ~try {...; fail("string");} catch(Exception e) {...}~ 
+* HW3 Hashing
+** ~SimpleOomage.java~ 
+*** Override ~equals~ and ~hashCode~ 
+    #+begin_src java :classname 
+      @Override
+      public boolean equals(Object o) {
+          // TODO: Write this method.
+          if (o.getClass() == this.getClass()) { // or if (o instanceof SimpleOomage)
+              boolean re = red == ((SimpleOomage) o).red;
+              boolean ge = green == ((SimpleOomage) o).green;
+              boolean be = blue == ((SimpleOomage) o).blue;
+              if (re && ge && be) return true;
+          }
+          return false;
+      }
+
+      @Override
+      public int hashCode() {
+          if (!USE_PERFECT_HASH) {
+              return red + green + blue;
+          } else {
+              // TODO: Write a perfect hash function for Simple Oomages.
+              return red / 5 * 53 * 53 + green / 5 * 53 + blue / 5;
+          }
+      }
+    #+end_src 
+    - ~hashCode()~ in Java default returns the *memory address* of the object.
+    - ~red / 5 * 53 * 53 + green / 5 * 53 + blue / 5~ due to 53 > 52, ~/ 5~ to avoid ~hashCode()~ always returns a multiple of 5 -> *evenly distributed*
+    - ~o.getClass() == this.getClass()~ = ~o instanceof SimpleOomage~
+    - About ~public~, ~protected~, ~default~ and ~private~
+      #+DOWNLOADED: screenshot @ 2019-10-17 17:45:47
+      [[file:pictures/HW3_Hashing/screenshot_2019-10-17_17-45-47.png]]
+** ~OomageTestUtility.java~ 
+*** ~haveNiceHashCodeSpread~  
+    #+begin_src java :classname 
+      public static boolean haveNiceHashCodeSpread(List<Oomage> oomages, int M) {
+          /* TODO:
+           ,* Write a utility function that returns true if the given oomages
+           ,* have hashCodes that would distribute them fairly evenly across
+           ,* M buckets. To do this, convert each oomage's hashcode in the
+           ,* same way as in the visualizer, i.e. (& 0x7FFFFFFF) % M.
+           ,* and ensure that no bucket has fewer than N / 50
+           ,* Oomages and no bucket has more than N / 2.5 Oomages.
+           ,*/
+          int[] bucket = new int[M]; int N = oomages.size();
+          for (int i = 0; i < N; i++) {
+              int index = (oomages.get(i).hashCode() & 0x7FFFFFFF) % M;
+              bucket[index] += 1;
+          }
+          for (int i = 0; i < M; i++) {
+              if (bucket[i] < N / 50 || bucket[i] > N / 2.5) return false;
+          }
+          return true;
+      }
+    #+end_src 
+    - ~(oomages.get(i).hashCode() & 0x7FFFFFFF) % M~ and ~bucket[index] += 1~
+**** Question:                                                    :QUESTIONS:
+     1. ~& 0x7FFFFFFF~ ？
+** ~ComplexOomage.java~ 
+*** ~hashCode~                                             :UNRESOLVED:EXTRA:
+    #+begin_src java :classname 
+      @Override
+      public int hashCode() {
+          int total = 0;
+          for (int x : params) {
+              total = total * 256;
+              total = total + x;
+          }
+          return total;
+      }
+    #+end_src 
+** Tests
+*** ~TestSimpleOomage.java~ 
+    #+begin_src java :classname 
+      @Test
+      public void testHashCodePerfect() {
+          /* TODO: Write a test that ensures the hashCode is perfect,
+            meaning no two SimpleOomages should EVER have the same
+            hashCode UNLESS they have the same red, blue, and green values!
+           ,*/
+          SimpleOomage ooA = new SimpleOomage(5, 10, 20);
+          int count = 0;
+
+          for (int i = 0; i < 256; i+=5) {
+              for (int j = 0; j < 256; j+=5) {
+                  for (int k = 0; k < 256; k+=5) {
+                      SimpleOomage ooA2 = new SimpleOomage(i, j, k);
+                      if (ooA.hashCode() == ooA2.hashCode()) {
+                          count++;
+                      }
+                  }
+              }
+          }
+          assertEquals(1, count);
+      }
+
+      @Test
+      public void testRandomOomagesHashCodeSpread() {
+          List<Oomage> oomages = new ArrayList<>();
+          int N = 10000;
+
+          for (int i = 0; i < N; i += 1) {
+              oomages.add(SimpleOomage.randomSimpleOomage());
+          }
+
+          assertTrue(OomageTestUtility.haveNiceHashCodeSpread(oomages, 10));
+      }
+    #+end_src 
+    - ~if (ooA.hashCode() == ooA2.hashCode()) {count++;}~
+**** Question:                                                    :QUESTIONS:
+     1. ~testHashCodePerfect~ 有没有别的简单点的写法？利用 ~java.util.Set/HashSet/List/ArrayList~ 之类的？
+*** ~TestComplexOomage.java~                                     :UNRESOLVED:
+    #+begin_src java :classname 
+      public void testWithDeadlyParams() {
+          List<Oomage> deadlyList = new ArrayList<>();
+          int N = 10000;
+
+          for (int i = 0; i < N; i += 1) {
+              deadlyList.add(ComplexOomage.random6ComplexOomage());
+          }
+          // Your code here.
+
+          assertTrue(OomageTestUtility.haveNiceHashCodeSpread(deadlyList, 5));
+      }
+    #+end_src 
 

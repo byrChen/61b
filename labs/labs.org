@@ -1,4 +1,4 @@
-#+TAGS: UNRESOLVED(u) QUESTIONS(q) TOBEORG(t)
+#+TAGS: UNRESOLVED(u) QUESTIONS(q) EXTRA(e) REQUIRED(r) TOBEORG(t)
 * Lab 1 javac, java, git
 ** Using Git
 *** B. Local Repositories (Narrative Introduction)
@@ -845,7 +845,7 @@
                   ...
               }
             #+end_src
-            - *Runtime type* of ~dest~ [[3]] is ~String[]~, decided by ~new String[0]~  <<2>>
+            - *Runtime type* of ~dest~ [[3]] is ~String[]~, decided by ~new String[0]~ 
 **** Question:                                                   :QUESTIONS:
      1. 是否 ~List~ 和 ~Set~ 都没有固定长度而 ~Arrays~ 的长度是指定的？
      2. ~Arrays.asList~ 返回的 ~ArrayList~ 和 ~java.util.ArrayList~ 异同？除了固定长度还有啥？
