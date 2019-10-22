@@ -1304,7 +1304,7 @@
           /** Inserts X into the back of the list. */
 
           public void resize(int capacity) {
-              Glorp[] a = (Glorp []) new Object[capacity];
+              Glorp[] a = (Glorp []) new Object[capacity]; <<elinktemp1>>
               System.arraycopy(items, 0, a, 0, size);
               items = a;
           }
@@ -2015,7 +2015,7 @@
     #+begin_src java :classname 
       import java.util.Comparator;
 
-      public class Dog implements Comparable<Dog> {
+      public class Dog implements Comparable<Dog> { <<elinktemp2>>
           ...
           public int compareTo(Dog uddaDog) {
               return this.size - uddaDog.size;
@@ -2045,7 +2045,7 @@
     - To retrieve *NameComparator*: ~Comparator<Dog> nc = Dog.getNameComparator();~
     - Use *NameComparator* to compare 2 ~Dog~ objects: ~nc.compare(dog1, dog2);~
     - ~String~'s built-in ~compareTo~
-*** To summarize <<ilink1>>
+*** To summarize <<ilink1>> 
     - *Interfaces* in Java provide the ability to make *callbacks*. A *callback* function is the *helping* function (in the scenario, ~compareTo~). In some languages, this is accomplished using *explicit function passing*; in Java, by *wrapping* the *needed function* in an *interface*.
       #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-11 14:23:33
       [[file:pictures/4._Inheritance,_Implements/screenshot_2019-08-11_14-23-33.png]]
@@ -2175,7 +2175,7 @@
        s.add(null);
        System.out.println(s.contains(null));
      #+end_src 
-** Iteration
+** Iteration <<elink2>>
 *** Enhanced For Loop
     #+begin_src java :classname 
       Set<String> s = new HashSet<>();
@@ -2325,7 +2325,7 @@
       #+end_src
       - ~public Iterator<T> iterator()~ and ~private class ArraySetIterator implements Iterator<T>~ make ~ArraySet~ can use *ugly loop*
       - ~public class ArraySet<T> implements Iterable<T>~ tells Java that ~ArraySet~ has a ~iterator()~ method, then can ~ArraySet~ use *enhanced loop* (~for (ArraySet<Integer> asee : aset) {}~)
-    - ~Comparable~ vs ~Comparator~ and ~Iterable~ vs ~Iterator~
+    - ~Comparable~ vs ~Comparator~ and ~Iterable~ vs ~Iterator~ <<elink1>>
       - ~Comparable~ has method ~comparator()~ which returns a ~Comparator~ object, ~Iterable~ is similar.
       - ~Comparable~ and ~Iterable~ are interfaces implemented by classes, describing a kind of classes' *attribute* (*comparable* and *iterable*)
       - ~Comparator~ and ~Iterator~ are *nested classes* inside classes which implement ~Comparable~ and ~Iterable~, instances of them are objects whose methods can take in ~Comparable~ and ~Iterable~ objects as arguments
@@ -2480,7 +2480,7 @@
     #+begin_src java :classname 
       import java.util.Iterator;
 
-      public class ArraySet<T> implements Iterable<T> {
+      public class ArraySet<Glerp> implements Iterable<Glerp> {
           ...
           public static <Glerp> ArraySet<Glerp> of(Glerp... stuff) {
               ArraySet<Glerp> returnSet = new ArraySet<Glerp>();
@@ -3329,7 +3329,7 @@
       [[file:pictures/L21_Tries/screenshot_2019-10-16_10-26-44.png]]
 *** Trie Maps
     #+DOWNLOADED: screenshot @ 2019-10-16 10:28:21
-    j[[file:pictures/L21_Tries/screenshot_2019-10-16_10-28-21.png]]
+    [[file:pictures/L21_Tries/screenshot_2019-10-16_10-28-21.png]]
     - *Hits* only if *contained and blue and not null*
 ** Trie Implementation and Performance
 *** Basic Implementations
@@ -3500,6 +3500,275 @@
 *** Trees implementations 
     #+DOWNLOADED: screenshot @ 2019-10-17 11:14:52
     [[file:pictures/L23_Tree_and_Graph_Traversals/screenshot_2019-10-17_11-14-52.png]]
+*** Tree traversal
+    #+begin_src java :classname 
+      preOrder(BSTNode x) {
+          if (x == null) return;
+          print(x.key);
+          preOrder(x.left);
+          preOrder(x.right);
+      }
+
+      inOrder(BSTNode x) {
+          if (x == null) return;
+          inOrder(x.left);
+          print(x.key);
+          inOrder(x.right);
+      }
+
+      postOrder(BSTNode x) {
+          if (x == null) return;
+          postOrder(x.left);
+          postOrder(x.right);
+          print(x.key);
+      }
+    #+end_src 
+    - *Traverse* is different from *visit* 
+    - Example: Postorder Traversal for gathering file sizes.
+      #+DOWNLOADED: screenshot @ 2019-10-22 10:13:27
+      [[file:pictures/L23_Tree_and_Graph_Traversals/screenshot_2019-10-22_10-13-27.png]]
 ** Graphs
+*** Definition
+    #+DOWNLOADED: screenshot @ 2019-10-22 10:24:29
+    [[file:pictures/L23_Tree_and_Graph_Traversals/screenshot_2019-10-22_10-24-29.png]]
+    #+DOWNLOADED: screenshot @ 2019-10-22 10:23:53
+    [[file:pictures/L23_Tree_and_Graph_Traversals/screenshot_2019-10-22_10-23-53.png]]
+*** Simple graph
+    #+DOWNLOADED: screenshot @ 2019-10-22 10:26:23
+    [[file:pictures/L23_Tree_and_Graph_Traversals/screenshot_2019-10-22_10-26-23.png]]
+*** Types
+    #+DOWNLOADED: screenshot @ 2019-10-22 10:26:51
+    [[file:pictures/L23_Tree_and_Graph_Traversals/screenshot_2019-10-22_10-26-51.png]]
+*** Terminology
+    #+DOWNLOADED: screenshot @ 2019-10-22 10:27:29
+    [[file:pictures/L23_Tree_and_Graph_Traversals/screenshot_2019-10-22_10-27-29.png]]
+** Graph Problems
+   #+DOWNLOADED: screenshot @ 2019-10-22 10:33:19
+   [[file:pictures/L23_Tree_and_Graph_Traversals/screenshot_2019-10-22_10-33-19.png]]
+   #+DOWNLOADED: screenshot @ 2019-10-22 10:33:43
+   [[file:pictures/L23_Tree_and_Graph_Traversals/screenshot_2019-10-22_10-33-43.png]]
 ** Depth-First Traversal
+*** s-t Connectivity 
+    #+DOWNLOADED: screenshot @ 2019-10-22 10:41:14
+    [[file:pictures/L23_Tree_and_Graph_Traversals/screenshot_2019-10-22_10-41-14.png]]
+    #+DOWNLOADED: screenshot @ 2019-10-22 10:41:34
+    [[file:pictures/L23_Tree_and_Graph_Traversals/screenshot_2019-10-22_10-41-34.png]]
+    - Example
+      #+DOWNLOADED: screenshot @ 2019-10-22 10:50:58
+      [[file:pictures/L23_Tree_and_Graph_Traversals/screenshot_2019-10-22_10-50-58.png]]
+*** Depth First Traversal
+    #+DOWNLOADED: screenshot @ 2019-10-22 10:53:36
+    [[file:pictures/L23_Tree_and_Graph_Traversals/screenshot_2019-10-22_10-53-36.png]]
+    - Example: DepthFirstPaths
+      #+DOWNLOADED: screenshot @ 2019-10-22 10:54:25
+      [[file:pictures/L23_Tree_and_Graph_Traversals/screenshot_2019-10-22_10-54-25.png]]
 ** Tree Vs. Graph Traversals
+*** Tree Traversal
+    #+DOWNLOADED: screenshot @ 2019-10-22 11:02:16
+    [[file:pictures/L23_Tree_and_Graph_Traversals/screenshot_2019-10-22_11-02-16.png]]
+*** Graph Traversal
+    - DFS Preorder
+      #+DOWNLOADED: screenshot @ 2019-10-22 11:04:01
+      [[file:pictures/L23_Tree_and_Graph_Traversals/screenshot_2019-10-22_11-04-01.png]]
+    - DFS Postorder
+      #+DOWNLOADED: screenshot @ 2019-10-22 11:04:30
+      [[file:pictures/L23_Tree_and_Graph_Traversals/screenshot_2019-10-22_11-04-30.png]]
+    - BFS order
+      #+DOWNLOADED: screenshot @ 2019-10-22 11:21:27
+      [[file:pictures/L23_Tree_and_Graph_Traversals/screenshot_2019-10-22_11-21-27.png]]
+      #+DOWNLOADED: screenshot @ 2019-10-22 11:11:14
+      [[file:pictures/L23_Tree_and_Graph_Traversals/screenshot_2019-10-22_11-11-14.png]]
+** Summary
+   #+DOWNLOADED: screenshot @ 2019-10-22 11:13:46
+   [[file:pictures/L23_Tree_and_Graph_Traversals/screenshot_2019-10-22_11-13-46.png]]
+* L24 Graph Traversals and Implementations
+** Graph API
+   #+DOWNLOADED: screenshot @ 2019-10-22 15:29:11
+   [[file:pictures/L24_Graph_Traversals_and_Implementations/screenshot_2019-10-22_15-29-11.png]]
+   #+DOWNLOADED: screenshot @ 2019-10-22 15:30:09
+   [[file:pictures/L24_Graph_Traversals_and_Implementations/screenshot_2019-10-22_15-30-09.png]]
+** Graph Representation and Graph Algorithm Runtimes
+*** Representations and runtimes
+    - Adjacency-matrix 
+      #+DOWNLOADED: screenshot @ 2019-10-22 13:07:58
+      [[file:pictures/L24_Graph_Traversals_and_Implementations/screenshot_2019-10-22_13-07-58.png]]
+    - Edge Sets
+      #+DOWNLOADED: screenshot @ 2019-10-22 13:08:40
+      [[file:pictures/L24_Graph_Traversals_and_Implementations/screenshot_2019-10-22_13-08-40.png]]
+    - Adjacency lists
+      #+DOWNLOADED: screenshot @ 2019-10-22 13:09:43
+      [[file:pictures/L24_Graph_Traversals_and_Implementations/screenshot_2019-10-22_13-09-43.png]]
+    - Runtime of some basic operations for each representation
+      #+DOWNLOADED: screenshot @ 2019-10-22 13:21:33
+      [[file:pictures/L24_Graph_Traversals_and_Implementations/screenshot_2019-10-22_13-21-33.png]]
+**** Question:                                                    :QUESTIONS:
+     - [ ] Adjacency lists 为什么是 $\Theta(V+E)$ 而不是 $\Theta(E)$
+*** Bare-Bones Undirected Graph Implementation
+    #+begin_src java :classname 
+      public class Graph {
+          private final int V;  private List<Integer>[] adj;
+    
+          public Graph(int V) {
+              this.V = V;
+              adj = (List<Integer>[]) new ArrayList[V];
+              for (int v = 0; v < V; v++) {
+                  adj[v] = new ArrayList<Integer>();
+              }
+          } 
+
+          public void addEdge(int v, int w) {
+              adj[v].add(w);   adj[w].add(v);
+          }
+
+          public Iterable<Integer> adj(int v) {
+              return adj[v];
+          }
+      }
+    #+end_src 
+    - ~adj = (List<Integer>[]) new ArrayList[V]~ 
+** Graph Traversal Implementations and Runtime
+   Common design pattern in graph algorithms: *Decouple type* from *processing algorithm*.
+   - Create a *graph object*.
+   - Pass the *graph* to a *graph-processing method* (or constructor) in a *client class*.
+   - Query the *client class* for information.
+*** DepthFirstPaths
+    - Implementation (Recursive)
+      #+begin_src java :classname 
+        public class DepthFirstPaths {
+            private boolean[] marked;
+            private int[] edgeTo;
+            private int s;
+     
+            public DepthFirstPaths(Graph G, int s) {
+                ...
+                dfs(G, s);
+            }
+
+            private void dfs(Graph G, int v) {
+                marked[v] = true;
+                for (int w : G.adj(v)) {
+                    if (!marked[w]) {
+                        edgeTo[w] = v;
+                        dfs(G, w);
+                    }            
+                } 
+            }
+
+            public Iterable<Integer> pathTo(int v) {
+                if (!hasPathTo(v)) return null;
+                List<Integer> path = new ArrayList<>();
+                for (int x = v; x != s; x = edgeTo[x]) {
+                    path.add(x);
+                }
+                path.add(s);
+                Collections.reverse(path);
+                return path;
+            }
+
+            public boolean hasPathTo(int v) {
+                return marked[v];
+            ...
+        }
+      #+end_src
+      - ~marked[v]~ is ~true~ *iff* ~v~ connected to ~s~
+      - ~edgeTo[v]~ is *previous vertex* on path from ~s~ to ~v~
+    - Runtime
+      - Adjacency list
+        #+DOWNLOADED: screenshot @ 2019-10-22 14:22:08
+        [[file:pictures/L24_Graph_Traversals_and_Implementations/screenshot_2019-10-22_14-22-08.png]]
+      - Adjacency matrix
+        #+DOWNLOADED: screenshot @ 2019-10-22 15:43:53
+        [[file:pictures/L24_Graph_Traversals_and_Implementations/screenshot_2019-10-22_15-43-53.png]]
+**** Question:                                                    :QUESTIONS:
+     - [ ] 上面的 Runtime 分析怎么理解？为什么 ~marked[w]~ 考虑的是边？为什么每条边最多考虑两次？为啥是 ~sum~ ？
+*** BreadthFirstPaths
+    - Implementation (*queue* instead of recursion)
+      #+DOWNLOADED: screenshot @ 2019-10-22 14:12:31
+      [[file:pictures/L24_Graph_Traversals_and_Implementations/screenshot_2019-10-22_14-12-31.png]]
+**** Question:                                                    :QUESTIONS:
+     - [ ] 怎么理解 Graph Problems 中 s-t shortest paths 的时间复杂度分析？为什么和 s-t paths 一样？
+*** Graph Problems
+    - Adjacency matrix
+      #+DOWNLOADED: screenshot @ 2019-10-22 15:42:11
+      [[file:pictures/L24_Graph_Traversals_and_Implementations/screenshot_2019-10-22_15-42-11.png]]
+    - Adjacency list
+      #+DOWNLOADED: screenshot @ 2019-10-22 15:43:10
+      [[file:pictures/L24_Graph_Traversals_and_Implementations/screenshot_2019-10-22_15-43-10.png]]
+**** Question:                                                    :QUESTIONS:
+     - [ ] 为什么 s-t paths 用 DFP 而 s-t shortest paths 用 BFP ？而且二者的时间复杂度还一样？
+** Summary
+   #+DOWNLOADED: screenshot @ 2019-10-22 15:27:30
+   [[file:pictures/L24_Graph_Traversals_and_Implementations/screenshot_2019-10-22_15-27-30.png]]
+   #+DOWNLOADED: screenshot @ 2019-10-22 15:27:53
+   [[file:pictures/L24_Graph_Traversals_and_Implementations/screenshot_2019-10-22_15-27-53.png]]
+* L25 Shortest Paths
+** DFS vs. BFS
+   #+DOWNLOADED: screenshot @ 2019-10-22 15:56:34
+   [[file:pictures/L25_Shortest_Paths/screenshot_2019-10-22_15-56-34.png]]
+   #+DOWNLOADED: screenshot @ 2019-10-22 15:56:56
+   [[file:pictures/L25_Shortest_Paths/screenshot_2019-10-22_15-56-56.png]]
+** Dikstra's Algorithm
+   Goal: Find the shortest paths from source vertex s to every other vertex.
+*** Bad algorithm 1
+    #+DOWNLOADED: screenshot @ 2019-10-22 16:48:05
+    [[file:pictures/L25_Shortest_Paths/screenshot_2019-10-22_16-48-05.png]]
+*** Bad algorithm 2
+    #+DOWNLOADED: screenshot @ 2019-10-22 16:48:31
+    [[file:pictures/L25_Shortest_Paths/screenshot_2019-10-22_16-48-31.png]]
+*** Dijkstra’s Algorithm
+    Visit vertices in order of *best-known distance* from source. On visit, *relax* every *edge* from the *visited vertex*.
+    #+DOWNLOADED: screenshot @ 2019-10-22 16:49:20
+    [[file:pictures/L25_Shortest_Paths/screenshot_2019-10-22_16-49-20.png]]
+** Dijkstra’s Correctness and Runtime
+*** Pseudocode 
+    #+DOWNLOADED: screenshot @ 2019-10-22 17:33:55
+    [[file:pictures/L25_Shortest_Paths/screenshot_2019-10-22_17-33-55.png]]
+*** Guaranteed Optimality
+    #+DOWNLOADED: screenshot @ 2019-10-22 17:38:19
+    [[file:pictures/L25_Shortest_Paths/screenshot_2019-10-22_17-38-19.png]]
+**** Question:                                                    :QUESTIONS:
+     - [ ] 具体怎么证明？直观上贪婪怎么保证最优解（最短路径）？
+*** Runtime
+    #+DOWNLOADED: screenshot @ 2019-10-22 17:38:55
+    [[file:pictures/L25_Shortest_Paths/screenshot_2019-10-22_17-38-55.png]]
+**** Question:                                                    :QUESTIONS:
+     - [ ] 上图中的 ~changePriority~ 是什么功能？复杂度怎么分析？
+     - [ ] Overall runtime 怎么分析出来的？
+** A*
+   Visit vertices in order of $d(Denver, v) + h(v, goal)$, where $h(v, goal)$ is an *estimate* of the distance from $v$ to $goal$.
+*** Heuristics and Correctness
+    #+DOWNLOADED: screenshot @ 2019-10-22 20:14:33
+    [[file:pictures/L25_Shortest_Paths/screenshot_2019-10-22_20-14-33.png]]
+*** Consistency and Admissibility (EXTRA: Beyond Course Scope)
+    #+DOWNLOADED: screenshot @ 2019-10-22 20:15:47
+    [[file:pictures/L25_Shortest_Paths/screenshot_2019-10-22_20-15-47.png]]
+** Summary
+*** Shortest Paths Problems 
+    #+DOWNLOADED: screenshot @ 2019-10-22 20:17:08
+    [[file:pictures/L25_Shortest_Paths/screenshot_2019-10-22_20-17-08.png]]
+    - At most time vastly more nodes *are visited* than *exist on the shortest path*.
+*** Graph Problems
+    #+DOWNLOADED: screenshot @ 2019-10-22 20:17:51
+    [[file:pictures/L25_Shortest_Paths/screenshot_2019-10-22_20-17-51.png]]
+ 
+* L26 Minimum Spanning Trees
+** MST, Cut Property, Generic MST Algorithm
+** Prim’s Algorithm
+** Kruskal’s Algorithm
+* L27 Reductions and Decomposition
+** Topological Sorting
+** Shortest Paths on DAGs
+** Longest Paths
+** Reductions
+* L29 Basic Sorts
+* L30 Quick Sort
+* L31 Software Engineering I
+* L32 More Quick Sort, Sorting Summary
+* L33 Sorting and Algorithmic Bounds
+* L34 Software Engineering II
+* L35 Radix Sorts
+* L36 Sorting and Data Structures Conclusion
+* L37 Software Engineering III
+* L38 Compression
+* L39 Compression, Complexity, and P=NP?
+* L40 Summary, Fun

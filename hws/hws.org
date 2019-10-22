@@ -121,7 +121,7 @@
      }
    #+end_src 
    - ~break;~ 
-** Optional: Exercise 4
+** Optional: Exercise 4                                               :EXTRA:
    #+begin_src java :classname Test
      public class Test {
          public static void windowPosSum(int[] a, int n) {

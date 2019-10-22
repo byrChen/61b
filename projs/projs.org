@@ -315,7 +315,7 @@
 
          public ArrayDeque() {
              size = 0;
-             items = (T[]) new Object[8];
+             items = (T[]) new Object[8]; 
              nextFirst = 7;
              nextLast = 0;
              ratio = 0.25;

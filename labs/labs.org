@@ -241,7 +241,7 @@
    - ~import static org.junit.Assert.*;~ and ~import org.junit.Test;~
 *** Question:                                                     :QUESTIONS:
     1. ~dreverse~ 和 ~reverse~ 理解，特别是 ~dreverse~ 的思路？
-    2. ~A~ 作为实参传递到函数后，为何 ~A = A.rest~ 不是 destructive 而 ~A.rest = ...~ 往往是 destructive ？传 ~A~ 并不是引用传递而仍然是值传递？所以返回后 ~A~ 中存储的地址不会变， ~A~ 指向的 reference type object 也不会变？ 
+    2. ~A~ 作为实参传递到函数后，为何 ~A = A.rest~ 不是 destructive 而 ~A.rest = ...~ 往往是 destructive ？传 ~A~ 并不是引用传递而仍然是值传递？所以返回后 ~A~ 中存储的地址不会变， ~A~ 指向的 reference type object 也不会变？ <<elink2>>
     3. Java 里实参到形参的引用传递（地址传递）和值传递？
 ** Flik int vs Integer as formal paras
    #+begin_src java :classname 
@@ -253,7 +253,7 @@
    #+end_src 
    - ~int~ is a *primitive* data type while ~Integer~ is a ~Wrapper~ class
 * Lab 5 Huglife
-** Plip
+** ~Plip~
 *** Basic Plip functionality
     #+begin_src java :classname 
       public void move() {
@@ -322,7 +322,7 @@
     - Return a random entry in ~ArrayDeque~: ~StdRandom.uniform(0, emptyNeighbors.size())~ and ~(Direction) emptyNeighbors.toArray()[indexToMove]~
     - Compare ~Object~ objects: ~obj1.equals(obj2)~
     - 50% possibility to move: ~if (anyClorus && StdRandom.uniform(2) == 0)~ 
-** Clorus
+** ~Clorus~
 *** chooseAction method 
     #+begin_src java :classname 
       public Action chooseAction(Map<Direction, Occupant> neighbors) {
@@ -417,7 +417,6 @@
       }
     #+end_src 
     - ~vertice[v1] = r1;~, ~v1 = p1~ and ~p1 = parent(v1)~ 
-
 ** Tests
 *** TestUnionFind
     #+begin_src java :classname 
@@ -467,25 +466,32 @@
       }
     #+end_src 
     - ~int[] expect = new int[5]~ and ~Arrays.fill(expect, -1)~, not ~int expect[]~ but ~int[] expect~ 
-** Challenge Lab 6 Falling Bubbles                               :UNRESOLVED:
+** Challenge Lab 6 Falling Bubbles                         :UNRESOLVED:EXTRA:
 * Lab 7 TreeMap
-** BSTMap.java
+** ~BSTMap~
 *** ~class Node~
     #+begin_src java :classname 
-      private class Node {
-          private K key;
-          private V val;
-          private Node left, right;
-          private int size;
+      public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> { <<elinktemp3>>
 
-          public Node(K key, V val, int size) {
-              this.key = key;
-              this.val = val;
-              this.size = size;
+          private Node root;
+
+          private class Node {
+              private K key;
+              private V val;
+              private Node left, right;
+              private int size;
+
+              public Node(K key, V val, int size) {
+                  this.key = key;
+                  this.val = val;
+                  this.size = size;
+              }
           }
+          ...
       }
     #+end_src 
-    - ~private~ 
+    - ~public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V>~ 
+    - ~private class Node~
 *** ~clear~ 
     #+begin_src java :classname 
       public void clear() {
@@ -687,7 +693,7 @@
       }
     #+end_src 
     - ~Set~ *implements* ~Collections~, while ~Collection~ *implements* ~Iterable~ -> ~Set~ is *iterable*, ~Set.iterator~ to return ~Iterator~ [[2]]
-    - ~for~ can be used on *iterables* [[file:~/csnds/cs/code/61b/rnl.org::2178][Iteration]]
+    - ~for~ can be used on *iterables* [[file:~/csnds/Dropbox/orglife/61b_rnl.org::<<elink2>>][Iteration]]
 *** Question:                                                     :QUESTIONS:
     1. 这种把方法定义全部以树为单位 与 以节点为单位的区别与优劣？而对于 ~size~ 又不是以树为单位，而是以节点为单位？
     2. ~keySet~ 的直接实现or用额外实例变量 ~list~ 存储实现，与 ~printInOrder~ 和 ~iterator~ 在这两种实现下的不同？ [[1]] 直接实现对吗？用额外的 ~list~ 是否不好实现，因为存储结构不方便遍历树？什么情况下不方便直接实现而需要采用一种合适的结构间接实现呢？以及是否间接实现就要详细写 ~Iterator~ ？间接结构怎么选择？
@@ -717,7 +723,7 @@
           assertEquals(seer.next(), "g");
       }
     #+end_src 
-    - Comparison among ~Arrays~, ~List~ and ~Set~
+    - Comparison among ~Arrays~, ~List~ and ~Set~ <<elink1>>
       - ~List~ and ~Set~ are *interfaces*, while ~Arrays~ is a *class*
         - Interface: Both ~List~ and ~Set~ *implement* ~Collection~, while ~Collection~ *implements* ~Iterable~
         - Class: ~Arrays~ *extends* ~Object~ 
@@ -850,4 +856,400 @@
      1. 是否 ~List~ 和 ~Set~ 都没有固定长度而 ~Arrays~ 的长度是指定的？
      2. ~Arrays.asList~ 返回的 ~ArrayList~ 和 ~java.util.ArrayList~ 异同？除了固定长度还有啥？
      3. ~Collection.toArray~ 返回的 ~Arrays~ 和 ~java.util.Arryas~ 异同？
-** Challenge BST Performance                                     :UNRESOLVED:
+** Challenge BST Performance                               :UNRESOLVED:EXTRA:
+* Lab 8 HashMap 
+** ~MyHashMap~ 
+*** ~class Entry<K, V>~ 
+    #+begin_src java :classname 
+      public class MyHashMap<K extends Comparable<K>, V> implements Map61B<K, V> {
+          private int initialSize;
+          private double loadFactor;
+          private Entry<K, V>[] buckets;
+          private int size;
+          private Set<K> keys;
+
+          private static class Entry<K, V> {
+              K key;
+              V val;
+              Entry<K, V> next;
+
+              Entry(K key, V val, Entry<K, V> next) {
+                  this.key = key;
+                  this.val = val;
+                  this.next = next;
+              }
+
+              V get(K key) {
+                  Entry<K, V> e = this;
+                  while (e != null) {
+                      if (e.key.equals(key)) return e.val;
+                      e = e.next;
+                  }
+                  return null;
+              }
+
+              void update(K key, V val) {
+                  Entry<K, V> e = this;
+                  while (e != null) {
+                      if (e.key.equals(key)) {
+                          e.val = val;
+                          break;
+                      }
+                      e = e.next;
+                  }
+              }
+
+              void add(K key, V val) {
+                  Entry<K, V> e = this;
+                  while (true) {
+                      if (e.next == null) {
+                          e.next = new Entry<>(key, val, null);
+                          break;
+                      }
+                      e = e.next;
+                  }
+              }
+
+              V remove(K key) {
+                  V r = this.get(key);
+                  Entry<K, V> e = this;
+                  while (true) {
+                      if (e.next.key.equals(key)) {
+                          e.next = e.next.next;
+                          break;
+                      }
+                      e = e.next;
+                  }
+                  return r;
+              }
+          }
+          ...
+      }
+    #+end_src 
+    - ~private static class Entry<K, V>~ and ~private Entry<K, V>[] buckets~
+    - ~Entry(K key, V val, Entry<K, V> next)~ 
+    - ~Entrn<K, V> e = this~
+    - ~get~ and ~update~: ~while ((e != Null))~, ~e.key.equals(key)~ and ~e = e.next~ 
+    - ~add~ and ~remove~: ~while (true)~, ~(e.next == null)~ + ~e.next = new Entry<>(key, val, null)~, ~(e.next.key.equals(key))~ + ~e.next = e.next.next~ and ~e = e.next~ 
+**** Question:                                                :SUM:QUESTIONS:
+     - [ ] 关于泛型，什么时候最好在类型声明或者构造函数时加上泛型声明 ~<K, V>~
+     - [ ] 关于 ~public~, ~private~ 和 ~protected~ 在嵌套类型及其成员变量和函数的声明：为什么 ~Entry~ 中成员变量和函数都不用声明？不管什么关键词都可以访问嵌套类中的任何成员？
+     - [ ] 关于 ~buckets~ 底层结构 
+       - [ ] 底层结构为什么不能用 ~Entry[] buckets = (Entry[]) new Object[N]~ 转换？ ~T[] t = (T[]) new Object[N]~ [[file:~/csnds/Dropbox/orglife/61b_rnl.org::<<elinktemp1>>][Object cast to Glorp]] 为什么可以？是 ~Glorp~ 只能是 initial types 吗？还是 built-in types 都可以？
+       - [ ] 最理想的应该是 ~Map~, 自带的 ~HashMap~ 底层结构是 ~Map~ 吗？如果不能用 ~Map~, 那 ~LinkedList~, ~ArrayList~ 和 ~Set~ 该怎么选择？用这三者的话是否需要重写 ~equals()~ 和 ~hashcode~ ？具体在哪重写呢？必要结合源码讨论。
+     - [ ] 关于 ~Comparable~ 与 ~Comparator~, ~Iterable~ 与 ~Iterator~ <<elink3>>
+       - [ ] 都是 ~interface~ 的话，为什么 [[file:~/csnds/Dropbox/orglife/61b_rnl.org::<<elinktemp2>>][class implements Comparable]] 而 [[<<elinktemp3>>][<K extends Comparable<K>, V>]]？是不是 ~class implements interface~, ~interface extends interface~ 以及 ~K extends interface~
+       - [ ] 关于 ~Comparable~, ~Comparator~, ~Iterable~ 和 ~Iterator~ 的比较 [[file:~/csnds/Dropbox/orglife/61b_rnl.org::<<elink1>>][比较1]] [[file:~/csnds/Dropbox/orglife/61b_rnl.org::<<ilink1>>][比较2]]
+       - [ ] 关于 ~equals~ 和 ~hashCode~: ~Object~ 和 ~Comparator~ 里 ~equals()~ 的区别以及什么时候需要一起重写 ~hashCode()~ ？
+*** ~MyHashMap~ 
+    #+begin_src java :classname 
+      public MyHashMap() {
+          this(16, 0.75);
+      }
+      public MyHashMap(int initialSize) {
+          this(initialSize, 0.75);
+      }
+
+      public MyHashMap(int initialSize, double loadFactor) {
+          this.initialSize = initialSize;
+          this.loadFactor = loadFactor;
+          buckets = new Entry[initialSize];
+          size = 0;
+          keys = new HashSet<>();
+      }
+    #+end_src 
+    - ~MyHashMap()~, ~MyHashMap(int initialSize)~ and ~MyHashMap(int initialSize, double loadFactor)~
+    - ~buckets = new Entry[initialSize]~ and ~keys = new HashSet<>()~ 
+*** ~clear~ 
+    #+begin_src java :classname 
+      @Override
+      public void clear() {
+          keys.removeAll(keys);
+          size = 0;
+          Arrays.fill(buckets, null);
+      }
+    #+end_src 
+    - ~keys.removeAll(keys)~
+    - ~Arrays.fill(buckets, null)~ 
+*** ~put~ and ~resize~ 
+    #+begin_src java :classname 
+      @Override
+      public void put(K key, V value) {
+          if (key == null) throw new IllegalArgumentException();
+          if ((float) size / initialSize > loadFactor) resize();
+          int index = (key.hashCode() & 0x7FFFFFFF) % initialSize;
+          if (containsKey(key)) {
+              buckets[index].update(key, value);
+          } else {
+              if (buckets[index] == null) {
+                  buckets[index] = new Entry<K, V>(key, value, null);
+              } else {
+                  buckets[index].add(key, value);
+              }
+              size += 1;
+              keys.add(key);
+          }
+      }
+
+      private void resize() {
+          MyHashMap<K, V> m = new MyHashMap<>(2 * initialSize, loadFactor);
+          for (int i = 0; i < buckets.length; i++) {
+              Entry<K, V> e = buckets[i];
+              while (e != null) {
+                  m.put(e.key, e.val);
+                  e = e.next;
+              }
+          }
+          this.buckets = m.buckets; <<ilink1>>
+          initialSize = 2 * initialSize;
+      }
+    #+end_src 
+    - ~index = (key.hashCode() & 0x7FFFFFFF) % initialSize~
+    - ~containsKey(key)~ + ~buckets[index].update(key, value)~, ~(buckets[index] == null)~ + ~buckets[index] = new Entry<K, V>(key, value, null)~ and ~buckets[index].add(key, value)~
+    - ~Entry<K, V> e = buckets[i]~, ~m.put(e.key, e.val)~ and ~this.buckets = m.buckets~
+**** Question:                                                    :QUESTIONS:
+     - [ ] 做完
+       - [ ] 针对 ~put~ 和 ~remove~ 怎么加一个哨兵节点来一般化？主要是哨兵节点的 ~<K, V>~ 怎么确定？
+       - [ ] [[ilink1]] ~m.buckets~ 为什么能从 ~m~ 访问到？因为这是在成员函数里吗？
+*** ~keySet~, ~containsKey~ and ~iterator~ 
+    #+begin_src java :classname 
+      public Set<K> keySet() {
+          //        return keys;
+          Set<K> k = new HashSet<>();
+          for (int i = 0; i < buckets.length; i++) {
+              Entry<K, V> e = buckets[i];
+              while (e != null) {
+                  k.add(e.key);
+                  e = e.next;
+              }
+          }
+          return k;
+      }
+
+      public boolean containsKey(K key) {
+          //        return keys.contains(key);
+          return keySet().contains(key);
+      }
+
+      @Override
+      public Iterator<K> iterator() {
+          return keys.iterator();
+      }
+    #+end_src 
+    - ~Set<K> k = new HashSet<>()~, ~k.add(e.key)~ and ~keySet().contains(key)~ 
+    - ~public Iterator<K> iterator()~ and ~keys.iterator()~ 
+*** ~remove~                                                          :EXTRA:
+    #+begin_src java :classname 
+      @Override
+      public V remove(K key) {
+          if (key == null) throw new IllegalArgumentException();
+          int index = (key.hashCode() & 0x7FFFFFFF) % initialSize;
+          if (containsKey(key)) {
+              V r;
+              if (buckets[index].key.equals(key)) {
+                  r = buckets[index].val;
+                  buckets[index] = buckets[index].next;
+              } else {
+                  r = buckets[index].remove(key);
+              }
+              size -= 1;
+              keys.remove(key);
+              return r;
+          }
+          return null;
+      }
+
+      @Override
+      public V remove(K key, V value) {
+          if (get(key).equals(value)) return remove(key);
+          return null;
+      }
+    #+end_src 
+    - ~buckets[index].key.equals(key)~ + ~buckets[index] = buckets[index].next~ and ~r = buckets[index].remove(key)~ 
+
+** SpeedTest
+   For ~MyHashMap~ and ~java.util.HashMap~, both runtime ~ $N$
+** Tests 
+*** TestMyHashMap                                                   :TOBEORG:
+    #+begin_src java :classname 
+      @Test
+      public void sanityGenericsTest() {
+          try {
+              MyHashMap<String, String> a = new MyHashMap<String, String>();
+              MyHashMap<String, Integer> b = new MyHashMap<String, Integer>();
+              MyHashMap<Integer, String> c = new MyHashMap<Integer, String>();
+              MyHashMap<Boolean, Integer> e = new MyHashMap<Boolean, Integer>();
+          } catch (Exception e) {
+              fail();
+          }
+      }
+
+      //assumes put/size/containsKey/get work
+      @Test
+      public void sanityClearTest() {
+          MyHashMap<String, Integer> b = new MyHashMap<String, Integer>();
+          for (int i = 0; i < 455; i++) {
+              b.put("hi" + i, 1);
+              //make sure put is working via containsKey and get
+              assertTrue(null != b.get("hi" + i)
+                          && b.containsKey("hi" + i)); 
+          }
+          b.clear();
+          assertEquals(0, b.size());
+          for (int i = 0; i < 455; i++) {
+              assertTrue(null == b.get("hi" + i) && !b.containsKey("hi" + i));
+          }
+      }
+
+      // assumes put works
+      @Test
+      public void sanityContainsKeyTest() {
+          MyHashMap<String, Integer> b = new MyHashMap<String, Integer>();
+          assertFalse(b.containsKey("waterYouDoingHere"));
+          b.put("waterYouDoingHere", 0);
+          assertTrue(b.containsKey("waterYouDoingHere"));
+      }
+
+      // assumes put works
+      @Test
+      public void sanityGetTest() {
+          MyHashMap<String, Integer> b = new MyHashMap<String, Integer>();
+          assertEquals(null, b.get("starChild"));
+          b.put("starChild", 5);
+          assertNotEquals(null, b.get("starChild"));
+          b.put("KISS", 5);
+          assertNotEquals(null, b.get("KISS"));
+          assertNotEquals(null, b.get("starChild"));
+      }
+
+      // assumes put works
+      @Test
+      public void sanitySizeTest() {
+          MyHashMap<String, Integer> b = new MyHashMap<String, Integer>();
+          assertEquals(0, b.size());
+          b.put("hi", 1);
+          assertEquals(1, b.size());
+          for (int i = 0; i < 455; i++) {
+              b.put("hi" + i, 1);
+          }
+          assertEquals(456, b.size());
+      }
+
+      //assumes get/containskey work
+      @Test
+      public void sanityPutTest() {
+          MyHashMap<String, Integer> b = new MyHashMap<String, Integer>();
+          b.put("hi", 1);
+          assertTrue(b.containsKey("hi") && b.get("hi") != null);
+      }
+
+      /* 
+      ,* Sanity test for keySet
+      ,*/
+      @Test
+      public void sanityKeySetTest() {
+          MyHashMap<String, Integer> b = new MyHashMap<String, Integer>();
+          HashSet<String> values = new HashSet<String>();
+          for (int i = 0; i < 455; i++) {
+              b.put("hi" + i, 1);   
+              values.add("hi" + i);
+          }
+          assertEquals(455, b.size()); //keys are there
+          Set<String> keySet = b.keySet();
+          assertTrue(values.containsAll(keySet));
+          assertTrue(keySet.containsAll(values));
+      }
+
+      /*
+       ,* Test for general functionality and that the properties of Maps hold.
+       ,*/
+      @Test
+      public void functionalityTest() {
+          MyHashMap<String, String> dictionary = new MyHashMap<>();
+          assertEquals(0, dictionary.size());
+
+          // can put objects in dictionary and get them
+          dictionary.put("hello", "world");
+          assertTrue(dictionary.containsKey("hello"));
+          assertEquals("world", dictionary.get("hello"));
+          assertEquals(1, dictionary.size());
+
+          // putting with existing key updates the value
+          dictionary.put("hello", "kevin");
+          assertEquals(1, dictionary.size());
+          assertEquals("kevin", dictionary.get("hello"));
+
+          // putting key in multiple times does not affect behavior
+          MyHashMap<String, Integer> studentIDs = new MyHashMap<String, Integer>();
+          studentIDs.put("sarah", 12345);
+          assertEquals(1, studentIDs.size());
+          assertEquals(12345, studentIDs.get("sarah").intValue());
+          studentIDs.put("alan", 345);
+          assertEquals(2, studentIDs.size());
+          assertEquals(12345, studentIDs.get("sarah").intValue());
+          assertEquals(345, studentIDs.get("alan").intValue());
+          studentIDs.put("alan", 345);
+          assertEquals(2, studentIDs.size());
+          assertEquals(12345, studentIDs.get("sarah").intValue());
+          assertEquals(345, studentIDs.get("alan").intValue());
+          studentIDs.put("alan", 345);
+          assertEquals(2, studentIDs.size());
+          assertEquals(12345, studentIDs.get("sarah").intValue());
+          assertEquals(345, studentIDs.get("alan").intValue());
+          assertTrue(studentIDs.containsKey("sarah"));
+          assertTrue(studentIDs.containsKey("alan"));
+
+          // handle values being the same
+          assertEquals(345, studentIDs.get("alan").intValue());
+          studentIDs.put("evil alan", 345);
+          assertEquals(345, studentIDs.get("evil alan").intValue());
+          assertEquals(studentIDs.get("evil alan"), studentIDs.get("alan"));
+      }
+    #+end_src 
+
+*** TestMyHashMapExtra                                              :TOBEORG:
+    #+begin_src java :classname 
+      @Test
+      public void testRemove() {
+          MyHashMap<String, String> q = new MyHashMap<String, String>();
+          q.put("c", "a");
+          q.put("b", "a");
+          q.put("a", "a");
+          q.put("d", "a");
+          q.put("e", "a"); // a b c d e
+          assertTrue(null != q.remove("c"));
+          assertFalse(q.containsKey("c"));
+          assertTrue(q.containsKey("a"));     
+          assertTrue(q.containsKey("b"));
+          assertTrue(q.containsKey("d"));
+          assertTrue(q.containsKey("e"));
+      }
+
+      /* Remove Test 2 
+       ,* test the 3 different cases of remove
+       ,*/
+      @Test
+      public void testRemoveThreeCases() {
+          MyHashMap<String, String> q = new MyHashMap<String, String>();
+          q.put("c", "a");
+          q.put("b", "a");
+          q.put("a", "a");
+          q.put("d", "a");
+          q.put("e", "a");                         // a b c d e
+          assertTrue(null != q.remove("e"));      // a b c d
+          assertTrue(q.containsKey("a"));     
+          assertTrue(q.containsKey("b"));
+          assertTrue(q.containsKey("c"));
+          assertTrue(q.containsKey("d"));
+          assertTrue(null != q.remove("c"));      // a b d
+          assertTrue(q.containsKey("a"));     
+          assertTrue(q.containsKey("b"));
+          assertTrue(q.containsKey("d"));
+          q.put("f", "a");                         // a b d f
+          assertTrue(null != q.remove("d"));      // a b f
+          assertTrue(q.containsKey("a"));     
+          assertTrue(q.containsKey("b"));
+          assertTrue(q.containsKey("f"));
+      }
+    #+end_src 
+** Challenge Heaps and Hashes                              :UNRESOLVED:EXTRA:
