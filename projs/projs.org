@@ -831,4 +831,5 @@
   - ~StdRandom.uniform(n)~ and ~StdRandom.uniform(a, b)~
   - ~switch~ and ~case~
   - ~assertEquals(String msg, expect, actual)~ 
-
+* Project 2A Extrinsic MinPQ
+* Project 2B K-d Tree
