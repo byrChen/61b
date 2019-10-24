@@ -832,4 +832,237 @@
   - ~switch~ and ~case~
   - ~assertEquals(String msg, expect, actual)~ 
 * Project 2A Extrinsic MinPQ
+** ~ArrayHeapMinPQ~ 
+*** ~class PNode<T>~ 
+    #+begin_src java :classname 
+      public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
+
+          private class PNode<T> {
+              T item;
+              double priority;
+
+              PNode(T item, double priority) {
+                  this.item = item;
+                  this.priority = priority;
+              }
+          }
+
+          private ArrayList<PNode<T>> minHeap;
+          private int size;
+          private HashMap<T, Integer> items;
+
+          public ArrayHeapMinPQ() {
+              minHeap = new ArrayList<>();
+              minHeap.add(null);
+              items = new HashMap<>();
+              size = 0;
+          }
+          ...
+      }
+    #+end_src 
+    - ~ArrayList<PNode<T>> minHeap = new ArrayList<>()~ and ~HashMap<T, Integer> items = new HashMap<>()~
+    - ~minHeap.addd(null)~
+*** ~add~ 
+    #+begin_src java :classname 
+      @Override
+      public void add(T item, double priority) {
+          if (item == null || contains(item)) {
+              throw new IllegalArgumentException("Items can't be null or duplicated.");
+          }
+          minHeap.add(new PNode(item, priority));
+          size += 1;
+          items.put(item, size);
+          swim(size);
+      }
+
+      private void swim(int index) {
+          if (index == 1) return;
+          if (lessThanParent(index)) {
+              swap(index, index / 2);
+              swim(index / 2);
+          }
+      }
+
+      private boolean lessThanParent(int child) {
+          if (child == 1) return false;
+          return minHeap.get(child).priority < minHeap.get(child/2).priority;
+      }
+
+      private void swap(int x, int y) {
+          items.replace(minHeap.get(x).item, y);
+          items.replace(minHeap.get(y).item, x);
+          PNode<T> temp = minHeap.get(x);
+          minHeap.set(x, minHeap.get(y));
+          minHeap.set(y, temp);
+      }
+    #+end_src 
+    - ~add~: ~minHeap.add(new PNode(item, priority))~, ~items.put(item, size)~ and ~swim(size)~
+    - ~swim~: ~swap(index, index / 2)~, recursive ~if (index == 1) return~ + ~swim(index / 2)~
+    - ~lessThanParent~: ~if (child == 1) return false~ to avoid ~minHeap.get(child/2).priority~
+    - ~swap~:
+      - *Update* ~index~ of ~item~ first: ~items.replace(minHeap.get(x).item, y)~ and ~items.replace(minHeap.get(y).item, x)~
+      - Then *swap* ~PNode<T>~: ~minHeap.set(x, minHeap.get(y))~ and ~minHeap.set(y, temp)~ 
+*** ~getSmallest~ 
+    #+begin_src java :classname 
+      @Override
+      public T getSmallest() {
+          if (size == 0) return null;
+          return minHeap.get(1).item;
+      }
+    #+end_src 
+    - ~minHeap.get(1).item~ 
+*** ~removeSmallest~ 
+    #+begin_src java :classname 
+      @Override
+      public T removeSmallest() {
+          if (size == 0) throw new IllegalArgumentException("Queue is empty.");
+          T min = minHeap.get(1).item;
+          minHeap.set(1, minHeap.get(size));
+          items.replace(minHeap.get(1).item, 1);
+          sink(1);
+          minHeap.remove(size);
+          size -= 1;
+          items.remove(min);
+          return min;
+      }
+
+      private void sink(int index) {
+          if (2 * index > size) return;
+          int child = smallerChild(index);
+          if (lessThanParent(child)) {
+              swap(index, child);
+              sink(child);
+          }
+      }
+
+      private int smallerChild(int parent) {
+          int left = 2 * parent;
+          int right = 2 * parent + 1;
+          if (left == size) return left;
+          return minHeap.get(left).priority <= minHeap.get(right).priority ? left : right;
+      }
+    #+end_src 
+    - ~removeSmallest~: ~minHeap.set(1, minHeap.get(size))~ --> ~items.replace(minHeap.get(1).item, 1)~ --> ~sink(1)~ --> ~minHeap.remove(size)~ and ~items.remove(min)~
+    - ~sink~: ~swap(index, child)~, recursive ~if (2 * index > size) return~ and ~sink(child)~
+    - ~smallerChild~: 
+      - ~if (left == size) return left~ to avoid ~minHeap.get(right).priority~
+      - ~minHeap.get(left).priority <= minHeap.get(right).priority ? left : right~ 
+*** ~changePriority~ <<ilink1>>
+    #+begin_src java :classname 
+      @Override
+      public void changePriority(T item, double priority) {
+          if (!contains(item)) return;
+          int index = items.get(item);
+          minHeap.set(index, new PNode<T>(item, priority));
+          if (lessThanParent(index)) swim(index);
+          else sink(index);
+      }
+    #+end_src 
+    - Update ~priority~ first: ~int index = items.get(item)~ and ~minHeap.set(index, new PNode<T>(item, priority))~
+    - Then ~swim(index)~ or ~sink(index)~ 
+*** Question:                                                     :QUESTIONS:
+    - [ ] 如果不用 ~HashMap<T, Integer> items~ 记录，该怎么实现 ~contains~ 以及记录 ~item~ 和 ~index~ 的对应关系？如果没有 ~item~ 和 ~index~ 的关系又如何实现 [[ilink1][changePriority]] ？
+    - [ ] 不用 ~ArrayList~, 直接用 ~PNode<T>[]~ 实现试试？包括 ~resize~ 的实现？
+    - [ ] 关于运行时间分析：
+      - [ ] 要求： ~getSmallest~, ~contains~, ~size~ and ~changePriority~ run in $O(log(n))$ time, ~add~ and ~removeSmallest~ run in $O(log(n))$ *average* time
+      - [ ] 实际：？ [[ilink2][Runtime testing]]
+** Tests
+*** ~ArrayHeapMinPQTest~  
+    #+begin_src java :classname 
+      @Test
+      public void sanityGenericTest() {
+          try {
+              ArrayHeapMinPQ<String> a = new ArrayHeapMinPQ<String>();
+              ArrayHeapMinPQ<String> b = new ArrayHeapMinPQ<String>();
+              ArrayHeapMinPQ<Integer> c = new ArrayHeapMinPQ<Integer>();
+              ArrayHeapMinPQ<Boolean> e = new ArrayHeapMinPQ<Boolean>();
+          } catch (Exception e) {
+              fail();
+          }
+      }
+
+      @Test
+      public void sanityAddTest() {
+          ArrayHeapMinPQ<String> a = new ArrayHeapMinPQ<>();
+          try {
+              a.add(null, 0.8);
+              fail("No exception thrown.");
+          } catch (Exception e) {
+              assertTrue(e.getMessage().contains("Items can't be null or duplicated."));
+          }
+          assertEquals(0, a.size());
+          assertNull(a.getSmallest());
+          for (int i = 0; i < 455; i++) {
+              a.add("a" + i, 455 - i);
+              assertEquals("a" + i, a.getSmallest());
+              assertEquals(i + 1, a.size());
+          }
+          try {
+              a.add("a0", 0.8);
+              fail("No exception thrown.");
+          } catch (Exception e) {
+              assertTrue(e.getMessage().contains("Items can't be null or duplicated."));
+          }
+      }
+
+      @Test
+      public void sanatyContainsTest() {
+          ArrayHeapMinPQ<String> a = new ArrayHeapMinPQ<>();
+          assertFalse(a.contains("a"));
+          for (int i = 0; i < 455; i++) {
+              a.add("a" + i, i);
+              assertTrue(a.contains("a" + i));
+          }
+      }
+
+      @Test
+      public void sanityRemoveSamllestTest() {
+          ArrayHeapMinPQ<String> a = new ArrayHeapMinPQ<>();
+          try {
+              a.removeSmallest();
+              fail();
+          } catch (Exception e) {
+              e.getMessage().contains("Queue is empty.");
+          }
+
+          for (int i = 0; i < 455; i++) {
+              a.add("a" + i, i);
+          }
+          for (int i = 0; i < 455; i++) {
+              assertEquals("a" + i, a.removeSmallest());
+              assertFalse(a.contains("a" + i));
+              assertEquals(454 - i, a.size());
+          }
+
+          try {
+              a.removeSmallest();
+              fail();
+          } catch (Exception e) {
+              e.getMessage().contains("Queue is empty.");
+          }
+      }
+
+      @Test
+      public void sanityChangePriorityTest() {
+          ArrayHeapMinPQ<String> a = new ArrayHeapMinPQ<>();
+          ArrayHeapMinPQ<String> b = new ArrayHeapMinPQ<>();
+          for (int i = 0; i < 455; i++) {
+              a.add("a" + i, i);
+              b.add("b" + i, i);
+          }
+          b.changePriority("b0", 455);
+          for (int i = 0; i < 455; i++) {
+              a.changePriority("a" + (454 - i), -1);
+              assertEquals("a" + (454 - i), a.removeSmallest());
+              if (i == 454) assertEquals("b0", b.removeSmallest());
+              else assertEquals("b" + (i + 1), b.removeSmallest());
+          }
+      }
+    #+end_src 
+    - ~try {fail("No exception thrown.")} cache (Exception e) {e.getMessage().contains()}~
+    - Use ~for~ to write tests
+**** Question:                                                    :QUESTIONS:
+     - [ ] 写测试时 ~try{} catch () {}~ 怎么捕捉多个异常并对不同异常分开测试？
+*** Randomized testing                                     :UNRESOLVED:EXTRA:
+*** Runtime testing <<ilink2>>                             :UNRESOLVED:EXTRA:
 * Project 2B K-d Tree

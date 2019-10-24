@@ -1070,7 +1070,7 @@
 ** SpeedTest
    For ~MyHashMap~ and ~java.util.HashMap~, both runtime ~ $N$
 ** Tests 
-*** TestMyHashMap                                                   :TOBEORG:
+*** ~TestMyHashMap~                                                   :TOBEORG:
     #+begin_src java :classname 
       @Test
       public void sanityGenericsTest() {
@@ -1207,7 +1207,7 @@
       }
     #+end_src 
 
-*** TestMyHashMapExtra                                              :TOBEORG:
+*** ~TestMyHashMapExtra~                                              :TOBEORG:
     #+begin_src java :classname 
       @Test
       public void testRemove() {
