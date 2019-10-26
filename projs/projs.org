@@ -875,7 +875,7 @@
           swim(size);
       }
 
-      private void swim(int index) {
+      private void swim(int index) { <<elink1>>
           if (index == 1) return;
           if (lessThanParent(index)) {
               swap(index, index / 2);
@@ -926,7 +926,7 @@
           return min;
       }
 
-      private void sink(int index) {
+      private void sink(int index) { <<elink2>>
           if (2 * index > size) return;
           int child = smallerChild(index);
           if (lessThanParent(child)) {
@@ -1066,3 +1066,174 @@
 *** Randomized testing                                     :UNRESOLVED:EXTRA:
 *** Runtime testing <<ilink2>>                             :UNRESOLVED:EXTRA:
 * Project 2B K-d Tree
+** ~KDTree~ 
+*** ~class Node~ 
+    #+begin_src java :classname 
+      public class KDTree implements PointSet {
+
+          class Node {
+              Point p;
+              Node left, right;
+              boolean compareX = true;
+
+              Node(Point p, Node left, Node right) {
+                  this.p = p; this.left = left; this.right = right;
+              }
+          }
+
+          private Node root;
+
+          Comparator<Node> nodeComparator = (child, parent) -> {
+              if (parent.compareX) {
+                  child.compareX = false;
+                  return Double.compare(child.p.getX(), parent.p.getX());
+              } else {
+                  child.compareX = true;
+                  return Double.compare(child.p.getY(), parent.p.getY());
+              }
+          };
+
+          public KDTree(List<Point> points) {
+              if (points.size() < 1) throw new IllegalArgumentException();
+              root = new Node(points.get(0), null, null);
+              for (int i = 1; i < points.size(); i++) {
+                  put(new Node(points.get(i), null, null));
+              }
+          }
+          ...
+      }
+    #+end_src 
+    - ~boolean compareX~
+    - ~Comparator<Node> nodeComparator = (child, parent) -> {};~
+    - ~Double.compare~ 
+    - ~root = new Node(points.get(0), null, null)~ and ~put(new Node(points.get(i), null, null))~
+*** ~put~ 
+    #+begin_src java :classname 
+      public void put(Node n) {
+          if (n == null) throw new IllegalArgumentException("calls put() with a null Node");
+          root = put(root, n);
+      }
+
+      private Node put(Node parent, Node child) { <<ilink3>>
+          if (parent == null) return child;
+          int cmp = nodeComparator.compare(child, parent);
+          if (cmp < 0) parent.left = put(parent.left, child);
+          else         parent.right = put(parent.right, child);
+          return parent;
+      }
+    #+end_src 
+    - ~public void put(Node n)~: ~root = put(root, n)~
+    - ~private Node put(Node parent, Node child)~:
+      - ~int cmp = nodeComparator.compare(child, parent)~
+      - Recursive: ~parent.left = put(parent.left, child)~ and ~parent.right = put(parent.right, child)~ 
+*** ~nearest~ 
+    #+begin_src java :classname 
+      @Override
+      public Point nearest(double x, double y) {
+          Node goal = new Node(new Point(x, y), null, null);
+          return nearest(root, goal, root).p;
+      }
+
+      private Node nearest(Node n, Node goal, Node best) { <<ilink4>>
+          if (n == null) return best;
+          int cmp = Double.compare(disBetween(n, goal), disBetween(best, goal));
+          if (cmp < 0) best = n;
+          cmp = nodeComparator.compare(goal, n);
+          Node goodSide, badSide;
+          goodSide = cmp < 0 ? n.left : n.right;
+          badSide= cmp < 0 ? n.right : n.left;
+          best = nearest(goodSide, goal, best);
+          if (needBad(n, goal, disBetween(best, goal))) {
+              best = nearest(badSide, goal, best);
+          }
+          return best;
+      }
+
+      private boolean needBad (Node n, Node goal, double min) { <<ilink5>>
+          Double d;
+          if (n.compareX) d = Math.pow(n.p.getX() - goal.p.getX(), 2);
+          else d = Math.pow(n.p.getY() - goal.p.getY(), 2);
+          int cmp = Double.compare(d, min);
+          return cmp < 0 ? true : false;
+      }
+
+      private static double disBetween(Node n1, Node goal) {
+          return Point.distance(n1.p, goal.p);
+      }
+    #+end_src 
+    - ~public Point nearest(double x, double y)~: ~return nearest(root, goal, root).p~
+    - ~private Node nearest(Node n, Node goal, Node best)~
+      - ~Double.compare(disBetween(n, goal), disBetween(best, goal))~
+      - ~cmp = nodeComparator.compare(goal, n)~ --> ~goodSide = cmp < 0 ? n.left : n.right~ and ~badSide= cmp < 0 ? n.right : n.left~
+      - Recursive: ~best = nearest(goodSide, goal, best)~ and ~best = nearest(badSide, goal, best)~
+    - ~private boolean needBad (Node n, Node goal, double min)~ 
+      - ~d = Math.pow(n.p.getX() - goal.p.getX(), 2)~ and ~d = Math.pow(n.p.getY() - goal.p.getY(), 2)~
+      - ~cmp < 0 ? true : false~ 
+*** Question:                                                     :QUESTIONS:
+    - [ ] 关于 recursive 的思考：有无返回值，需要传入什么样的参数，怎样的返回条件
+      - [ ] 无返回， ~ArrayHeapMinPQ~ 的 [[file:61b_projs.org::<<elink1>>][swim]] 和 [[file:61b_projs.org::<<elink2>>][sink]]
+      - [ ] 有返回值， ~BSTMap~ 的 [[file:61b_labs.org::<<elink4>>][put]], [[file:61b_labs.org::<<elink5>>][updateBST]], [[file:61b_labs.org::<<elink6>>][get]]; ~KDTree~ 的 [[ilink3][put]], [[ilink4][nearest]] 等
+    - [ ] 有关模仿 ~BSTMap~ 的更多操作的实现，特别是 ~remove~ 
+    - [ ] 关于 [[ilink5][needBad]] 的准确准则及实现，并用 randomized tests 验证速度
+    - [ ] 如果数据的维数更多，又该怎么去实现？
+** Tests
+*** ~KDTreeTest~ 
+    #+begin_src java :classname 
+      public class KDTreeTest {
+
+          private LinkedList<Point> l;
+          private KDTree t;
+
+          public KDTreeTest() {
+              l = new LinkedList<>();
+              l.add(new Point(2, 3));
+              l.add(new Point(4, 2));
+              l.add(new Point(4, 5));
+              l.add(new Point(3, 3));
+              l.add(new Point(1, 5));
+              l.add(new Point(4, 4));
+              t = new KDTree(l);
+          }
+
+          @Test
+          public void sanityPutTest() {
+              KDTree.Node n = t.getRoot();
+              assertEquals(n.p, new Point(2, 3));
+              assertEquals(n.right.p, new Point(4, 2));
+              assertEquals(n.left.p, new Point(1, 5));
+              assertEquals(n.right.right.p, new Point(4, 5));
+              assertEquals(n.right.right.left.p, new Point(3, 3));
+              assertEquals(n.right.right.right.p, new Point(4, 4));
+          }
+
+          @Test
+          public void sanitySimpleNearestTest() {
+              KDTree.Node n = t.getRoot();
+              assertEquals(n.p, t.nearest(2, 3));
+              assertEquals(n.right.p, t.nearest(4, 2));
+              assertEquals(n.left.p, t.nearest(1, 5));
+              assertEquals(n.right.right.p, t.nearest(4, 5));
+              assertEquals(n.right.right.left.p, t.nearest(3, 3));
+              assertEquals(n.right.right.right.p, t.nearest(4, 4));
+          }
+
+          @Test
+          public void sanityRandomNearestTest() {
+              Random r = new Random();
+              for (int i = 0; i < 100; i++) {
+                  l.add(new Point(r.nextDouble() * 100, r.nextDouble() * 100));
+              }
+              t = new KDTree(l);
+              NaivePointSet s = new NaivePointSet(l);
+
+              double x, y;
+              for (int i = 0; i < 455; i++) {
+                  x = r.nextDouble() * 100; y = r.nextDouble() * 100;
+                  Point pt = t.nearest(x, y);
+                  Point ps = s.nearest(x, y);
+                  assertEquals(pt, ps);
+              }
+          }
+      }
+    #+end_src 
+    - ~Random r = new Random()~ and ~r.nextDouble()~ 

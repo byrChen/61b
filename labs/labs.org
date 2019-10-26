@@ -514,7 +514,7 @@
           return size(root);
       }
 
-      public V get(Node n, K key) {
+      public V get(Node n, K key) { <<elink6>>
           if (key == null) throw new IllegalArgumentException("calls get() with a null key");
           if (n == null) return null;
           int cmp = key.compareTo(n.key);
@@ -534,7 +534,7 @@
       }
     #+end_src 
     - Recursive: ~n.size = 1 + updateSize(n.left) + updateSize(n.right)~ 
-*** ~put~ 
+*** ~put~ <<elink4>>
     #+begin_src java :classname 
       public void put(K key, V value) {
           if (key == null) throw new IllegalArgumentException("calls put() with a null key");
@@ -570,7 +570,7 @@
             return null;
         }
 
-        public Node updateBST(K key, Node n) {
+        public Node updateBST(K key, Node n) { <<elink5>>
             int cmp = key.compareTo(n.key);
             if (cmp < 0)        n.left = updateBST(key, n.left);
             else if (cmp > 0)   n.right = updateBST(key, n.right);
@@ -695,8 +695,9 @@
     - ~Set~ *implements* ~Collections~, while ~Collection~ *implements* ~Iterable~ -> ~Set~ is *iterable*, ~Set.iterator~ to return ~Iterator~ [[2]]
     - ~for~ can be used on *iterables* [[file:~/csnds/Dropbox/orglife/61b_rnl.org::<<elink2>>][Iteration]]
 *** Question:                                                     :QUESTIONS:
-    1. 这种把方法定义全部以树为单位 与 以节点为单位的区别与优劣？而对于 ~size~ 又不是以树为单位，而是以节点为单位？
-    2. ~keySet~ 的直接实现or用额外实例变量 ~list~ 存储实现，与 ~printInOrder~ 和 ~iterator~ 在这两种实现下的不同？ [[1]] 直接实现对吗？用额外的 ~list~ 是否不好实现，因为存储结构不方便遍历树？什么情况下不方便直接实现而需要采用一种合适的结构间接实现呢？以及是否间接实现就要详细写 ~Iterator~ ？间接结构怎么选择？
+    - [ ] 这种把方法定义全部以树为单位 与 以节点为单位的区别与优劣？而对于 ~size~ 又不是以树为单位，而是以节点为单位？
+    - [ ] ~keySet~ 的直接实现or用额外实例变量 ~list~ 存储实现，与 ~printInOrder~ 和 ~iterator~ 在这两种实现下的不同？ [[1]] 直接实现对吗？用额外的 ~list~ 是否不好实现，因为存储结构不方便遍历树？什么情况下不方便直接实现而需要采用一种合适的结构间接实现呢？以及是否间接实现就要详细写 ~Iterator~ ？间接结构怎么选择？
+    - [ ] BST 有 ~replace(key, value)~ 操作吗？可以 ~remove~ + ~put~, 有直接点的办法吗？怎么调整 BST 的结构
 ** Tests
 *** TestBSTMapExtra (~testkeySet~)
     #+begin_src java :classname 
