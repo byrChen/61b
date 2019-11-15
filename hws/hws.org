@@ -786,3 +786,68 @@
       }
     #+end_src 
 
+* HW4 AStarSolver
+** ~AStarSolver.java~ 
+*** ~AStarSolver~                                                   :TOBEORG:
+    #+begin_src java :classname 
+      public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
+          private SolverOutcome outcome;
+          private double solutionWeight = 0;
+          private List<Vertex> solution = new ArrayList<>();
+          private double timeSpent;
+          private HashMap<Vertex, Double> distTo = new HashMap<>();
+          private HashMap<Vertex, Vertex> edgeTo = new HashMap<>();
+          private HashSet<Vertex> visited = new HashSet<>();
+
+          public AStarSolver(AStarGraph<Vertex> input, Vertex start, Vertex end, double timeout) {
+              ArrayHeapMinPQ<Vertex> pq = new ArrayHeapMinPQ<>();
+              distTo.put(start, 0.0);
+              pq.add(start, distTo.get(start) + input.estimatedDistanceToGoal(start, end));
+              Stopwatch sw = new Stopwatch();
+              while (pq.size() != 0 && sw.elapsedTime() <= timeout) {
+                  if (pq.getSmallest().equals(end)) {
+                      break;
+                  }
+                  Vertex v = pq.removeSmallest();
+                  visited.add(v);
+                  for (WeightedEdge<Vertex> e : input.neighbors(v)) {
+                      Vertex q = e.to(); double w = e.weight();
+                      if (visited.contains(q)) continue;
+                      double d = distTo.get(v) + w;
+                      if (distTo.containsKey(q) && d >= distTo.get(q)) continue;
+                      distTo.put(q, d);
+                      edgeTo.put(q, v);
+                      pq.add(q, d + input.estimatedDistanceToGoal(q, end));
+                  }
+              }
+              timeSpent = sw.elapsedTime();
+              if (timeSpent > timeout) outcome = SolverOutcome.TIMEOUT;
+              else outcome = pq.size() == 0 ? SolverOutcome.UNSOLVABLE : SolverOutcome.SOLVED;
+              if (outcome == SolverOutcome.SOLVED) {
+                  solutionWeight = distTo.get(end);
+                  solution.add(0, end);
+                  while (!edgeTo.get(end).equals(start)) {
+                      end = edgeTo.get(end);
+                      solution.add(0, end);
+                  }
+                  solution.add(0, start);
+              }
+          }
+          ...
+      }
+    #+end_src 
+    - 
+**** Question:                                                    :QUESTIONS:
+     - [ ] 该算法空间上需要至少维持更新哪些变量？ ~distTo~, ~edgeTo~ 和 ~visited~ 能否精简？有无更好的选择？
+     - [ ] [[file:~/csnds/Dropbox/orglife/61b_rnl.org::<<elink11>>][Memory optimized A* may visit the same vertex many times]] 怎么理解？代码如何改正？
+     - [ ] 有没有没考虑的边界情况和无效输入？代码逻辑能否优化精简？
+*** Extra challenge                                        :UNRESOLVED:EXTRA:
+    - [[file:~/csnds/Dropbox/orglife/61b_rnl.org::<<elink10>>][One additional optimization can make]]
+    - ~bearmaps.hw4.integerhoppuzzle~
+      - Difficult challenge
+    - ~bearmaps.hw4.wordladderpuzzle~
+      - Extra challenge
+    - ~bearmaps.hw4.slidingpuzzle~
+      - Challenge
+      - High Difficulty Challenge
+    - Going Beyond Our Graph Examples

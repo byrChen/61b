@@ -471,7 +471,7 @@
 ** ~BSTMap~
 *** ~class Node~
     #+begin_src java :classname 
-      public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> { <<elinktemp3>>
+      public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> { <<ilink7>>
 
           private Node root;
 
@@ -936,10 +936,10 @@
      - [ ] 关于泛型，什么时候最好在类型声明或者构造函数时加上泛型声明 ~<K, V>~
      - [ ] 关于 ~public~, ~private~ 和 ~protected~ 在嵌套类型及其成员变量和函数的声明：为什么 ~Entry~ 中成员变量和函数都不用声明？不管什么关键词都可以访问嵌套类中的任何成员？
      - [ ] 关于 ~buckets~ 底层结构 
-       - [ ] 底层结构为什么不能用 ~Entry[] buckets = (Entry[]) new Object[N]~ 转换？ ~T[] t = (T[]) new Object[N]~ [[file:~/csnds/Dropbox/orglife/61b_rnl.org::<<elinktemp1>>][Object cast to Glorp]] 为什么可以？是 ~Glorp~ 只能是 initial types 吗？还是 built-in types 都可以？
+       - [ ] 底层结构为什么不能用 ~Entry[] buckets = (Entry[]) new Object[N]~ 转换？ ~T[] t = (T[]) new Object[N]~ [[file:~/csnds/Dropbox/orglife/61b_rnl.org::<<elink4>>][Object cast to Glorp]] 为什么可以？是 ~Glorp~ 只能是 initial types 吗？还是 built-in types 都可以？
        - [ ] 最理想的应该是 ~Map~, 自带的 ~HashMap~ 底层结构是 ~Map~ 吗？如果不能用 ~Map~, 那 ~LinkedList~, ~ArrayList~ 和 ~Set~ 该怎么选择？用这三者的话是否需要重写 ~equals()~ 和 ~hashcode~ ？具体在哪重写呢？必要结合源码讨论。
      - [ ] 关于 ~Comparable~ 与 ~Comparator~, ~Iterable~ 与 ~Iterator~ <<elink3>>
-       - [ ] 都是 ~interface~ 的话，为什么 [[file:~/csnds/Dropbox/orglife/61b_rnl.org::<<elinktemp2>>][class implements Comparable]] 而 [[<<elinktemp3>>][<K extends Comparable<K>, V>]]？是不是 ~class implements interface~, ~interface extends interface~ 以及 ~K extends interface~
+       - [ ] 都是 ~interface~ 的话，为什么 [[file:~/csnds/Dropbox/orglife/61b_rnl.org::<<elink5>>][class implements Comparable]] 而 [[<<ilink7>>][<K extends Comparable<K>, V>]]？是不是 ~class implements interface~, ~interface extends interface~ 以及 ~K extends interface~
        - [ ] 关于 ~Comparable~, ~Comparator~, ~Iterable~ 和 ~Iterator~ 的比较 [[file:~/csnds/Dropbox/orglife/61b_rnl.org::<<elink1>>][比较1]] [[file:~/csnds/Dropbox/orglife/61b_rnl.org::<<ilink1>>][比较2]]
        - [ ] 关于 ~equals~ 和 ~hashCode~: ~Object~ 和 ~Comparator~ 里 ~equals()~ 的区别以及什么时候需要一起重写 ~hashCode()~ ？
 *** ~MyHashMap~ 
@@ -1430,3 +1430,223 @@
     #+end_src 
 
 ** Challenge Graphs                                        :UNRESOLVED:EXTRA:
+* Lab 11 Merge Sort and Quick Sort
+** ~MergeSort~  
+*** ~getMin~ 
+    #+begin_src java :classname 
+      private static <Item extends Comparable> Item getMin(
+                                                           Queue<Item> q1, Queue<Item> q2) {
+          if (q1.isEmpty()) {
+              return q2.dequeue();
+          } else if (q2.isEmpty()) {
+              return q1.dequeue();
+          } else {
+              // Peek at the minimum item in each queue (which will be at the front, since the
+              // queues are sorted) to determine which is smaller.
+              Comparable q1Min = q1.peek();
+              Comparable q2Min = q2.peek();
+              if (q1Min.compareTo(q2Min) <= 0) {
+                  // Make sure to call dequeue, so that the minimum item gets removed.
+                  return q1.dequeue();
+              } else {
+                  return q2.dequeue();
+              }
+          }
+      }
+    #+end_src 
+    - ~<Item extends Comparable> Item~
+    - ~Comparable q1Min~ and ~Comparable q2Min~  
+*** ~makeSingleItemQueues~ 
+    #+begin_src java :classname 
+      private static <Item extends Comparable> Queue<Queue<Item>>
+          makeSingleItemQueues(Queue<Item> items) {
+          // Your code here!
+          Queue<Queue<Item>> Q = new Queue<>();
+          for (Item i : items) {
+              Queue<Item> q = new Queue<>();
+              q.enqueue(i);
+              Q.enqueue(q);
+          }
+          return Q;
+      }
+    #+end_src 
+    - ~Queue<Queue<Item>> Q = new Queue<>()~
+    - Bug
+      #+begin_src java :classname 
+        Queue<Queue<Item>> Q = new Queue<>();
+        Queue<Item> q = new Queue<>();
+        for (Item i : items) {
+            q.enqueue(i);
+            Q.enqueue(q);
+            q.dequeue();
+        }
+        return Q;
+      #+end_src
+      - ~q.dequeue()~ will affect ~Q~: the first item in ~Q~ *refers to* ~q~, it will change if ~q~ change, like ~q.dequeue()~ 
+*** ~mergeSortedQueues~ 
+    #+begin_src java :classname 
+      private static <Item extends Comparable> Queue<Item> mergeSortedQueues(
+              Queue<Item> q1, Queue<Item> q2) {
+          // Your code here!
+          Queue<Item> mq = new Queue<>();
+          while (true) {
+              if (q1.isEmpty() && q2.isEmpty()) break;
+              mq.enqueue(getMin(q1, q2));
+          }
+          return mq;
+      }
+    #+end_src 
+    - ~if (q1.isEmpty() && q2.isEmpty()) break~
+    - ~mq.enqueue(getMin(q1, q2))~ 
+*** ~mergeSort~ 
+    - Recursive method
+      #+begin_src java :classname 
+        public static <Item extends Comparable> Queue<Item> mergeSort(
+                Queue<Item> items) {
+            // Your code here!
+            if (items == null) throw new IllegalArgumentException("Input can't be null.");
+            if (items.size() <= 1) return items;
+            int N = items.size();
+            Queue<Item> q1 = new Queue<>();
+            Queue<Item> q2 = new Queue<>();
+            for (int i = 0; i < N/2; i++) {
+                q1.enqueue(items.dequeue());
+            }
+            for (int i = 0; i < N - N/2; i++) {
+                q2.enqueue(items.dequeue());
+            }
+            return mergeSortedQueues(mergeSort(q1), mergeSort(q2));
+        }
+      #+end_src
+      - Base: ~if (items.size() <= 1) return items~
+      - Separation: ~i < N/2~ + ~q1.enqueue(items.dequeue())~ and ~i < N - N/2~ + ~q2.enqueue(items.dequeue())~
+        - Can not use ~i < N/2 + 1~ and ~i < N - N/2 -1~ because when ~N = 2~ such separation can't separate correctly
+      - ~mergeSortedQueues(mergeSort(q1), mergeSort(q2))~ 
+    - Iterative method
+      #+begin_src java :classname 
+        if (items == null) throw new IllegalArgumentException("Input can't be null.");
+        if (items.size() <= 1) return items;
+
+        Queue<Queue<Item>> sortedQueues = makeSingleItemQueues(items);
+
+        while (sortedQueues.size() > 1) {
+            Queue<Item> sortedQ1 = sortedQueues.dequeue();
+            Queue<Item> sortedQ2 = sortedQueues.dequeue();
+
+            sortedQueues.enqueue(mergeSortedQueues(sortedQ1, sortedQ2));
+        }
+
+        return sortedQueues.dequeue();
+      #+end_src
+      - ~Queue<Queue<Item>> sortedQueues = makeSingleItemQueues(items)~
+      - Each time *dequeue 2 item* in ~sortedQueues~, then ~mergeSortedQueues~ on them and *enqueue* in ~sortedQueues~ until ~sortedQueues.size() == 1~: ~while (sortedQueues.size() > 1)~ --> ~Queue<Item> sortedQ1 = sortedQueues.dequeue()~ + ~Queue<Item> sortedQ2 = sortedQueues.dequeue()~ --> ~sortedQueues.enqueue(mergeSortedQueues(sortedQ1, sortedQ2))~ 
+** ~QuickSort~ 
+*** ~catenated~ 
+    #+begin_src java :classname 
+      private static <Item extends Comparable> Queue<Item> catenate(Queue<Item> q1, Queue<Item> q2) {
+          Queue<Item> catenated = new Queue<Item>();
+          for (Item item : q1) {
+              catenated.enqueue(item);
+          }
+          for (Item item: q2) {
+              catenated.enqueue(item);
+          }
+          return catenated;
+      }
+    #+end_src 
+    - ~catenate~ to catenate two ~Queue~ 
+*** ~getRandomItem~ 
+    #+begin_src java :classname 
+      private static <Item extends Comparable> Item getRandomItem(Queue<Item> items) {
+          int pivotIndex = (int) (Math.random() * items.size());
+          Item pivot = null;
+          // Walk through the queue to find the item at the given index.
+          for (Item item : items) {
+              if (pivotIndex == 0) {
+                  pivot = item;
+                  break;
+              }
+              pivotIndex--;
+          }
+          return pivot;
+      }
+    #+end_src 
+    - ~for (Item item : items)~ + ~pivotIndex == 0~ to get target ~pivot~ in ~Queue~ 
+*** ~partition~ 
+    #+begin_src java :classname 
+      private static <Item extends Comparable> void partition(
+              Queue<Item> unsorted, Item pivot,
+              Queue<Item> less, Queue<Item> equal, Queue<Item> greater) {
+          // Your code here!
+          for (Item item : unsorted) {
+              int cmp = item.compareTo(pivot);
+              if      (cmp > 0) greater.enqueue(item);
+              else if (cmp < 0) less.enqueue(item);
+              else              equal.enqueue(item);
+          }
+      }
+    #+end_src 
+    - Signature design: ~<Item extends Comparable> void partition(Queue<Item> unsorted, Item pivot, Queue<Item> less, Queue<Item> equal, Queue<Item> greater)~
+*** ~quicksort~                                                     :TOBEORG:
+    - Recursive
+      #+begin_src java :classname 
+        public static <Item extends Comparable> Queue<Item> quickSortR(
+                Queue<Item> items) {
+            if (items.size() <= 1) return items;
+            Queue<Item> less = new Queue<>();
+            Queue<Item> equal = new Queue<>();
+            Queue<Item> greater = new Queue<>();
+            partition(items, getRandomItem(items), less, equal, greater);
+            less = quickSortR(less);
+            greater = quickSortR(greater);
+            return catenate(catenate(less, equal), greater);
+        }
+      #+end_src
+      - Base: ~if (items.size() <= 1) return items~
+      - ~partition(items, getRandomItem(items), less, equal, greater)~ to get ~equal~ --> recursive ~less = quickSortR(less)~ to get ~less~ --> recursive ~greater = quickSortR(greater)~ to get ~greater~
+      - ~catenate(catenate(less, equal), greater)~ to catenate ~less~, ~equal~ and ~greater~ 
+    - Iterative
+      #+begin_src java :classname 
+        public static <Item extends Comparable> Queue<Item> quickSortI(
+                Queue<Item> items) {
+            // Your code here!
+            Queue<Queue<Item>> sortedQueues = new Queue<>();
+            Stack<Queue<Item>> stack = new Stack<>();
+
+            stack.push(items);
+            while (!stack.isEmpty()) {
+                Queue<Item> currentQueue = stack.pop();
+                Queue<Item> less = new Queue<>();
+                Queue<Item> equal = new Queue<>();
+                Queue<Item> greater = new Queue<>();
+
+                partition(currentQueue, getRandomItem(currentQueue), less, equal, greater);
+
+                if (less.isEmpty() && greater.isEmpty()) {
+                    sortedQueues.enqueue(currentQueue);
+                    continue;
+                }
+
+                if (!greater.isEmpty()) {
+                    stack.push(greater);
+                }
+
+                stack.push(equal);
+
+                if (!less.isEmpty()) {
+                    stack.push(less);
+                }
+            }
+
+            Queue<Item> sortedItems = new Queue<>();
+            for (Queue<Item> q : sortedQueues) {
+                while (!q.isEmpty()) {
+                    sortedItems.enqueue(q.dequeue());
+                }
+            }
+
+            return sortedItems;
+        }
+      #+end_src
+**** Question:                                                    :QUESTIONS:
+     - [ ] 上面 Iterative 方法？

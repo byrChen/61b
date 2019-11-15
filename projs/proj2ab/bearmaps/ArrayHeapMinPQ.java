@@ -52,8 +52,8 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
     }
 
     private void swap(int x, int y) {
-        items.replace(minHeap.get(x).item, y);
-        items.replace(minHeap.get(y).item, x);
+        items.put(minHeap.get(x).item, y);
+        items.put(minHeap.get(y).item, x);
         PNode<T> temp = minHeap.get(x);
         minHeap.set(x, minHeap.get(y));
         minHeap.set(y, temp);
@@ -75,7 +75,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
         if (size == 0) throw new IllegalArgumentException("Queue is empty.");
         T min = minHeap.get(1).item;
         minHeap.set(1, minHeap.get(size));
-        items.replace(minHeap.get(1).item, 1);
+        items.put(minHeap.get(1).item, 1);
         sink(1);
         minHeap.remove(size);
         size -= 1;

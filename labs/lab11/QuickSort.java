@@ -1,4 +1,7 @@
 import edu.princeton.cs.algs4.Queue;
+import edu.princeton.cs.algs4.Stack;
+
+import java.util.Comparator;
 
 public class QuickSort {
     /**
@@ -58,6 +61,24 @@ public class QuickSort {
             Queue<Item> unsorted, Item pivot,
             Queue<Item> less, Queue<Item> equal, Queue<Item> greater) {
         // Your code here!
+        for (Item item : unsorted) {
+            int cmp = item.compareTo(pivot);
+            if      (cmp > 0) greater.enqueue(item);
+            else if (cmp < 0) less.enqueue(item);
+            else              equal.enqueue(item);
+        }
+    }
+
+    public static <Item extends Comparable> Queue<Item> quickSortR(
+            Queue<Item> items) {
+        if (items.size() <= 1) return items;
+        Queue<Item> less = new Queue<>();
+        Queue<Item> equal = new Queue<>();
+        Queue<Item> greater = new Queue<>();
+        partition(items, getRandomItem(items), less, equal, greater);
+        less = quickSortR(less);
+        greater = quickSortR(greater);
+        return catenate(catenate(less, equal), greater);
     }
 
     /**
@@ -66,9 +87,45 @@ public class QuickSort {
      * @param items  A Queue of possibly unsorted items
      * @return       A Queue of sorted items
      */
-    public static <Item extends Comparable> Queue<Item> quickSort(
+    public static <Item extends Comparable> Queue<Item> quickSortI(
             Queue<Item> items) {
         // Your code here!
-        return items;
+        // Iterative with stack
+        Queue<Queue<Item>> sortedQueues = new Queue<>();
+        Stack<Queue<Item>> stack = new Stack<>();
+
+        stack.push(items);
+        while (!stack.isEmpty()) {
+            Queue<Item> currentQueue = stack.pop();
+            Queue<Item> less = new Queue<>();
+            Queue<Item> equal = new Queue<>();
+            Queue<Item> greater = new Queue<>();
+
+            partition(currentQueue, getRandomItem(currentQueue), less, equal, greater);
+
+            if (less.isEmpty() && greater.isEmpty()) {
+                sortedQueues.enqueue(currentQueue);
+                continue;
+            }
+
+            if (!greater.isEmpty()) {
+                stack.push(greater);
+            }
+
+            stack.push(equal);
+
+            if (!less.isEmpty()) {
+                stack.push(less);
+            }
+        }
+
+        Queue<Item> sortedItems = new Queue<>();
+        for (Queue<Item> q : sortedQueues) {
+            while (!q.isEmpty()) {
+                sortedItems.enqueue(q.dequeue());
+            }
+        }
+
+        return sortedItems;
     }
 }

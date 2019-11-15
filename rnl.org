@@ -1,4 +1,4 @@
-#+TAGS: OUTSTANDING(o) QUESTIONS(q) TOBEORG(t)
+#+TAGS: OUTSTANDING(o) QUESTIONS(q) TOBEORG(t) UNCOVERED(u) EXTRA(e)
 * 1. Introduction to Java
 ** Essentials
    #+begin_src java :classname HelloWorld
@@ -1304,7 +1304,7 @@
           /** Inserts X into the back of the list. */
 
           public void resize(int capacity) {
-              Glorp[] a = (Glorp []) new Object[capacity]; <<elinktemp1>>
+              Glorp[] a = (Glorp []) new Object[capacity]; <<elink4>>
               System.arraycopy(items, 0, a, 0, size);
               items = a;
           }
@@ -2015,7 +2015,7 @@
     #+begin_src java :classname 
       import java.util.Comparator;
 
-      public class Dog implements Comparable<Dog> { <<elinktemp2>>
+      public class Dog implements Comparable<Dog> { <<elink5>>
           ...
           public int compareTo(Dog uddaDog) {
               return this.size - uddaDog.size;
@@ -2516,7 +2516,7 @@
     - Tests help verify that semantics are correct.
 *** ADT's
     ADT's (Abstract Data Structures) are high-level types that are defined by their *behaviors*, not their *implementations*.
-    - Delegation vs Extension: Write a *Stack* class using a *Linked List* as its underlying data structure
+    - Delegation vs Extension: Write a *Stack* class using a *Linked List* as its underlying data structure <<ilink12>>
       - Extension: inheriting from parent class
         #+begin_src java :classname 
           public class ExtensionStack<Item> extends LinkedList<Item> {
@@ -2579,13 +2579,15 @@
       [[file:pictures/8._Efficient_Programming/reverse_list1_2019-08-19_09-37-17.png]]
       #+DOWNLOADED: https://joshhug.gitbooks.io/hug61b/content/assets/reverse_list2.png @ 2019-08-19 09:37:39
       [[file:pictures/8._Efficient_Programming/reverse_list2_2019-08-19_09-37-39.png]]
+**** Question:                                                    :QUESTIONS:
+     - [ ] [[ilink12][Stack]] 实现？ <<elink3>>
 ** Asymptotics I
-*** $\Theta$ is a tight bound, including upper and lower bound correspond to worst and best case (can be reached)
+*** $\Theta$ is a *tight bound*, including *upper and lower bound* correspond to *worst and best case* (can be reached)
     $R(N) \in \Theta(f(N))$ means that there exists positive constants $k_{1}, k_{2}$ such that:
     $k_{1} \cdot f(N) \leq R(N) \leq k_{2} \cdot f(N)$ ,  for all values of $N$ greater than some $N_{0}$
-*** $O$ is just an upper bound, it is not the same but often used as worst case (may not be able to reach) 
-    $R(N) \in O(f(N))$ means that there exists positive constants $k_{2}$ such that:
-    $R(N) \leq k_{2} \cdot f(N)$ ,  for all values of $N$ greater than some $N_{0}$
+*** $O$ is just an *upper bound*, it is not the same but often used as *worst case* (may not be able to reach) 
+    $R(N) \in O(f(N))$ means that there exists positive constants $k$ such that:
+    $R(N) \leq k \cdot f(N)$ ,  for all values of $N$ greater than some $N_{0}$
 ** Asymptotics II
 *** Loop
     #+begin_src java :classname 
@@ -2623,7 +2625,9 @@
 *** Binary Search: $\theta\left(\log _{2}(n)\right)$
 *** Merge Sort: $\theta\left(n \log _{2}(n)\right)$
 ** Omega and Amortized Analysis (extra)
-*** $\Omega$ 
+*** $\Omega$ is just an *lower bound*, it is not the same but often used as *best case* (may not be able to reach) 
+    $R(N) \in \Omega(f(N))$ means that there exists positive constants $k$ such that:
+    $R(N) \ge k \cdot f(N)$ ,  for all values of $N$ greater than some $N_{0}$
     1. Used to prove $\Theta$ : $R(N)=O(f(N))$ and $R(N)=\Omega(f(N))$ -> $R(N)=\Theta(f(N))$
     2. Used to prove the difficulty of a problem.
     #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-20 13:56:31
@@ -2965,7 +2969,7 @@
     - Beyond
       #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-22 11:29:01
       [[file:pictures/11._Balanced_Trees/screenshot_2019-08-22_11-29-01.png]]
-** Question:                                                      :QUESTIONS:
+** Question:                                                      :QUESTIONS: <<elink7>>
    - [ ] 2-3 和 2-3-4 的实现？
    - [ ] 红黑树的实现？
 * L19 Hashing
@@ -3198,6 +3202,9 @@
     - HashTable: No good! Items go into *random* places.
     #+DOWNLOADED: /tmp/screenshot.png @ 2019-10-15 18:33:17
     [[file:pictures/L20_Heaps_and_PQs/screenshot_2019-10-15_18-33-17.png]]
+
+*** Question:                                                     :QUESTIONS:
+    - [ ] ~Queue~ 的实现？ <<elink6>>
 ** Heaps
    *Binary min-heap*: Binary tree that is *complete* and obeys *min-heap property*.
    - *Min-heap*: Every node is *less than or equal* to both of its children.
@@ -3731,6 +3738,9 @@
     Visit vertices in order of *best-known distance* from source. On visit, *relax* every *edge* from the *visited vertex*.
     #+DOWNLOADED: screenshot @ 2019-10-22 16:49:20
     [[file:pictures/L25_Shortest_Paths/screenshot_2019-10-22_16-49-20.png]]
+*** Demo
+    #+DOWNLOADED: screenshot @ 2019-11-13 14:15:04
+    [[file:pictures/L25_Shortest_Paths/2019-11-13_14-15-04_screenshot.png]]
 ** Dijkstra’s Correctness and Runtime
 *** Pseudocode 
     #+DOWNLOADED: screenshot @ 2019-10-22 17:33:55
@@ -3747,13 +3757,43 @@
      - [ ] 上图中的 ~changePriority~ 是什么功能？复杂度怎么分析？
      - [ ] Overall runtime 怎么分析出来的？主要是 ~changePriority~ 的复杂度和边的关系？
 ** A*
-   Visit vertices in order of $d(Denver, v) + h(v, goal)$, where $h(v, goal)$ is an *estimate* of the distance from $v$ to $goal$.
+   Visit vertices in order of $d(source, v) + h(v, goal)$, where $h(v, goal)$ is an *estimate* of the distance from /v/ to /goal/. On visit, *relax* every *edge* from the *visited vertex*.
 *** Heuristics and Correctness
     #+DOWNLOADED: screenshot @ 2019-10-22 20:14:33
     [[file:pictures/L25_Shortest_Paths/screenshot_2019-10-22_20-14-33.png]]
 *** Consistency and Admissibility (EXTRA: Beyond Course Scope)
     #+DOWNLOADED: screenshot @ 2019-10-22 20:15:47
     [[file:pictures/L25_Shortest_Paths/screenshot_2019-10-22_20-15-47.png]]
+    
+*** Memory Optimized A*                                       :TOBEORG:EXTRA:
+    - 3 differences from A*
+      - The algorithm starts with *only the start* vertex in the PQ.
+      - When relaxing an edge, if the relaxation is successful and the target vertex is not in the PQ, add it.
+      - If the algorithm takes longer than some timeout value, it stops running.
+    - Algorithm Pseudocode
+      - Create a PQ where each vertex v will have priority p equal to the sum of v’s distance from the source plus the heuristic estimate from v to the goal, i.e. p = distTo[v] + h(v, goal).
+      - Insert the source vertex into the PQ.
+      - Repeat until the PQ is empty, PQ.getSmallest() is the goal, or timeout is exceeded:
+        - p = PQ.removeSmallest()
+        - relax all edges outgoing from p
+      - relax(e):
+        - p = e.from(), q = e.to(), w = e.weight()
+        - if distTo[p] + w < distTo[q]:
+          - distTo[q] = distTo[p] + w
+          - if q is in the PQ: changePriority(q, distTo[q] + h(q, goal))
+          - if q is not in PQ: add(q, distTo[q] + h(q, goal))
+    - Some interesting consequences of these changes
+      - In the lecture version, once a vertex was removed from the PQ, it was gone forever. This meant that each vertex was visited at most one time. In this new version of A*, the algorithm can theoretically revisit the same vertex many times. <<elink11>>
+      - Beyond the scope of our course: As a side effect of the consequence above, admissibility is a sufficient condition for correctness for the memory optimized version of A*. For the version in lecture, we needed a stronger criterion for our heuristic called consistency. (CS188)
+    - One additional optimization can make <<elink10>>
+      Avoid storing the best known distance and edge to every vertex. In this case, rather than “relaxing” edges, we’d blindly add all discovered vertices to our PQ. This is the equivalent of treating every edge relaxation as successful. This requires the addition of an “already visited set” to keep memory from getting out of hand. (CS188)
+*** Demo
+    - A* 
+      #+DOWNLOADED: screenshot @ 2019-11-13 14:11:51
+      [[file:pictures/L25_Shortest_Paths/2019-11-13_14-11-51_screenshot.png]]
+    - Memory Optimized A*
+      #+DOWNLOADED: screenshot @ 2019-11-13 14:30:43
+      [[file:pictures/L25_Shortest_Paths/2019-11-13_14-30-43_screenshot.png]]
 ** Summary
 *** Shortest Paths Problems 
     #+DOWNLOADED: screenshot @ 2019-10-22 20:17:08
@@ -3821,7 +3861,9 @@
 *** Question:                                                     :QUESTIONS:
     - [ ] Generic MST, Prim, Kruskal 的理解与相互联系？
     - [ ] Summary 里的复杂度分析
-* L27 Reductions and Decomposition                                  :TOBEORG:
+** Question:                                                      :QUESTIONS: <<elink8>>
+   - [ ] L23-L26中数据结构以及算法的实现：树 图
+* L27 Reductions and Decomposition
 ** Topological Sorting
    #+DOWNLOADED: screenshot @ 2019-10-28 22:17:47
    [[file:pictures/L27_Reductions_and_Decomposition/screenshot_2019-10-28_22-17-47.png]]
@@ -4028,7 +4070,7 @@
 * L33 Sorting and Algorithmic Bounds
 ** Math Problems out of Nowhere
    Given $log(N!) \in \Omega(NlogN)$ + $NlogN \in \Omega(log(N!))$ -> $log(N!) \in \Theta(NlogN)$ + $NlogN \in \Theta(log(N!))$
-** Theoretical Bounds on Sorting                                    :TOBEORG:
+** Theoretical Bounds on Sorting
 *** Decision Tree 
     #+DOWNLOADED: screenshot @ 2019-10-29 15:36:18
     [[file:pictures/L33_Sorting_and_Algorithmic_Bounds/2019-10-29_15-36-18_screenshot.png]]
@@ -4042,7 +4084,7 @@
     - *Heapsort, Mergesort and Quicksort LTHS* have achieved absolute *asymptotic optimality*, mathematically impossible to sort using fewer comparisons
     - *Randomized quicksort* is only *probabilistically optimal*, but the probability is extremely high for even modest $N$
     - *Not impossible* to sort in $\Theta(N)$ time, just can’t *compare* anything
-** Sorting Implementations                                    :TOBEORG:EXTRA:
+** Sorting Implementations                                            :EXTRA:
    #+DOWNLOADED: screenshot @ 2019-10-29 15:59:57
    [[file:pictures/L33_Sorting_and_Algorithmic_Bounds/2019-10-29_15-59-57_screenshot.png]]
 *** Selection Sort 
@@ -4076,7 +4118,13 @@
         [[file:pictures/L33_Sorting_and_Algorithmic_Bounds/2019-10-29_16-07-09_screenshot.png]]
 * L34 Software Engineering II                                       :TOBEORG:
 * L35 Radix Sorts                                                   :TOBEORG:
+** Counting Sort
+** LSD Radix Sort
+** LSD Radix Sort vs. Comparison Sorting
+** MSD Radix Sort
 * L36 Sorting and Data Structures Conclusion                        :TOBEORG:
+** Question:                                                      :QUESTIONS: <<elink9>>
+   - [ ] L29-L36 各种 sort 的代码实现
 * L37 Software Engineering III                                      :TOBEORG:
 * L38 Compression                                                   :TOBEORG:
 * L39 Compression, Complexity, and P=NP?                            :TOBEORG:

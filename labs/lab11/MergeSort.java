@@ -43,7 +43,13 @@ public class MergeSort {
     private static <Item extends Comparable> Queue<Queue<Item>>
             makeSingleItemQueues(Queue<Item> items) {
         // Your code here!
-        return null;
+        Queue<Queue<Item>> Q = new Queue<>();
+        for (Item i : items) {
+            Queue<Item> q = new Queue<>();
+            q.enqueue(i);
+            Q.enqueue(q);
+        }
+        return Q;
     }
 
     /**
@@ -62,7 +68,12 @@ public class MergeSort {
     private static <Item extends Comparable> Queue<Item> mergeSortedQueues(
             Queue<Item> q1, Queue<Item> q2) {
         // Your code here!
-        return null;
+        Queue<Item> mq = new Queue<>();
+        while (true) {
+            if (q1.isEmpty() && q2.isEmpty()) break;
+            mq.enqueue(getMin(q1, q2));
+        }
+        return mq;
     }
 
     /**
@@ -78,6 +89,34 @@ public class MergeSort {
     public static <Item extends Comparable> Queue<Item> mergeSort(
             Queue<Item> items) {
         // Your code here!
-        return items;
+        /* recursive method */
+//        if (items == null) throw new IllegalArgumentException("Input can't be null.");
+//        if (items.size() <= 1) return items;
+//        int N = items.size();
+//        Queue<Item> q1= new Queue<>();
+//        Queue<Item> q2= new Queue<>();
+//        for (int i = 0; i < N/2; i++) {
+//            q1.enqueue(items.dequeue());
+//        }
+//        for (int i = 0; i < N - N/2; i++) {
+//            q2.enqueue(items.dequeue());
+//        }
+//        return mergeSortedQueues(mergeSort(q1), mergeSort(q2));
+
+        /* iterative method */
+        if (items == null) throw new IllegalArgumentException("Input can't be null.");
+        if (items.size() <= 1) return items;
+
+        Queue<Queue<Item>> sortedQueues = makeSingleItemQueues(items);
+
+        while (sortedQueues.size() > 1) {
+            Queue<Item> sortedQ1 = sortedQueues.dequeue();
+            Queue<Item> sortedQ2 = sortedQueues.dequeue();
+
+            sortedQueues.enqueue(mergeSortedQueues(sortedQ1, sortedQ2));
+        }
+
+        return sortedQueues.dequeue();
     }
+
 }
