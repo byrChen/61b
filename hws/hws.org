@@ -785,10 +785,9 @@
           assertTrue(OomageTestUtility.haveNiceHashCodeSpread(deadlyList, 5));
       }
     #+end_src 
-
-* HW4 AStarSolver
+* HW4 AStarSolver                                                   :TOBEORG:
 ** ~AStarSolver.java~ 
-*** ~AStarSolver~                                                   :TOBEORG:
+*** ~AStarSolver~
     #+begin_src java :classname 
       public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
           private SolverOutcome outcome;
@@ -838,7 +837,7 @@
     #+end_src 
     - 
 **** Question:                                                    :QUESTIONS:
-     - [ ] 该算法空间上需要至少维持更新哪些变量？ ~distTo~, ~edgeTo~ 和 ~visited~ 能否精简？有无更好的选择？
+     - [ ] 以上 ~A* Tree Search~ 算法空间上需要至少维持更新哪些变量？ ~distTo~, ~edgeTo~ 和 ~visited~ 能否精简？有无更好的选择？ -> ~A* Graph Search~ 不需要记录 ~distTo~ 和 ~edgeTo~ ？
      - [ ] [[file:~/csnds/Dropbox/orglife/61b_rnl.org::<<elink11>>][Memory optimized A* may visit the same vertex many times]] 怎么理解？代码如何改正？
      - [ ] 有没有没考虑的边界情况和无效输入？代码逻辑能否优化精简？
 *** Extra challenge                                        :UNRESOLVED:EXTRA:

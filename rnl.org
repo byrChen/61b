@@ -1,4 +1,4 @@
-#+TAGS: OUTSTANDING(o) QUESTIONS(q) TOBEORG(t) UNCOVERED(u) EXTRA(e)
+#+TAGS: QUESTIONS(q) TOBEORG(t) UNCOVERED(u) EXTRA(e)
 * 1. Introduction to Java
 ** Essentials
    #+begin_src java :classname HelloWorld

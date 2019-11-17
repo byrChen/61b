@@ -17,8 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static bearmaps.proj2c.utils.Constants.SEMANTIC_STREET_GRAPH;
-import static bearmaps.proj2c.utils.Constants.ROUTE_LIST;
+import static bearmaps.proj2c.utils.Constants.*;
 
 /**
  * Handles requests from the web browser for map images. These images
@@ -84,11 +83,54 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
      */
     @Override
     public Map<String, Object> processRequest(Map<String, Double> requestParams, Response response) {
-        //System.out.println("yo, wanna know the parameters given by the web browser? They are:");
-        //System.out.println(requestParams);
+//        System.out.println("yo, wanna know the parameters given by the web browser? They are:");
+//        System.out.println(requestParams);
         Map<String, Object> results = new HashMap<>();
-        System.out.println("Since you haven't implemented RasterAPIHandler.processRequest, nothing is displayed in "
-                + "your browser.");
+        results.put("query_success", false);
+//        System.out.println("Since you haven't implemented RasterAPIHandler.processRequest, nothing is displayed in "
+//                + "your browser.");
+        double width = requestParams.get("w"), ullon = requestParams.get("ullon"),
+                ullat = requestParams.get("ullat"), lrlon = requestParams.get("lrlon"),
+                lrlat = requestParams.get("lrlat");
+        int cmp1 = Double.compare(ullon, lrlon), cmp2 = Double.compare(ullat, lrlat);
+        if (cmp1 > 0 || cmp2 < 0) return results;
+        double requestLonDPP = (lrlon - ullon) / width,
+                initLonDPP = (ROOT_LRLON - ROOT_ULLON) / TILE_SIZE,
+                initLatDPP = (ROOT_ULLAT - ROOT_LRLAT) /TILE_SIZE;
+        int depth = (int) Math.ceil(Math.log(initLonDPP / requestLonDPP) / Math.log(2));
+        depth = depth < 0 ? 0 : depth;
+        depth = depth > 7 ? 7 : depth;
+        int blocks = (int) Math.pow(2, depth);
+        double iLonDPP = initLonDPP / blocks, iLatDPP = initLatDPP / blocks;
+
+        int xl = (int) Math.floor((ullon - ROOT_ULLON) / (iLonDPP * TILE_SIZE));
+        int xr = (int) Math.floor((lrlon - ROOT_ULLON) / (iLonDPP * TILE_SIZE));
+        int yu = (int) Math.floor((ROOT_ULLAT - ullat) / (iLatDPP * TILE_SIZE));
+        int yd = (int) Math.floor((ROOT_ULLAT - lrlat) / (iLatDPP * TILE_SIZE));
+        if (xl > blocks - 1 || xr < 0 || yu > blocks - 1 || yd < 0) return results;
+        xl = xl < 0 ? 0 : xl;
+        xr = xr > blocks - 1 ? blocks - 1 : xr;
+        yu = yu < 0 ? 0 : yu;
+        yd = yd > blocks - 1 ? blocks - 1 : yd;
+        int y = yd - yu + 1, x = xr - xl + 1;
+        String[][] grid = new String[y][x];
+        for (int j = 0; j < y; j++) {
+            for (int k = 0; k < x; k ++){
+                grid[j][k] = "d" + depth + "_x" + (k + xl) + "_y" + (j + yu) + ".png";
+            }
+        }
+        double ul_lon = ROOT_ULLON + xl * (ROOT_LRLON - ROOT_ULLON) / blocks;
+        double ul_lat = ROOT_ULLAT + yu * (ROOT_LRLAT - ROOT_ULLAT) / blocks;
+        double lr_lon = ROOT_ULLON + (xr + 1) * (ROOT_LRLON - ROOT_ULLON) / blocks;
+        double lr_lat = ROOT_ULLAT + (yd + 1) * (ROOT_LRLAT - ROOT_ULLAT) / blocks;
+        results.put("render_grid", grid);
+        results.put("raster_ul_lon", ul_lon);
+        results.put("raster_ul_lat", ul_lat);
+        results.put("raster_lr_lon", lr_lon);
+        results.put("raster_lr_lat", lr_lat);
+        results.put("depth", depth);
+        results.put("query_success", true);
+
         return results;
     }
 

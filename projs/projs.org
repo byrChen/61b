@@ -131,7 +131,7 @@
 *** Adding Audio                                                :UNRESOLVED:
 *** Gold Points                                                 :UNRESOLVED:
 * Proj 1A Data Structures                                           :TOBEORG:
-** LinkedListDeque 
+** ~LinkedListDeque.java~ 
    #+begin_src java :classname 
      import java.io.NotActiveException;
 
@@ -267,41 +267,7 @@
          }
      }
    #+end_src 
-** LLDTest
-   #+begin_src java :classname 
-     import org.junit.Test;
-     import static org.junit.Assert.*;
-
-     public class LLDTest {
-
-         @Test
-         public void getTest() {
-             LinkedListDeque<Integer> llD = new LinkedListDeque<>();
-             llD.addFirst(0);
-             llD.addLast(1);
-             assertEquals(1, (long) llD.removeLast());
-             assertEquals(0, (long) llD.removeLast());
-             llD.addLast(5);
-             assertEquals(5, (long) llD.get(0));
-         }
-
-         @Test
-         public void getRecursiveTest() {
-             LinkedListDeque<Integer> llD = new LinkedListDeque<>();
-             assertNull(llD.getRecursive(0));
-             assertNull(llD.getRecursive(1));
-             llD.addLast(0);
-             assertEquals(0, (long) llD.getRecursive(0));
-             llD.removeLast();
-             assertNull(llD.getRecursive(0));
-             llD.addFirst(1);
-             assertEquals(1, (long) llD.getRecursive(0));
-             llD.removeFirst();
-             assertNull(llD.getRecursive(0));
-         }
-     }
-   #+end_src 
-** ArrayDeque
+** ~ArrayDeque.java~
    #+begin_src java :classname 
      import java.util.TreeMap;
 
@@ -465,170 +431,206 @@
          }
      }
    #+end_src 
-** ADTest
-   #+begin_src java :classname 
-     import org.junit.Test;
-     import static org.junit.Assert.*;
 
-     public class ADTest {
-         @Test
-         public void constructorTest() {
-             ArrayDeque<String> aD = new ArrayDeque<>();
-             assertEquals(8,  aD.itemsLength());
-             assertEquals(7, aD.nextFirst());
-             assertEquals(0, aD.nextLast());
-             ArrayDeque<String> newaD = new ArrayDeque<>(aD);
-             assertEquals(aD.itemsLength(), newaD.itemsLength());
-             assertEquals(aD.nextFirst(), newaD.nextFirst());
-             assertEquals(aD.nextLast(), newaD.nextLast());
-             assertArrayEquals(aD.items(), newaD.items());
-             assertNotEquals(aD, newaD);
-         }
-         @Test
-         public void addTest() {
-             ArrayDeque<Integer> aD = new ArrayDeque<>();
-             assertNull(aD.get(0));
-             aD.addFirst(1);
-             aD.addFirst(0);
-             aD.addLast(2);
-             Integer[] expect = {2, null, null, null, null, null, 0, 1};
-             assertArrayEquals(expect, aD.items());
-             assertEquals(5, aD.nextFirst());
-             assertEquals(1, aD.nextLast());
-             assertEquals(3, aD.size());
-         }
-         @Test
-         public void removeTest() {
-             ArrayDeque<Integer> aD = new ArrayDeque<>();
-             assertNull(aD.removeFirst());
-             assertNull(aD.removeLast());
-             for (int i = 0; i < 7; i++) {
-                 aD.addLast(i);
-             }
-             assertEquals(0, (long) aD.removeFirst());
-             assertEquals(6, (long) aD.removeLast());
-             Integer[] expect = {null, 1, 2, 3, 4, 5, null, null};
-             assertArrayEquals(expect, aD.items());
-             assertEquals(0, aD.nextFirst());
-             assertEquals(6, aD.nextLast());
-             assertEquals(5, aD.size());
-         }
-         @Test
-         public void resizeTestF() {
+** Tests
+*** ~LLDTest.java~
+    #+begin_src java :classname 
+      import org.junit.Test;
+      import static org.junit.Assert.*;
 
-             /* always addLast to full */
-             ArrayDeque<Integer> aD1 = new ArrayDeque<>();
-             for (int i = 0; i < 8; i++) {
-                 aD1.addLast(i);
-             }
-             Integer[] expectF = {0, 1, 2, 3, 4, 5, 6, 7, null, null,
-                     null, null, null, null, null, null};
-             assertArrayEquals(expectF, aD1.items());
-             aD1.addLast(8);
-             expectF[8] = 8;
-             assertArrayEquals(expectF, aD1.items());
-             assertEquals(15, aD1.nextFirst());
-             assertEquals(9, aD1.nextLast());
-             assertEquals(9, aD1.size());
+      public class LLDTest {
 
-             /* always addFirst to full */
-             ArrayDeque<Integer> aD2 = new ArrayDeque<>();
-             for (int i = 7; i >= 0; i--) {
-                 aD2.addFirst(i);
-             }
-             aD2.addLast(8);
-             assertArrayEquals(aD1.items(), aD2.items());
-             assertEquals(aD1.nextFirst(), aD2.nextFirst());
-             assertEquals(aD1.nextLast(), aD2.nextLast());
-             assertEquals(aD1.size(), aD2.size());
+          @Test
+          public void getTest() {
+              LinkedListDeque<Integer> llD = new LinkedListDeque<>();
+              llD.addFirst(0);
+              llD.addLast(1);
+              assertEquals(1, (long) llD.removeLast());
+              assertEquals(0, (long) llD.removeLast());
+              llD.addLast(5);
+              assertEquals(5, (long) llD.get(0));
+          }
 
-             /* addLast and addFirst (nextFirst = nextLast - 1) to full */
-             ArrayDeque<Integer> aD3 = new ArrayDeque<>();
-             for (int i = 3; i >= 0; i--) {
-                 aD3.addFirst(i);
-             }
-             for (int i = 4; i < 8; i++) {
-                 aD3.addLast(i);
-             }
-             aD3.addLast(8);
-             assertArrayEquals(aD1.items(), aD3.items());
-             assertEquals(aD1.nextFirst(), aD3.nextFirst());
-             assertEquals(aD1.nextLast(), aD3.nextLast());
-             assertEquals(aD1.size(), aD3.size());
-         }
+          @Test
+          public void getRecursiveTest() {
+              LinkedListDeque<Integer> llD = new LinkedListDeque<>();
+              assertNull(llD.getRecursive(0));
+              assertNull(llD.getRecursive(1));
+              llD.addLast(0);
+              assertEquals(0, (long) llD.getRecursive(0));
+              llD.removeLast();
+              assertNull(llD.getRecursive(0));
+              llD.addFirst(1);
+              assertEquals(1, (long) llD.getRecursive(0));
+              llD.removeFirst();
+              assertNull(llD.getRecursive(0));
+          }
+      }
+    #+end_src 
+*** ~ADTest.java~
+    #+begin_src java :classname 
+      import org.junit.Test;
+      import static org.junit.Assert.*;
 
-         @Test
-         public void resizeTestW() {
+      public class ADTest {
+          @Test
+          public void constructorTest() {
+              ArrayDeque<String> aD = new ArrayDeque<>();
+              assertEquals(8,  aD.itemsLength());
+              assertEquals(7, aD.nextFirst());
+              assertEquals(0, aD.nextLast());
+              ArrayDeque<String> newaD = new ArrayDeque<>(aD);
+              assertEquals(aD.itemsLength(), newaD.itemsLength());
+              assertEquals(aD.nextFirst(), newaD.nextFirst());
+              assertEquals(aD.nextLast(), newaD.nextLast());
+              assertArrayEquals(aD.items(), newaD.items());
+              assertNotEquals(aD, newaD);
+          }
+          @Test
+          public void addTest() {
+              ArrayDeque<Integer> aD = new ArrayDeque<>();
+              assertNull(aD.get(0));
+              aD.addFirst(1);
+              aD.addFirst(0);
+              aD.addLast(2);
+              Integer[] expect = {2, null, null, null, null, null, 0, 1};
+              assertArrayEquals(expect, aD.items());
+              assertEquals(5, aD.nextFirst());
+              assertEquals(1, aD.nextLast());
+              assertEquals(3, aD.size());
+          }
+          @Test
+          public void removeTest() {
+              ArrayDeque<Integer> aD = new ArrayDeque<>();
+              assertNull(aD.removeFirst());
+              assertNull(aD.removeLast());
+              for (int i = 0; i < 7; i++) {
+                  aD.addLast(i);
+              }
+              assertEquals(0, (long) aD.removeFirst());
+              assertEquals(6, (long) aD.removeLast());
+              Integer[] expect = {null, 1, 2, 3, 4, 5, null, null};
+              assertArrayEquals(expect, aD.items());
+              assertEquals(0, aD.nextFirst());
+              assertEquals(6, aD.nextLast());
+              assertEquals(5, aD.size());
+          }
+          @Test
+          public void resizeTestF() {
 
-             Integer[] expectF = {0, 1, 2, 3, 4, 5, 6, 7, 8, null,
-                     null, null, null, null, null, null};
-             ArrayDeque<Integer> aD3 = new ArrayDeque<>();
-             for (int i = 0; i < 9; i++) {
-                 aD3.addLast(i);
-             }
+              /* always addLast to full */
+              ArrayDeque<Integer> aD1 = new ArrayDeque<>();
+              for (int i = 0; i < 8; i++) {
+                  aD1.addLast(i);
+              }
+              Integer[] expectF = {0, 1, 2, 3, 4, 5, 6, 7, null, null,
+                      null, null, null, null, null, null};
+              assertArrayEquals(expectF, aD1.items());
+              aD1.addLast(8);
+              expectF[8] = 8;
+              assertArrayEquals(expectF, aD1.items());
+              assertEquals(15, aD1.nextFirst());
+              assertEquals(9, aD1.nextLast());
+              assertEquals(9, aD1.size());
 
-             /* nextFirst = 15 to waste, copy left */
-             Integer[] expectW = {0, 1, 2, null, null, null, null, null};
-             ArrayDeque<Integer> aD4 = new ArrayDeque<>(aD3);
-             for (int i = 0; i < 6; i++) {
-                 aD4.removeLast();
-             }
-             assertArrayEquals(expectW, aD4.items());
-             assertEquals(3, aD4.size());
-             assertEquals(3, aD4.nextLast());
-             assertEquals(7, aD4.nextFirst());
+              /* always addFirst to full */
+              ArrayDeque<Integer> aD2 = new ArrayDeque<>();
+              for (int i = 7; i >= 0; i--) {
+                  aD2.addFirst(i);
+              }
+              aD2.addLast(8);
+              assertArrayEquals(aD1.items(), aD2.items());
+              assertEquals(aD1.nextFirst(), aD2.nextFirst());
+              assertEquals(aD1.nextLast(), aD2.nextLast());
+              assertEquals(aD1.size(), aD2.size());
 
-             /* nextLast = 0 to waste, copy right */
-             ArrayDeque<Integer> aD5 = new ArrayDeque<>(aD3);
-             for (int i = 0; i < 3; i++) {
-                 aD5.addFirst(2 - i);
-                 expectF[15 - i] = 2 - i;
-             }
-             assertArrayEquals(expectF, aD5.items());
-             for (int i = 0; i < 9; i++) {
-                 aD5.removeLast();
-             }
-             assertArrayEquals(expectW, aD5.items());
-             assertEquals(3, aD5.size());
-             assertEquals(3, aD5.nextLast());
-             assertEquals(7, aD5.nextFirst());
+              /* addLast and addFirst (nextFirst = nextLast - 1) to full */
+              ArrayDeque<Integer> aD3 = new ArrayDeque<>();
+              for (int i = 3; i >= 0; i--) {
+                  aD3.addFirst(i);
+              }
+              for (int i = 4; i < 8; i++) {
+                  aD3.addLast(i);
+              }
+              aD3.addLast(8);
+              assertArrayEquals(aD1.items(), aD3.items());
+              assertEquals(aD1.nextFirst(), aD3.nextFirst());
+              assertEquals(aD1.nextLast(), aD3.nextLast());
+              assertEquals(aD1.size(), aD3.size());
+          }
 
-             /* nextLast != 0 and nextFirst !=0
-             and nextFirst > nextLast, copy two sides */
-             ArrayDeque<Integer> aD6 = new ArrayDeque<>(aD3);
-             for (int i = 0; i < 2; i++) {
-                 aD6.addFirst(1 - i);
-                 expectF[15 - i] = 1 - i;
-             }
-             expectF[13] = null;
-             assertArrayEquals(expectF, aD6.items());
-             for (int i = 0; i < 8; i++) {
-                 aD6.removeLast();
-             }
-             expectW[2] = 0;
-             assertArrayEquals(expectW, aD6.items());
-             assertEquals(3, aD6.size());
-             assertEquals(3, aD6.nextLast());
-             assertEquals(7, aD6.nextFirst());
+          @Test
+          public void resizeTestW() {
 
-             /* nextLast != 0 and nextFirst !=0
-             and nextFirst < nextLast, copy middle */
-             ArrayDeque<Integer> aD7 = new ArrayDeque<>(aD3);
-             for (int i = 0; i < 6; i++) {
-                 aD7.removeFirst();
-             }
-             expectW[0] = 6;
-             expectW[1] = 7;
-             expectW[2] = 8;
-             assertArrayEquals(expectW, aD7.items());
-             assertEquals(3, aD7.size());
-             assertEquals(3, aD7.nextLast());
-             assertEquals(7, aD7.nextFirst());
-         }
-     }
-   #+end_src 
+              Integer[] expectF = {0, 1, 2, 3, 4, 5, 6, 7, 8, null,
+                      null, null, null, null, null, null};
+              ArrayDeque<Integer> aD3 = new ArrayDeque<>();
+              for (int i = 0; i < 9; i++) {
+                  aD3.addLast(i);
+              }
+
+              /* nextFirst = 15 to waste, copy left */
+              Integer[] expectW = {0, 1, 2, null, null, null, null, null};
+              ArrayDeque<Integer> aD4 = new ArrayDeque<>(aD3);
+              for (int i = 0; i < 6; i++) {
+                  aD4.removeLast();
+              }
+              assertArrayEquals(expectW, aD4.items());
+              assertEquals(3, aD4.size());
+              assertEquals(3, aD4.nextLast());
+              assertEquals(7, aD4.nextFirst());
+
+              /* nextLast = 0 to waste, copy right */
+              ArrayDeque<Integer> aD5 = new ArrayDeque<>(aD3);
+              for (int i = 0; i < 3; i++) {
+                  aD5.addFirst(2 - i);
+                  expectF[15 - i] = 2 - i;
+              }
+              assertArrayEquals(expectF, aD5.items());
+              for (int i = 0; i < 9; i++) {
+                  aD5.removeLast();
+              }
+              assertArrayEquals(expectW, aD5.items());
+              assertEquals(3, aD5.size());
+              assertEquals(3, aD5.nextLast());
+              assertEquals(7, aD5.nextFirst());
+
+              /* nextLast != 0 and nextFirst !=0
+              and nextFirst > nextLast, copy two sides */
+              ArrayDeque<Integer> aD6 = new ArrayDeque<>(aD3);
+              for (int i = 0; i < 2; i++) {
+                  aD6.addFirst(1 - i);
+                  expectF[15 - i] = 1 - i;
+              }
+              expectF[13] = null;
+              assertArrayEquals(expectF, aD6.items());
+              for (int i = 0; i < 8; i++) {
+                  aD6.removeLast();
+              }
+              expectW[2] = 0;
+              assertArrayEquals(expectW, aD6.items());
+              assertEquals(3, aD6.size());
+              assertEquals(3, aD6.nextLast());
+              assertEquals(7, aD6.nextFirst());
+
+              /* nextLast != 0 and nextFirst !=0
+              and nextFirst < nextLast, copy middle */
+              ArrayDeque<Integer> aD7 = new ArrayDeque<>(aD3);
+              for (int i = 0; i < 6; i++) {
+                  aD7.removeFirst();
+              }
+              expectW[0] = 6;
+              expectW[1] = 7;
+              expectW[2] = 8;
+              assertArrayEquals(expectW, aD7.items());
+              assertEquals(3, aD7.size());
+              assertEquals(3, aD7.nextLast());
+              assertEquals(7, aD7.nextFirst());
+          }
+      }
+    #+end_src 
 * Project 1B Applying and Testing Data Structures version 1.0       :TOBEORG:
-** Deque Interface 
+** ~Deque.java~
    #+begin_src java :classname 
      interface Deque<T> {
 
@@ -651,7 +653,7 @@
          T get(int index);
      }
    #+end_src 
-** wordToDeque
+** ~wordToDeque~
    #+begin_src java :classname 
      public class Palindrome {
 
@@ -667,7 +669,7 @@
          ...
      }
    #+end_src 
-** isPalindrome
+** ~isPalindrome~
    #+begin_src java :classname 
      public boolean isPalindrome(String word) {
          if (word.length() == 1 || word.length() == 0) {
@@ -692,7 +694,7 @@
      }
    #+end_src 
 ** Generalized Palindrome and OffByOne
-*** OffByOne
+*** ~OffByOne~
     #+begin_src java :classname 
       /** This interface defines a method for determining equality of characters. */
       public interface CharacterComparator {
@@ -709,7 +711,7 @@
           }
       }
     #+end_src 
-*** Generalized Palindrome
+*** Generalized ~isPalindrome~
     #+begin_src java :classname 
       public boolean isPalindrome(String s, CharacterComparator cc) {
 
@@ -726,7 +728,7 @@
           return true;
       }
     #+end_src 
-** OffByN
+** ~OffByN.java~
    #+begin_src java :classname 
      public class OffByN implements CharacterComparator {
 
@@ -832,7 +834,7 @@
   - ~switch~ and ~case~
   - ~assertEquals(String msg, expect, actual)~ 
 * Project 2A Extrinsic MinPQ
-** ~ArrayHeapMinPQ~ 
+** ~ArrayHeapMinPQ.java~ 
 *** ~class PNode<T>~ 
     #+begin_src java :classname 
       public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
@@ -967,7 +969,7 @@
       - [ ] 要求： ~getSmallest~, ~contains~, ~size~ and ~changePriority~ run in $O(log(n))$ time, ~add~ and ~removeSmallest~ run in $O(log(n))$ *average* time
       - [ ] 实际：？ [[ilink2][Runtime testing]]
 ** Tests
-*** ~ArrayHeapMinPQTest~  
+*** ~ArrayHeapMinPQTest.java~  
     #+begin_src java :classname 
       @Test
       public void sanityGenericTest() {
@@ -1066,7 +1068,7 @@
 *** Randomized testing                                     :UNRESOLVED:EXTRA:
 *** Runtime testing <<ilink2>>                             :UNRESOLVED:EXTRA:
 * Project 2B K-d Tree
-** ~KDTree~ 
+** ~KDTree.java~ 
 *** ~class Node~ 
     #+begin_src java :classname 
       public class KDTree implements PointSet {
@@ -1177,7 +1179,7 @@
     - [ ] 关于 [[ilink5][needBad]] 的准确准则及实现，并用 randomized tests 验证速度
     - [ ] 如果数据的维数更多，又该怎么去实现？
 ** Tests
-*** ~KDTreeTest~ 
+*** ~KDTreeTest.java~ 
     #+begin_src java :classname 
       public class KDTreeTest {
 
@@ -1237,3 +1239,205 @@
       }
     #+end_src 
     - ~Random r = new Random()~ and ~r.nextDouble()~ 
+* Project 2C Bear Maps
+** ~RasterAPIHandler.java~ 
+*** ~processRequest~ 
+    #+begin_src java :classname 
+      @Override
+      public Map<String, Object> processRequest(Map<String, Double> requestParams, Response response) {
+            System.out.println("yo, wanna know the parameters given by the web browser? They are:");
+            System.out.println(requestParams);
+          Map<String, Object> results = new HashMap<>();
+          results.put("query_success", false);
+            System.out.println("Since you haven't implemented RasterAPIHandler.processRequest, nothing is displayed in "
+                    + "your browser.");
+          double width = requestParams.get("w"), ullon = requestParams.get("ullon"),
+                  ullat = requestParams.get("ullat"), lrlon = requestParams.get("lrlon"),
+                  lrlat = requestParams.get("lrlat");
+          int cmp1 = Double.compare(ullon, lrlon), cmp2 = Double.compare(ullat, lrlat);
+          if (cmp1 > 0 || cmp2 < 0) return results;
+          double requestLonDPP = (lrlon - ullon) / width,
+                  initLonDPP = (ROOT_LRLON - ROOT_ULLON) / TILE_SIZE,
+                  initLatDPP = (ROOT_ULLAT - ROOT_LRLAT) /TILE_SIZE;
+          int depth = (int) Math.ceil(Math.log(initLonDPP / requestLonDPP) / Math.log(2));
+          depth = depth < 0 ? 0 : depth;
+          depth = depth > 7 ? 7 : depth;
+          int blocks = (int) Math.pow(2, depth);
+          double iLonDPP = initLonDPP / blocks, iLatDPP = initLatDPP / blocks;
+
+          int xl = (int) Math.floor((ullon - ROOT_ULLON) / (iLonDPP * TILE_SIZE));
+          int xr = (int) Math.floor((lrlon - ROOT_ULLON) / (iLonDPP * TILE_SIZE));
+          int yu = (int) Math.floor((ROOT_ULLAT - ullat) / (iLatDPP * TILE_SIZE));
+          int yd = (int) Math.floor((ROOT_ULLAT - lrlat) / (iLatDPP * TILE_SIZE));
+          if (xl > blocks - 1 || xr < 0 || yu > blocks - 1 || yd < 0) return results;
+          xl = xl < 0 ? 0 : xl;
+          xr = xr > blocks - 1 ? blocks - 1 : xr;
+          yu = yu < 0 ? 0 : yu;
+          yd = yd > blocks - 1 ? blocks - 1 : yd;
+          int y = yd - yu + 1, x = xr - xl + 1;
+          String[][] grid = new String[y][x];
+          for (int j = 0; j < y; j++) {
+              for (int k = 0; k < x; k ++){
+                  grid[j][k] = "d" + depth + "_x" + (k + xl) + "_y" + (j + yu) + ".png";
+              }
+          }
+          double ul_lon = ROOT_ULLON + xl * (ROOT_LRLON - ROOT_ULLON) / blocks;
+          double ul_lat = ROOT_ULLAT + yu * (ROOT_LRLAT - ROOT_ULLAT) / blocks;
+          double lr_lon = ROOT_ULLON + (xr + 1) * (ROOT_LRLON - ROOT_ULLON) / blocks;
+          double lr_lat = ROOT_ULLAT + (yd + 1) * (ROOT_LRLAT - ROOT_ULLAT) / blocks;
+          results.put("render_grid", grid);
+          results.put("raster_ul_lon", ul_lon);
+          results.put("raster_ul_lat", ul_lat);
+          results.put("raster_lr_lon", lr_lon);
+          results.put("raster_lr_lat", lr_lat);
+          results.put("depth", depth);
+          results.put("query_success", true);
+
+          return results;
+      }
+    #+end_src 
+** Tests                                                          :QUESTIONS:
+*** ~TestRasterAPIHandler.java~
+    #+begin_src java :classname 
+      public class TestRasterAPIHandler {
+          private static final double DOUBLE_THRESHOLD = 0.000000001;
+          private static DecimalFormat df2 = new DecimalFormat(".#########");
+          private static final String PARAMS_FILE = "../../library-sp19/data/proj2c_test_inputs/raster_params.txt";
+          private static final String RESULTS_FILE = "../../library-sp19/data/proj2c_test_inputs/raster_results.txt";
+          private static final int NUM_TESTS = 8;
+          private static RasterAPIHandler rasterer;
+
+
+          @Before
+          public void setUp() throws Exception {
+              rasterer = new RasterAPIHandler();
+          }
+
+          @Test
+          public void testProcessRequests() throws Exception {
+              List<Map<String, Double>> testParams = paramsFromFile();
+              List<Map<String, Object>> expectedResults = resultsFromFile();
+
+              for (int i = 0; i < NUM_TESTS; i++) {
+                  System.out.println(String.format("Running test: %d", i));
+                  Map<String, Double> params = testParams.get(i);
+                  Map<String, Object> actual = rasterer.processRequest(params, null);
+                  Map<String, Object> expected = expectedResults.get(i);
+                  String msg = "Your results did not match the expected results for input "
+                               + mapToString(params) + ".\n";
+                  checkParamsMap(msg, expected, actual);
+              }
+          }
+
+          private List<Map<String, Double>> paramsFromFile() throws Exception {
+              List<String> lines = Files.readAllLines(Paths.get(PARAMS_FILE), Charset.defaultCharset());
+              List<Map<String, Double>> testParams = new ArrayList<>();
+              int lineIdx = 2; // ignore comment lines
+              for (int i = 0; i < NUM_TESTS; i++) {
+                  Map<String, Double> params = new HashMap<>();
+                  params.put("ullon", Double.parseDouble(lines.get(lineIdx)));
+                  params.put("ullat", Double.parseDouble(lines.get(lineIdx + 1)));
+                  params.put("lrlon", Double.parseDouble(lines.get(lineIdx + 2)));
+                  params.put("lrlat", Double.parseDouble(lines.get(lineIdx + 3)));
+                  params.put("w", Double.parseDouble(lines.get(lineIdx + 4)));
+                  params.put("h", Double.parseDouble(lines.get(lineIdx + 5)));
+                  testParams.add(params);
+                  lineIdx += 6;
+              }
+              return testParams;
+          }
+
+          private List<Map<String, Object>> resultsFromFile() throws Exception {
+              List<String> lines = Files.readAllLines(Paths.get(RESULTS_FILE), Charset.defaultCharset());
+              List<Map<String, Object>> expected = new ArrayList<>();
+              int lineIdx = 4; // ignore comment lines
+              for (int i = 0; i < NUM_TESTS; i++) {
+                  Map<String, Object> results = new HashMap<>();
+                  results.put("raster_ul_lon", Double.parseDouble(lines.get(lineIdx)));
+                  results.put("raster_ul_lat", Double.parseDouble(lines.get(lineIdx + 1)));
+                  results.put("raster_lr_lon", Double.parseDouble(lines.get(lineIdx + 2)));
+                  results.put("raster_lr_lat", Double.parseDouble(lines.get(lineIdx + 3)));
+                  results.put("depth", Integer.parseInt(lines.get(lineIdx + 4)));
+                  results.put("query_success", Boolean.parseBoolean(lines.get(lineIdx + 5)));
+                  lineIdx += 6;
+                  String[] dimensions = lines.get(lineIdx).split(" ");
+                  int rows = Integer.parseInt(dimensions[0]);
+                  int cols = Integer.parseInt(dimensions[1]);
+                  lineIdx += 1;
+                  String[][] grid = new String[rows][cols];
+                  for (int r = 0; r < rows; r++) {
+                      for (int c = 0; c < cols; c++) {
+                          grid[r][c] = lines.get(lineIdx);
+                          lineIdx++;
+                      }
+                  }
+                  results.put("render_grid", grid);
+                  expected.add(results);
+              }
+              return expected;
+          }
+
+          private void checkParamsMap(String err, Map<String, Object> expected,
+                                                  Map<String, Object> actual) {
+              for (String key : expected.keySet()) {
+                  assertTrue(err + "Your results map is missing "
+                             + key, actual.containsKey(key));
+                  Object o1 = expected.get(key);
+                  Object o2 = actual.get(key);
+
+                  if (o1 instanceof Double) {
+                      String errMsg = genDiffErrMsg(err, expected, actual);
+                      assertTrue(errMsg, Math.abs((Double) o1 - (Double) o2) < DOUBLE_THRESHOLD);
+                  } else if (o1 instanceof String[][]) {
+                      String errMsg = genDiffErrMsg(err, expected, actual);
+                      assertArrayEquals(errMsg, (String[][]) o1, (String[][]) o2);
+                  } else {
+                      String errMsg = genDiffErrMsg(err, expected, actual);
+                      assertEquals(errMsg, o1, o2);
+                  }
+              }
+          }
+
+          /** Generates an actual/expected message from a base message, an actual map,
+           ,*  and an expected map.
+           ,*/
+          private String genDiffErrMsg(String basemsg, Map<String, Object> expected,
+                                       Map<String, Object> actual) {
+              return basemsg + "Expected: " + mapToString(expected) + ", but got\n"
+                             + "Actual  : " + mapToString(actual);
+          }
+
+          /** Converts a Rasterer input or output map to its string representation. */
+          private String mapToString(Map<String, ?> m) {
+              StringJoiner sj = new StringJoiner(", ", "{", "}");
+
+              List<String> keys = new ArrayList<>();
+              keys.addAll(m.keySet());
+              Collections.sort(keys);
+
+              for (String k : keys) {
+
+                  StringBuilder sb = new StringBuilder();
+                  sb.append(k);
+                  sb.append("=");
+                  Object v = m.get(k);
+
+                  if (v instanceof String[][]) {
+                      sb.append(Arrays.deepToString((String[][]) v));
+                  } else if (v instanceof Double) {
+                      sb.append(df2.format(v));
+                  } else {
+                      sb.append(v.toString());
+                  }
+                  String thisEntry = sb.toString();
+
+                  sj.add(thisEntry);
+              }
+
+              return sj.toString();
+          }
+
+      }
+    #+end_src 
+**** Question:                                                    :QUESTIONS:
+     - [ ] ~TestRasterAPIHandler.java~ 理解？

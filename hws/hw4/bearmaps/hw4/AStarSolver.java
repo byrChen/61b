@@ -15,6 +15,11 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
     private HashSet<Vertex> visited = new HashSet<>();
 
     public AStarSolver(AStarGraph<Vertex> input, Vertex start, Vertex end, double timeout) {
+        if (start.equals(end)) {
+            outcome = SolverOutcome.SOLVED;
+            solution.add(start);
+            return;
+        }
         ArrayHeapMinPQ<Vertex> pq = new ArrayHeapMinPQ<>();
         distTo.put(start, 0.0);
         pq.add(start, distTo.get(start) + input.estimatedDistanceToGoal(start, end));
