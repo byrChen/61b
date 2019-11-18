@@ -14,21 +14,21 @@ public class TestMyTrieSet {
         for (int i = 0; i < 455; i++) {
             t.add("hi" + i);
             //make sure put is working via contains
-            assertTrue(t.contains("hi" + i));
+            assertTrue(t.containsStr("hi" + i));
         }
         t.clear();
         for (int i = 0; i < 455; i++) {
-            assertFalse(t.contains("hi" + i));
+            assertFalse(t.containsStr("hi" + i));
         }
     }
 
     // assumes add works
     @Test
-    public void sanityContainsTest() {
+    public void sanitycontainsStrTest() {
         MyTrieSet t = new MyTrieSet();
-        assertFalse(t.contains("waterYouDoingHere"));
+        assertFalse(t.containsStr("waterYouDoingHere"));
         t.add("waterYouDoingHere");
-        assertTrue(t.contains("waterYouDoingHere"));
+        assertTrue(t.containsStr("waterYouDoingHere"));
     }
 
     // assumes add works

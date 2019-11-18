@@ -1,3 +1,5 @@
+package bearmaps.lab9;
+
 import java.util.*;
 
 public class MyTrieSet implements TrieSet61B{

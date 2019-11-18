@@ -1278,7 +1278,7 @@
                   return map.get(c);
               }
 
-              boolean containsKey(Character c) {
+              boolean containsCh(Character c) {
                   return map.containsKey(c);
               }
 
@@ -1300,12 +1300,12 @@
 *** ~contains~ 
     #+begin_src java :classname 
       @Override
-      public boolean contains(String key) {
-          if (key == null) return false;
+      public boolean containsStr(String str) {
+          if (str == null) return false;
           Node n = root;
-          for (int i = 0, l = key.length(); i < l; i++) {
-              char c = key.charAt(i);
-              if (n.containsKey(c)) {
+          for (int i = 0, l = str.length(); i < l; i++) {
+              char c = str.charAt(i);
+              if (n.containsCh(c)) {
                   n = n.getNode(c);
                   continue;
               }
@@ -1322,13 +1322,13 @@
     #+begin_src java :classname 
       @Override
       public void add(String key) {
-          if (key == null || key.length() < 1) {
+          if (key == null || key.length() < 1 || collect().contains(key)) {
               return;
           }
           Node curr = root;
           for (int i = 0, n = key.length(); i < n; i++) {
               char c = key.charAt(i);
-              if (!curr.containsKey(c)) {
+              if (!curr.containsCh(c)) {
                   curr.add(c, new Node(false));
               }
               curr = curr.getNode(c);
@@ -1343,7 +1343,7 @@
       @Override
       public List<String> keysWithPrefix(String prefix) {
           List<String> keys = new LinkedList<>();
-          if (!contains(prefix)) return null;
+          if (!containsStr(prefix)) return null;
           Node n = root;
           for (int i = 0, l = prefix.length(); i < l; i++) {
               char c = prefix.charAt(i);
@@ -1351,13 +1351,6 @@
           }
           colHelp(prefix, keys, n);
           return keys;
-      }
-
-      private void colHelp(String s, List<String> x, Node n) {
-          if (n.isKey) x.add(s);
-          for (char c : n.keySet()) {
-              colHelp(s + c, x, n.getNode(c));
-          }
       }
     #+end_src 
     - ~colHelp(String s, List<String> x, Node n)~

@@ -1239,18 +1239,13 @@
       }
     #+end_src 
     - ~Random r = new Random()~ and ~r.nextDouble()~ 
-* Project 2C Bear Maps
+* Project 2C Bear Maps                                              :TOBEORG:
 ** ~RasterAPIHandler.java~ 
 *** ~processRequest~ 
     #+begin_src java :classname 
-      @Override
       public Map<String, Object> processRequest(Map<String, Double> requestParams, Response response) {
-            System.out.println("yo, wanna know the parameters given by the web browser? They are:");
-            System.out.println(requestParams);
           Map<String, Object> results = new HashMap<>();
           results.put("query_success", false);
-            System.out.println("Since you haven't implemented RasterAPIHandler.processRequest, nothing is displayed in "
-                    + "your browser.");
           double width = requestParams.get("w"), ullon = requestParams.get("ullon"),
                   ullat = requestParams.get("ullat"), lrlon = requestParams.get("lrlon"),
                   lrlat = requestParams.get("lrlat");
@@ -1258,7 +1253,7 @@
           if (cmp1 > 0 || cmp2 < 0) return results;
           double requestLonDPP = (lrlon - ullon) / width,
                   initLonDPP = (ROOT_LRLON - ROOT_ULLON) / TILE_SIZE,
-                  initLatDPP = (ROOT_ULLAT - ROOT_LRLAT) /TILE_SIZE;
+                  initLatDPP = (ROOT_ULLAT - ROOT_LRLAT) / TILE_SIZE;
           int depth = (int) Math.ceil(Math.log(initLonDPP / requestLonDPP) / Math.log(2));
           depth = depth < 0 ? 0 : depth;
           depth = depth > 7 ? 7 : depth;
@@ -1277,7 +1272,7 @@
           int y = yd - yu + 1, x = xr - xl + 1;
           String[][] grid = new String[y][x];
           for (int j = 0; j < y; j++) {
-              for (int k = 0; k < x; k ++){
+              for (int k = 0; k < x; k++) {
                   grid[j][k] = "d" + depth + "_x" + (k + xl) + "_y" + (j + yu) + ".png";
               }
           }
@@ -1296,7 +1291,97 @@
           return results;
       }
     #+end_src 
-** Tests                                                          :QUESTIONS:
+**** Question:                                                    :QUESTIONS:
+     - [ ] ~processRequest~ 有没有更优雅的实现？
+     - [ ] 以上对 ~double~ 的各种运算怎么保证精度？
+** ~AugmentedStreetMapGraph.java~ 
+*** ~AugmentedStreetMapGraph~ 
+    #+begin_src java :classname 
+      public class AugmentedStreetMapGraph extends StreetMapGraph {
+
+          private HashMap<Point, Node> pToNode = new HashMap<>();
+          private HashMap<String, List<Node>> nToNodes = new HashMap<>(); <<ilink6>>
+          private HashMap<String, List<String>> clToNames = new HashMap<>();
+          private KDTree kt;
+          private MyTrieSet trie = new MyTrieSet();
+
+          public AugmentedStreetMapGraph(String dbPath) {
+              super(dbPath);
+              // You might find it helpful to uncomment the line below:
+              List<Node> nodes = this.getNodes();
+              for (Node n : nodes) {
+                  if (neighbors(n.id()).size() != 0) {
+                      pToNode.put(new Point(n.lon(), n.lat()), n);
+                  }
+                  if (n.name() != null && !n.name().isEmpty()) {
+                      String clean = cleanString(n.name());
+                      if (!trie.collect().contains(clean)) {
+                          trie.add(clean);
+                      }
+                      if (!clToNames.containsKey(clean)) {
+                          clToNames.put(clean, new ArrayList<>());
+                      }
+                      if (!clToNames.get(clean).contains(n.name())) {
+                          clToNames.get(clean).add(n.name());
+                      }
+                      if (!nToNodes.containsKey(n.name())) {
+                          nToNodes.put(n.name(), new ArrayList<>());
+                      }
+                      nToNodes.get(n.name()).add(n);
+                  }
+              }
+              List<Point> points = new ArrayList<>(pToNode.keySet());
+              kt = new KDTree(points);
+          }
+          ...
+      }
+    #+end_src 
+*** ~closest~ 
+    #+begin_src java :classname 
+      public long closest(double lon, double lat) {
+          return pToNode.get(kt.nearest(lon, lat)).id();
+      }
+    #+end_src 
+*** ~getLocationByPrefix~ <<ilink7>>                                  :EXTRA:
+    #+begin_src java :classname 
+      public List<String> getLocationsByPrefix(String prefix) {
+          List<String> names = new ArrayList<>();
+          for (String cl : trie.keysWithPrefix(cleanString(prefix))) {
+              names.addAll(clToNames.get(cl));
+          }
+          return names;
+      }
+    #+end_src 
+*** ~getLocations~ <<ilink8>>                                         :EXTRA:
+    #+begin_src java :classname 
+      public List<Map<String, Object>> getLocations(String locationName) {
+          List<Map<String, Object>> locations = new ArrayList<>();
+          for (String name : clToNames.get(cleanString(locationName))) {
+              for (Node n : nToNodes.get(name)) {
+                  HashMap<String, Object> map = new HashMap<>();
+                  map.put("lat", n.lat());
+                  map.put("lon", n.lon());
+                  map.put("name", n.name());
+                  map.put("id", n.id());
+                  locations.add(map);
+              }
+          }
+
+          return locations;
+      }
+    #+end_src 
+*** ~cleanString~ <<ilink9>>
+    #+begin_src java :classname 
+      private static String cleanString(String s) {
+          return s.replaceAll("[^a-zA-Z ]", "").toLowerCase();
+      }
+    #+end_src 
+*** Question:                                                     :QUESTIONS:
+    - [ ] [[ilink6][nToNodes 和 clToNames]] 是必要的吗？ [[ilink7][getLocationsByPrefix]] 和 [[ilink8][getLocations]] 能否有更优雅的实现？
+    - [ ] 为什么搜索的时候先要用 [[ilink9][cleanString]] 处理？输入字符与输出结果之间需要怎样的逻辑处理？
+** ~Router.java~  
+*** ~routeDirections~                                                 :EXTRA:
+** Tests
 *** ~TestRasterAPIHandler.java~
     #+begin_src java :classname 
       public class TestRasterAPIHandler {
@@ -1439,5 +1524,134 @@
 
       }
     #+end_src 
-**** Question:                                                    :QUESTIONS:
-     - [ ] ~TestRasterAPIHandler.java~ 理解？
+*** ~TestRouter.java~ 
+    #+begin_src java :classname 
+      public class TestRouter {
+          private static final String PARAMS_FILE = "../../library-sp19/data/proj2c_test_inputs/path_params.txt";
+          private static final String RESULTS_FILE = "../../library-sp19/data/proj2c_test_inputs/path_results.txt";
+          private static final int NUM_TESTS = 8;
+          private static final String OSM_DB_PATH = "../../library-sp19/data/proj2c_xml/berkeley-2019.osm.xml";
+          private static AugmentedStreetMapGraph graph;
+          private static boolean initialized = false;
+
+          @Before
+          public void setUp() throws Exception {
+              if (initialized) {
+                  return;
+              }
+              graph = new AugmentedStreetMapGraph(OSM_DB_PATH);
+              initialized = true;
+
+          }
+
+          @Test
+          public void testShortestPath() throws Exception {
+              List<Map<String, Double>> testParams = paramsFromFile();
+              List<List<Long>> expectedResults = resultsFromFile();
+
+              for (int i = 0; i < NUM_TESTS; i++) {
+                  System.out.println(String.format("Running test: %d", i));
+                  Map<String, Double> params = testParams.get(i);
+                  List<Long> actual = Router.shortestPath(graph,
+                          params.get("start_lon"), params.get("start_lat"),
+                          params.get("end_lon"), params.get("end_lat"));
+                  List<Long> expected = expectedResults.get(i);
+                  assertEquals("Your results did not match the expected results", expected, actual);
+              }
+          }
+
+          private List<Map<String, Double>> paramsFromFile() throws Exception {
+              List<String> lines = Files.readAllLines(Paths.get(PARAMS_FILE), Charset.defaultCharset());
+              List<Map<String, Double>> testParams = new ArrayList<>();
+              int lineIdx = 2; // ignore comment lines
+              for (int i = 0; i < NUM_TESTS; i++) {
+                  Map<String, Double> params = new HashMap<>();
+                  params.put("start_lon", Double.parseDouble(lines.get(lineIdx)));
+                  params.put("start_lat", Double.parseDouble(lines.get(lineIdx + 1)));
+                  params.put("end_lon", Double.parseDouble(lines.get(lineIdx + 2)));
+                  params.put("end_lat", Double.parseDouble(lines.get(lineIdx + 3)));
+                  testParams.add(params);
+                  lineIdx += 4;
+              }
+              return testParams;
+          }
+
+          private List<List<Long>> resultsFromFile() throws Exception {
+              List<String> lines = Files.readAllLines(Paths.get(RESULTS_FILE), Charset.defaultCharset());
+              List<List<Long>> expected = new ArrayList<>();
+              int lineIdx = 2; // ignore comment lines
+              for (int i = 0; i < NUM_TESTS; i++) {
+                  int numVertices = Integer.parseInt(lines.get(lineIdx));
+                  lineIdx++;
+                  List<Long> path = new ArrayList<>();
+                  for (int j = 0; j < numVertices; j++) {
+                      path.add(Long.parseLong(lines.get(lineIdx)));
+                      lineIdx++;
+                  }
+                  expected.add(path);
+              }
+              return expected;
+          }
+      }
+    #+end_src 
+
+*** ~TestRouterTiny.java~ 
+    #+begin_src java :classname 
+      public class TestRouterTiny {
+          private static final String OSM_DB_PATH_TINY = "../../library-sp19/data/proj2c_xml/tiny-clean.osm.xml";
+          private static AugmentedStreetMapGraph graphTiny;
+          private static boolean initialized = false;
+
+          @Before
+          public void setUp() throws Exception {
+              if (initialized) {
+                  return;
+              }
+              graphTiny = new AugmentedStreetMapGraph(OSM_DB_PATH_TINY);
+              initialized = true;
+          }
+
+          @Test
+          public void test22to66() {
+              List<Long> actual = Router.shortestPath(graphTiny, 0.2, 38.2, 0.6, 38.6);
+              List<Long> expected = new ArrayList<>();
+              expected.add(22L);
+              expected.add(46L);
+              expected.add(66L);
+              assertEquals("Best path from 22 to 66 is incorrect.", expected, actual);
+          }
+
+          @Test
+          public void test22to11() {
+              List<Long> actual = Router.shortestPath(graphTiny, 0.2, 38.2, 0.1, 38.1);
+              List<Long> expected = new ArrayList<>();
+              expected.add(22L);
+              expected.add(11L);
+              assertEquals(expected, actual);
+          }
+
+          @Test
+          public void test41to46() {
+              List<Long> actual = Router.shortestPath(graphTiny, 0.4, 38.1, 0.4, 38.6);
+              List<Long> expected = new ArrayList<>();
+              expected.add(41L);
+              expected.add(63L);
+              expected.add(66L);
+              expected.add(46L);
+              assertEquals(expected, actual);
+          }
+
+          @Test
+          public void test66to55() {
+              List<Long> actual = Router.shortestPath(graphTiny, 0.6, 38.6, 0.5, 38.5);
+              List<Long> expected = new ArrayList<>();
+              expected.add(66L);
+              expected.add(63L);
+              expected.add(55L);
+              assertEquals(expected, actual);
+          }
+      }
+    #+end_src 
+*** Question:                                                     :QUESTIONS:
+    - [ ] 以上 tests 理解？
+      

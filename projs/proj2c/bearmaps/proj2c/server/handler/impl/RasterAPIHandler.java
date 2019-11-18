@@ -96,7 +96,7 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
         if (cmp1 > 0 || cmp2 < 0) return results;
         double requestLonDPP = (lrlon - ullon) / width,
                 initLonDPP = (ROOT_LRLON - ROOT_ULLON) / TILE_SIZE,
-                initLatDPP = (ROOT_ULLAT - ROOT_LRLAT) /TILE_SIZE;
+                initLatDPP = (ROOT_ULLAT - ROOT_LRLAT) / TILE_SIZE;
         int depth = (int) Math.ceil(Math.log(initLonDPP / requestLonDPP) / Math.log(2));
         depth = depth < 0 ? 0 : depth;
         depth = depth > 7 ? 7 : depth;
@@ -115,7 +115,7 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
         int y = yd - yu + 1, x = xr - xl + 1;
         String[][] grid = new String[y][x];
         for (int j = 0; j < y; j++) {
-            for (int k = 0; k < x; k ++){
+            for (int k = 0; k < x; k++) {
                 grid[j][k] = "d" + depth + "_x" + (k + xl) + "_y" + (j + yu) + ".png";
             }
         }
