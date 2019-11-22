@@ -1686,3 +1686,55 @@
           return true;
       }
     #+end_src 
+    
+* Lab 12 Getting Started on Project 3
+** ~HexWorld.java~ 
+*** ~addHexagon~ 
+    #+begin_src java :classname 
+      private static void addHexagon(TETile[][] tiles, int x, int y, int s, TETile tile) {
+          int count = 0;
+          for (int i = y; i < y + s; i++) {
+              for (int j = x; j < x +  s + 2 * count; j++) {
+                  tiles[j][i] = tile;
+                  tiles[j][i+2*(s-count)-1] = tile;
+              }
+              x -= 1;
+              count += 1;
+          }
+      }
+    #+end_src 
+    - Add *by row*
+*** ~addHexagons~ 
+    #+begin_src java :classname 
+      private static void addHexagons(TETile[][] tiles, int x, int y, int s1, int s2) {
+          int count = 0;
+          for (int i = 0; i < s1; i++) {
+              int yj = y;
+              for (int j = 0; j < 2*s1 - count - 1; j++) {
+                  addHexagon(tiles, x, yj, s2, randomTile());
+                  addHexagon(tiles, x+i*(4*s2-2), yj, s2, randomTile());
+                  yj += 2 * s2;
+              }
+              x -= 2 * s2 - 1;
+              y += s2;
+              count += 1;
+          }
+      }
+
+      private static TETile randomTile() {
+          int tileNum = RANDOM.nextInt(3);
+          switch (tileNum) {
+          case 0: return Tileset.WALL;
+          case 1: return Tileset.FLOWER;
+          case 2: return Tileset.AVATAR;
+          default: return Tileset.FLOOR;
+          }
+      }
+    #+end_src 
+    - Add *by column*
+    - ~switch () {case n: ...; default: ...;}~ 
+*** Question:                                                     :QUESTIONS:
+    - [ ] 进一步抽象函数： ~addHexagon~ 按行扫描添加并对称与 ~addHexagons~ 按列扫描添加并对称。
+    - [ ] ~WIDTH~, ~HEIGHT~ 与六边形边长的关系，把六边形至于世界中间
+* Lab 13 Interactivity in Project 3                              :UNRESOLVED:
+

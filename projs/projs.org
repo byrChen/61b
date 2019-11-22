@@ -1239,7 +1239,7 @@
       }
     #+end_src 
     - ~Random r = new Random()~ and ~r.nextDouble()~ 
-* Project 2C Bear Maps                                              :TOBEORG:
+* Project 2C Bear Maps
 ** ~RasterAPIHandler.java~ 
 *** ~processRequest~ 
     #+begin_src java :classname 
@@ -1291,6 +1291,14 @@
           return results;
       }
     #+end_src 
+    - Corner cases 
+      - ~requestParams~ is wrong: ~if (cmp1 > 0 || cmp2 < 0) return results~
+      - Unaccessible ~requestLonDPP~: ~depth = depth < 0 ? 0 : depth~ + ~depth = depth > 7 ? 7 : depth~
+      - *Totally* out of map: ~if (xl > blocks - 1 || xr < 0 || yu > blocks - 1 || yd < 0) return results~
+      - *Partially* out of map: ~xl = xl < 0 ? 0 : xl~ + ~xr = xr > blocks - 1 ? blocks - 1 : xr~ + ~yu = yu < 0 ? 0 : yu~ + ~yd = yd > blocks - 1 ? blocks - 1 : yd~ 
+    - Depth: ~int depth = (int) Math.ceil(Math.log(initLonDPP / requestLonDPP) / Math.log(2))~
+    - Index of png: ~int xl = (int) Math.floor((ullon - ROOT_ULLON) / (iLonDPP * TILE_SIZE))~ 
+    - ~ul~ and ~lr~: ~double lr_lon = ROOT_ULLON + (xr + 1) * (ROOT_LRLON - ROOT_ULLON) / blocks~ 
 **** Question:                                                    :QUESTIONS:
      - [ ] ~processRequest~ 有没有更优雅的实现？
      - [ ] 以上对 ~double~ 的各种运算怎么保证精度？
@@ -1315,9 +1323,7 @@
                   }
                   if (n.name() != null && !n.name().isEmpty()) {
                       String clean = cleanString(n.name());
-                      if (!trie.collect().contains(clean)) {
-                          trie.add(clean);
-                      }
+                      trie.add(clean);
                       if (!clToNames.containsKey(clean)) {
                           clToNames.put(clean, new ArrayList<>());
                       }
@@ -1336,12 +1342,23 @@
           ...
       }
     #+end_src 
+    - Maps: ~HashMap<Point, Node> pToNode~, ~HashMap<String, List<Node>> nToNodes~, and ~HashMap<String, List<String>> clToNames~
+      - ~pToNode~ maps *Points* to *Nodes* 
+      - ~clToNames~ maps *cleanNames* to *Lists of locationNames*
+      - ~nToNodes~ maps *locationNames* to *Lists of Nodes*
+    - ~kt~ only stores *Points* that have neighbors: ~if (neighbors(n.id()).size() != 0)~ + ~pToNode.put(new Point(n.lon(), n.lat()), n)~ 
+    - ~nToNodes~ and ~clToNames~ only consider *Nodes* that have names: ~if (n.name() != null && !n.name().isEmpty())~, ~n.name() != null~ first
+      - ~trie~ stores *cleanNames* for *locationNames*: ~trie.add(clean)~
+      - *Names* in *List of Names* of ~clToNames~ required to be *unique*: ~if (!clToNames.get(clean).contains(n.name()))~ + ~clToNames.get(clean).add(n.name())~ 
+      - *Nodes* in *List of Nodes* of ~nToNodes~ are *originally guaranteed to be unique*: just ~nToNodes.get(n.name()).add(n)~
+      - New *keys* for ~clToNames~ and ~nToNodes~: ~clToNames.put(clean, new ArrayList<>())~ and ~nToNodes.put(n.name(), new ArrayList<>())~ 
 *** ~closest~ 
     #+begin_src java :classname 
       public long closest(double lon, double lat) {
           return pToNode.get(kt.nearest(lon, lat)).id();
       }
     #+end_src 
+    - ~pToNode.get(kt.nearest(lon, lat)).id()~ 
 *** ~getLocationByPrefix~ <<ilink7>>                                  :EXTRA:
     #+begin_src java :classname 
       public List<String> getLocationsByPrefix(String prefix) {
@@ -1352,6 +1369,7 @@
           return names;
       }
     #+end_src 
+    - ~for (String cl : trie.keysWithPrefix(cleanString(prefix)))~ + ~names.addAll(clToNames.get(cl))~ 
 *** ~getLocations~ <<ilink8>>                                         :EXTRA:
     #+begin_src java :classname 
       public List<Map<String, Object>> getLocations(String locationName) {
@@ -1370,18 +1388,20 @@
           return locations;
       }
     #+end_src 
+    - ~for (String name : clToNames.get(cleanString(locationName)))~ + ~for (Node n : nToNodes.get(name))~
 *** ~cleanString~ <<ilink9>>
     #+begin_src java :classname 
       private static String cleanString(String s) {
           return s.replaceAll("[^a-zA-Z ]", "").toLowerCase();
       }
     #+end_src 
+    - ~s.replaceAll("[^a-zA-Z ]", "").toLowerCase()~ 
 *** Question:                                                     :QUESTIONS:
     - [ ] [[ilink6][nToNodes 和 clToNames]] 是必要的吗？ [[ilink7][getLocationsByPrefix]] 和 [[ilink8][getLocations]] 能否有更优雅的实现？
     - [ ] 为什么搜索的时候先要用 [[ilink9][cleanString]] 处理？输入字符与输出结果之间需要怎样的逻辑处理？
-** ~Router.java~  
-*** ~routeDirections~                                                 :EXTRA:
-** Tests
+** ~Router.java~                                           :UNRESOLVED:EXTRA:
+*** ~routeDirections~  
+** Tests                                                            :TOBEORG:
 *** ~TestRasterAPIHandler.java~
     #+begin_src java :classname 
       public class TestRasterAPIHandler {
@@ -1594,7 +1614,6 @@
           }
       }
     #+end_src 
-
 *** ~TestRouterTiny.java~ 
     #+begin_src java :classname 
       public class TestRouterTiny {
@@ -1655,3 +1674,6 @@
 *** Question:                                                     :QUESTIONS:
     - [ ] 以上 tests 理解？
       
+* Project 3A BYOW Phase 1                                        :UNRESOLVED:
+* Project 3B BYOW Phase 2                                        :UNRESOLVED:
+
