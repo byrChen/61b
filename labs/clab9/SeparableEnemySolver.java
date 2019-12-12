@@ -23,8 +23,28 @@ public class SeparableEnemySolver {
      * Returns true if input is separable, false otherwise.
      */
     public boolean isSeparable() {
-        // TODO: Fix me
-        return false;
+        HashMap<String, Integer> party = new HashMap<>();
+//        Iterator<String> itr = g.labels().iterator();
+//        String s = itr.next();
+//        party.put(s, 0);
+//        if (!isSeparable(s, party.get(s), party)) return false;
+        for (String s : g.labels()) {
+            if (!party.containsKey(s)) {
+                party.put(s, 0);
+                if (!isSeparable(s, party.get(s), party)) return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean isSeparable(String s, int mark, HashMap<String, Integer> party) {
+        for (String neighbor : g.neighbors(s)) {
+            if (!party.containsKey(neighbor)) {
+                party.put(neighbor, 1 - mark);
+                if (!isSeparable(neighbor, 1 - mark, party)) return false;
+            } else if (party.get(neighbor) == mark) return false;
+        }
+        return true;
     }
 
 

@@ -31,7 +31,6 @@
     - ~git remote -v~: Lists all locations for network data transfers.
     - ~git pull [remote-repo-name] master~: Get the most recent copy of the files as seen in remote-repo-name
     - ~git push [remote-repo-name] master~: Pushes the most recent copy of your files to the remote-repo-name.
-
 ** C. Git Exercise
 
    #+begin_src sh 
@@ -319,7 +318,8 @@
     #+end_src
     - Create an ~ArrayDeque~ object: ~Deque<Direction> emptyNeighbors = new ArrayDeque<>()~
     - Iterate on ~Map~: ~for (Map.Entry<Direction, Occupant> entry : neighbors.entrySet())~, ~entry.getValue()~ and ~entry.getKey()~
-    - Return a random entry in ~ArrayDeque~: ~StdRandom.uniform(0, emptyNeighbors.size())~ and ~(Direction) emptyNeighbors.toArray()[indexToMove]~
+    - Return a random entry in ~ArrayDeque~: ~StdRandom.uniform(0, emptyNeighbors.size())~ 
+    - ~ArrayDeque~ to ~Array~: ~(Direction) emptyNeighbors.toArray()[indexToMove]~
     - Compare ~Object~ objects: ~obj1.equals(obj2)~
     - 50% possibility to move: ~if (anyClorus && StdRandom.uniform(2) == 0)~ 
 ** ~Clorus.java~
@@ -466,7 +466,93 @@
       }
     #+end_src 
     - ~int[] expect = new int[5]~ and ~Arrays.fill(expect, -1)~, not ~int expect[]~ but ~int[] expect~ 
-** Challenge Lab 6 Falling Bubbles                         :UNRESOLVED:EXTRA:
+* CLab 6 Falling Bubbles                                              :EXTRA:
+** ~BubbleGird.java~ 
+*** ~popBubbles~  
+    #+begin_src java :classname 
+      public int[] popBubbles(int[][] darts) {
+          // TODO
+          if (grid == null || grid.length == 0 || grid[0].length == 0) return null;
+          if (darts == null || darts.length == 0 || darts[0].length != 2) return null;
+          int row = grid.length, col = grid[0].length, dartsNum = darts.length;
+          for (int[] dart: darts) {
+              if (dart[0] < 0 || dart[0] >= row ||
+                  dart[1] < 0 || dart[1] >= col) return null;
+          }
+
+          int[] ur = {1, 0, -1, 0};
+          int[] uc = {0, 1, 0, -1};
+          int root = row * col;
+          UnionFind union = new UnionFind(root + 1);
+          int[][] copy = new int[row][col];
+
+          for (int i = 0; i < row; i++) {
+              copy[i] = grid[i].clone();
+          }
+
+          for (int[] dart: darts) {
+              copy[dart[0]][dart[1]] = 0;
+          }
+
+          for (int i = 0; i < row; i++) {
+              for (int j = 0; j < col; j++) {
+                  if (copy[i][j] == 1) {
+                      int index = xyToint(i, j);
+                      if (i == 0) {
+                          union.union(index, root);
+                          continue;
+                      }
+                      if (i - 1 >= 0 && copy[i-1][j] == 1) {
+                          union.union(index, xyToint(i-1, j));
+                      }
+                      if (j - 1 >= 0 && copy[i][j-1] == 1) {
+                          union.union(index, xyToint(i, j-1));
+                      }
+                  }
+              }
+          }
+
+
+          int[] bubbles = new int[dartsNum];
+
+          for (int i = dartsNum - 1; i >= 0; i--) {
+              int prePop = union.sizeOf(root);
+              int r = darts[i][0];
+              int c = darts[i][1];
+              int index = xyToint(r, c);
+              if (grid[r][c] == 0) continue;
+              if (r == 0) union.union(index, root);
+              for (int j = 0; j < 4; j++) {
+                  int nr = r + ur[j];
+                  int nc = c + uc[j];
+                  if (nr >= 0 && nr < row &&
+                          nc >=0 && nc < col && copy[nr][nc] == 1) {
+                      union.union(index, xyToint(nr, nc));
+                  }
+              }
+              int pop = union.sizeOf(root) - prePop - 1;
+              bubbles[i] = pop > 0 ? pop : 0;
+              copy[r][c] = 1;
+          }
+          return bubbles;
+      }
+    #+end_src 
+    - Copy ~grid~ to ~copy~ --> throw *all* darts on ~copy~ --> *union* ~copy~ to get the *remains* --> *from last to first* put on a bubble and *reunion* ~copy~ --> calculate the bubbles popped *this time*
+    - Corner or edge case
+      - ~if (grid == null || grid.length == 0 || grid[0].length == 0)~
+      - ~if (darts == null || darts.length == 0 || darts[0].length != 2)~
+      - ~if (dart[0] < 0 || dart[0] >= row || dart[1] < 0 || dart[1] >= col)~ 
+    - Arrays clone: ~copy[i] = grid[i].clone()~
+    - ~UnionFind union = new UnionFind(root + 1)~ + ~union.union(index, root)~ + ~union.sizeOf(root)~ to get total num of sticked bubbles
+    - ~union.union~ from *upside and leftside* after throwing all darts: ~union.union(index, xyToint(i-1, j))~ + ~union.union(index, xyToint(i, j-1))~
+    - ~ur~ and ~uc~ + ~for (int j = 0; j < 4; j++)~ + ~union.union(index, xyToint(nr, nc))~ to union the *added bubble* with its *neighbors*
+    - ~bubbles[i] = pop > 0 ? pop : 0~
+**** Question:                                                    :QUESTIONS:
+     - [ ] 为什么加上气泡后粘住的气泡数反而可能减少
+     - [ ] 其他方法
+     - [ ] 复杂度
+       - 
+       - 
 * Lab 7 TreeMap
 ** ~BSTMap.java~
 *** ~class Node~
@@ -524,7 +610,7 @@
       }
     #+end_src 
     - ~int cmp = key.compareTo(n.key)~
-    - Recursive: ~null~ + ~get(n.left, key)~ and ~get(n.right, key)~ 
+    - Recursive: ~null~ + ~get(n.left, key)~, ~get(n.right, key)~ and ~n.val~ 
 *** ~updateSize~
     #+begin_src java :classname 
       private int updateSize(Node n) {
@@ -678,7 +764,7 @@
     #+end_src 
     - ~Collections.emptySet()~ for empty set
     - ~s1.add(element)~ and ~s1.addAll(s2)~
-    - ~s.addAll(keySet(n.left))~ --> ~s.add(n.key)~ --> ~s.addAll(keySet(n.right))~ to get *sorted* ~keySet~ 
+    - Recursive: ~s.addAll(keySet(n.left))~ --> ~s.add(n.key)~ --> ~s.addAll(keySet(n.right))~ to get *sorted* ~keySet~ 
 *** ~iterator~ and ~printInOrder~
     #+begin_src java :classname 
       public Iterator<K> iterator() {
@@ -692,7 +778,7 @@
           }
       }
     #+end_src 
-    - ~Set~ *implements* ~Collections~, while ~Collection~ *implements* ~Iterable~ -> ~Set~ is *iterable*, ~Set.iterator~ to return ~Iterator~ [[2]]
+    - ~Set~ *implements* ~Collections~, while ~Collection~ *implements* ~Iterable~ -> ~Set~ is *iterable*, ~Set.iterator~ to return ~Iterator~
     - ~for~ can be used on *iterables* [[file:~/csnds/Dropbox/orglife/61b_rnl.org::<<elink2>>][Iteration]]
 *** Question:                                                     :QUESTIONS:
     - [ ] 这种把方法定义全部以树为单位 与 以节点为单位的区别与优劣？而对于 ~size~ 又不是以树为单位，而是以节点为单位？
@@ -730,7 +816,7 @@
         - Class: ~Arrays~ *extends* ~Object~ 
       - Convertion
         - ~List~ <-> ~Arrays~
-          - ~Arrays~ -> ~List~ <<2>>
+          - ~Arrays~ -> ~List~
             #+begin_src java :classname 
               String[] s = new String[]{"A", "B", "C", "D","E"};
               List<String> list = Arrays.asList(s);
@@ -742,7 +828,7 @@
             #+end_src
             - ~Arrays.asList(array)~
             - Elements in ~list~ *equals* elements in ~s~: changes in ~s~ will affect ~list~ 
-          - ~List~ -> ~Arrays~ <<3>>
+          - ~List~ -> ~Arrays~
             #+begin_src java :classname 
               String[] dest = list.toArray(new String[0]);//new String[0]是指定返回数组的类型
               System.out.println("dest: " + Arrays.toString(dest));
@@ -766,7 +852,7 @@
         - ~Arrays~ <-> ~Set~ 
           - ~Arrays~ -> ~Set~: ~set = new HashSet<>(Arrays.asList(s));~ 
           - ~Set~ -> ~Arrays~: ~dest = set.toArray(new String[0]);~  
-      - ~Arrays.asList()~ and ~Collection.toArray()~
+      - ~Arrays.asList()~, ~Collection.toArray()~ and ~Iterable.iterator()~ 
         - ~Arrays.asList~
           ~public static <T> List<T> asList(T... a)~: Returns a *fixed-size list* backed by the *specified array*.
           #+begin_src java :classname 
@@ -853,11 +939,53 @@
               }
             #+end_src
             - *Runtime type* of ~dest~ [[3]] is ~String[]~, decided by ~new String[0]~ 
+        - ~Iterable.iterator()~ to return an *iterator*
 **** Question:                                                   :QUESTIONS:
      1. 是否 ~List~ 和 ~Set~ 都没有固定长度而 ~Arrays~ 的长度是指定的？
      2. ~Arrays.asList~ 返回的 ~ArrayList~ 和 ~java.util.ArrayList~ 异同？除了固定长度还有啥？
-     3. ~Collection.toArray~ 返回的 ~Arrays~ 和 ~java.util.Arryas~ 异同？
-** Challenge BST Performance                               :UNRESOLVED:EXTRA:
+     3. ~Collection.toArray~ 返回的 ~Arrays~ 和 ~java.util.Arrays~ 异同？
+* CLab 7 BST Performance                                              :EXTRA:
+** Experiment 1 - BST Generation Using Insertion
+   #+DOWNLOADED: screenshot @ 2019-12-09 21:28:43
+   [[file:pictures/CLab_7_BST_Performance/2019-12-09_21-28-43_screenshot.png]]
+   *Random trees* are *boshy*
+*** ~IPL~ in ~BST.java~ 
+    #+begin_src java :classname 
+      private double IPL(Node n, int i) {
+          if (n == null) return 0.0;
+          int count = i;
+          count += IPL(n.left, i + 1);
+          count += IPL(n.right, i + 1);
+          return count;
+      }
+    #+end_src 
+    - Recursive: ~int count = i~ + ~count += IPL(n.left, i + 1)~ + ~count += IPL(n.right, i + 1)~ 
+*** ~optimalIPL~ in ~ExperimentHelper.java~ 
+    #+begin_src java :classname 
+      public static int optimalIPL(int N) {
+          if (N <= 0) return 0;
+          int count = 0;
+          for (int i = 1; i <=  N; i++) {
+              int j = i;
+              while (j >> 1 != 0) {
+                  count += 1;
+                  j = j >> 1;
+              }
+          }
+          return count;
+      }
+    #+end_src 
+    - $log_{2}(N)$, can also ~Math.log(N) / Math.log(2)~ 
+    - ~j >> 1~ = ~j / 2~ and ~j << 1~ = ~j * 2~ for ~j > 0~
+** Experiment 2 and 3 - BST Generation Using Insertion and Deletion :UNRESOLVED:
+   #+DOWNLOADED: screenshot @ 2019-12-09 22:23:22
+   [[file:pictures/CLab_7_BST_Performance/2019-12-09_22-23-22_screenshot.png]]
+   - The average depth actually drops as we randomly insert and delete. However, as the insertion/deletion cycle continues, you should see the depth *climb* well above the starting depth.
+   #+DOWNLOADED: screenshot @ 2019-12-09 22:23:49
+   [[file:pictures/CLab_7_BST_Performance/2019-12-09_22-23-49_screenshot.png]]
+   - You should see that the average depth *drops and stays down*. It should converge to *88%* of the starting depth (open problem)
+** Question:                                                      :QUESTIONS:
+   - [ ] 实验2 3 怎么实现正确的图？是哪个参数错了？
 * Lab 8 HashMap 
 ** ~MyHashMap.java~ 
 *** ~class Entry<K, V>~ 
@@ -929,7 +1057,7 @@
     #+end_src 
     - ~private static class Entry<K, V>~ and ~private Entry<K, V>[] buckets~
     - ~Entry(K key, V val, Entry<K, V> next)~ 
-    - ~Entrn<K, V> e = this~
+    - ~Entry<K, V> e = this~
     - ~get~ and ~update~: ~while ((e != Null))~, ~e.key.equals(key)~ and ~e = e.next~ 
     - ~add~ and ~remove~: ~while (true)~, ~(e.next == null)~ + ~e.next = new Entry<>(key, val, null)~, ~(e.next.key.equals(key))~ + ~e.next = e.next.next~ and ~e = e.next~ 
 **** Question:                                                    :QUESTIONS:
@@ -940,7 +1068,7 @@
        - [ ] 最理想的应该是 ~Map~, 自带的 ~HashMap~ 底层结构是 ~Map~ 吗？如果不能用 ~Map~, 那 ~LinkedList~, ~ArrayList~ 和 ~Set~ 该怎么选择？用这三者的话是否需要重写 ~equals()~ 和 ~hashcode~ ？具体在哪重写呢？必要结合源码讨论。
      - [ ] 关于 ~Comparable~ 与 ~Comparator~, ~Iterable~ 与 ~Iterator~ <<elink3>>
        - [ ] 都是 ~interface~ 的话，为什么 [[file:~/csnds/Dropbox/orglife/61b_rnl.org::<<elink5>>][class implements Comparable]] 而 [[<<ilink7>>][<K extends Comparable<K>, V>]]？是不是 ~class implements interface~, ~interface extends interface~ 以及 ~K extends interface~
-       - [ ] 关于 ~Comparable~, ~Comparator~, ~Iterable~ 和 ~Iterator~ 的比较 [[file:~/csnds/Dropbox/orglife/61b_rnl.org::<<elink1>>][比较1]] [[file:~/csnds/Dropbox/orglife/61b_rnl.org::<<ilink1>>][比较2]]
+       - [ ] 关于 ~Comparable~, ~Comparator~, ~Iterable~ 和 ~Iterator~ 的比较 [[file:~/csnds/Dropbox/orglife/61b_rnl.org::<<elink1>>][比较1]] [[file:~/csnds/Dropbox/orglife/61b_rnl.org::<<elink13>>][比较2]]
        - [ ] 关于 ~equals~ 和 ~hashCode~: ~Object~ 和 ~Comparator~ 里 ~equals()~ 的区别以及什么时候需要一起重写 ~hashCode()~ ？
 *** ~MyHashMap~ 
     #+begin_src java :classname 
@@ -1067,7 +1195,6 @@
       }
     #+end_src 
     - ~buckets[index].key.equals(key)~ + ~buckets[index] = buckets[index].next~ and ~r = buckets[index].remove(key)~ 
-
 ** SpeedTest
    For ~MyHashMap~ and ~java.util.HashMap~, both runtime ~ $N$
 ** Tests 
@@ -1252,7 +1379,72 @@
           assertTrue(q.containsKey("f"));
       }
     #+end_src 
-** Challenge Heaps and Hashes                              :UNRESOLVED:EXTRA:
+* CLab 8 Heaps and Hashes                                             :EXTRA:
+** Problem 1 Flight 
+*** ~FlightSolver.java~  
+    #+begin_src java :classname 
+      public class FlightSolver {
+
+          PriorityQueue<Flight> pq;
+
+          Comparator<Flight> flightComparator = (f1, f2) -> {
+              return Integer.compare(f2.startTime, f1.startTime);
+          };
+
+          public FlightSolver(ArrayList<Flight> flights) {
+              pq = new PriorityQueue<>(flights.size(), flightComparator);
+              for (Flight fl : flights) {
+                  pq.add(fl);
+              }
+              /* FIX ME */
+          }
+
+          public int solve() {
+              /* FIX ME */
+              int max = 0;
+              while (!pq.isEmpty()) {
+                  Flight fl = pq.poll();
+                  int count = fl.passengers;
+                  PriorityQueue<Flight> npq = new PriorityQueue<>(pq);
+                  while (!npq.isEmpty()) {
+                      if (npq.peek().endTime < fl.startTime) break;
+                      else {
+                          count += npq.poll().passengers;
+                      }
+                  }
+                  max = count > max ? count : max;
+              }
+              return max;
+          }
+      }
+    #+end_src 
+    - ~java.util.PriorityQueue~
+      #+DOWNLOADED: screenshot @ 2019-12-10 13:51:18
+      [[file:pictures/CLab_8_Heaps_and_Hashes/2019-12-10_13-51-18_screenshot.png]]
+      - ~pq = new PriorityQueue<>(flights.size(), flightComparator)~
+      - ~PriorityQueue<Flight> npq = new PriorityQueue<>(pq)~
+      - *Min-heap*
+    - Define Comparator: Discrete class ~FlightComparator.java~ or lambda ~Comparator<Flight> flightComparator = (f1, f2) -> {};~
+      - ~Integer.compare(f2.startTime, f1.startTime)~ to change *Min-heap* to *Max-heap* 
+    - ~List~ implements ~Collection~ implements ~Iterable~: ~for (Flight fl : flights)~
+    - ~while (!pq.isEmpty())~ + ~while (!npq.isEmpty())~
+    - Runtime $O(NlogN)$
+*** ~FlightComparator.java~ 
+    #+begin_src java :classname 
+      import java.util.Comparator;
+
+      public class FlightComparator implements Comparator<Flight> {
+          @Override
+          public int compare(Flight f1, Flight f2) {
+              return Integer.compare(f2.startTime, f1.startTime);
+          }
+      }
+    #+end_src 
+    - ~public class FlightComparator implements Comparator<Flight>~ and *override* ~public int compare(Flight f1, Flight f2)~ 
+** Problem 2 Rabin-Karp Algorithm                                :UNRESOLVED:
+** Question:                                                      :QUESTIONS:
+   - [ ] FlightSolver的时间复杂度是 $O(NlogN)$ 吗？不是的话怎么改？
+   - [ ] Rabin-Karp 实现？
 * Lab 9 Tries
 ** ~MyTrieSet.java~
 *** ~class Node~  
@@ -1293,11 +1485,11 @@
           ...
       }
     #+end_src 
-    - ~HashMap<Character, Node> map~ or ~HashMap<Character, Node> map~
+    - ~TreeMap<Character, Node> map~ or ~HashMap<Character, Node> map~
     - ~map.keySet()~, ~map.get(c)~, ~map.containsKey(c)~, ~map.clear()~ and ~map.put(c, n)~
 **** Question:                                                    :QUESTIONS:
-     - [ ] 尝试用自己实现的 ~BSTMap~ 和 ~MyHashMap~ 当底层结构试试
-*** ~contains~ 
+     - [X] 尝试用自己实现的 ~BSTMap~ 和 ~MyHashMap~ 当底层结构试试 => 可以
+*** ~containsStr~ 
     #+begin_src java :classname 
       @Override
       public boolean containsStr(String str) {
@@ -1352,11 +1544,19 @@
           colHelp(prefix, keys, n);
           return keys;
       }
+
+      private void colHelp(String s, List<String> x, Node n) {
+          if (n.isKey) x.add(s);
+          for (char c : n.keySet()) {
+              colHelp(s + c, x, n.getNode(c));
+          }
+      }
     #+end_src 
     - ~colHelp(String s, List<String> x, Node n)~
       - ~char c : n.keySet()~
       - Recursive: ~colHelp(s + c, x, n.getNode(c))~ 
-    - ~colHelp(prefix, keys, n)~ 
+    - ~colHelp(prefix, keys, n)~
+    - ~String~ + ~Character~ -> ~String~ 
 *** ~collect~ 
     #+begin_src java :classname 
       public List<String> collect() {
@@ -1369,8 +1569,10 @@
     #+end_src 
     - ~char~ to ~String~: ~String.valueOf(c)~ 
 *** ~longestPrefixOf~                                      :UNRESOLVED:EXTRA:
+*** ~delete~                                               :UNRESOLVED:EXTRA:
 *** Question:                                                     :QUESTIONS:
-    - [ ] 如果有删除操作 ~remove~, 该是什么逻辑以及实现？
+    - [ ] 如果有删除操作 ~delete~, 该是什么逻辑以及实现？
+    - [ ] ~longestPrefixOf~ 怎么实现？
 ** Tests
 *** ~TestMyTrieSet.java~                                            :TOBEORG:
     #+begin_src java :classname 
@@ -1420,7 +1622,46 @@
           }
       }
     #+end_src 
-** Challenge Graphs                                        :UNRESOLVED:EXTRA:
+* CLab 9 Graphs                                                       :EXTRA:
+** ~SeparableEnemySolver.java~ 
+*** ~isSeparable~ 
+    #+begin_src java :classname 
+      public boolean isSeparable() {
+          HashMap<String, Integer> party = new HashMap<>();
+          //        Iterator<String> itr = g.labels().iterator();
+          //        String s = itr.next();
+          //        party.put(s, 0);
+          //        if (!isSeparable(s, party.get(s), party)) return false;
+          for (String s : g.labels()) {
+              if (!party.containsKey(s)) {
+                  party.put(s, 0);
+                  if (!isSeparable(s, party.get(s), party)) return false;
+              }
+          }
+          return true;
+      }
+
+      private boolean isSeparable(String s, int mark, HashMap<String, Integer> party) {
+          for (String neighbor : g.neighbors(s)) {
+              if (!party.containsKey(neighbor)) {
+                  party.put(neighbor, 1 - mark);
+                  if (!isSeparable(neighbor, 1 - mark, party)) return false;
+              } else if (party.get(neighbor) == mark) return false;
+          }
+          return true;
+      }
+    #+end_src 
+    - May *disconnected* graphs -> Create ~party~ to store *successfully separated* nodes -> Add *unseparated* node to ~party~ -> *dfs* on it to see if nodes stored in ~party~ are all *successfully separated* 
+    - *DFS* ~boolean isSeparable(String s, int mark, HashMap<String, Integer> party)~
+      - For unseparated ~neighbor~, add to ~party~ and keep on *dfs* on it: ~party.put(neighbor, 1 - mark)~ + ~if (!isSeparable(neighbor, 1 - mark, party))~
+      - For separated ~neighbor~, check it whether *successfully separated*: ~if (party.get(neighbor) == mark)~
+    - *DFS* on node ~n~ will return ~false~ when *one pair of unsuccessfully separated nodes* are stored in ~party~ while ~true~ when *all nodes of the graph* which this node belongs to are *successfully separated* in ~party~
+    - Runtime
+      - $O(V+E)$
+*** ~isSeparable3g~                                              :UNRESOLVED:
+** Question:                                                      :QUESTIONS:
+   - [ ] 对比 [[file:~/csnds/Dropbox/orglife/61b_rnl.org::<<elink14>>][DFS]] 理解 DFS 的思想？
+   - [ ] 用 [[file:~/csnds/Dropbox/orglife/61b_rnl.org::<<elink15>>][BFS]] 解决？
 * Lab 11 Merge Sort and Quick Sort <<elink7>>
 ** ~MergeSort.java~  
 *** ~getMin~ 
@@ -1509,7 +1750,7 @@
             return mergeSortedQueues(mergeSort(q1), mergeSort(q2));
         }
       #+end_src
-      - Base: ~if (items.size() <= 1) return items~
+      - Base: ~if (items.size() <= 1) return items~ <<ilink2>>
       - Separation: ~i < N/2~ + ~q1.enqueue(items.dequeue())~ and ~i < N - N/2~ + ~q2.enqueue(items.dequeue())~
         - Can not use ~i < N/2 + 1~ and ~i < N - N/2 -1~ because when ~N = 2~ such separation can't separate correctly
       - ~mergeSortedQueues(mergeSort(q1), mergeSort(q2))~ 
@@ -1562,7 +1803,7 @@
           return pivot;
       }
     #+end_src 
-    - ~for (Item item : items)~ + ~pivotIndex == 0~ to get target ~pivot~ in ~Queue~ 
+    - ~for (Item item : items)~ + ~pivotIndex == 0~ + ~pivotIndex--~ to get target ~pivot~ in ~Queue~ 
 *** ~partition~ 
     #+begin_src java :classname 
       private static <Item extends Comparable> void partition(
@@ -1593,7 +1834,7 @@
             return catenate(catenate(less, equal), greater);
         }
       #+end_src
-      - Base: ~if (items.size() <= 1) return items~
+      - Base: ~if (items.size() <= 1) return items~ -> usual [[ilink1][base in recursive method for sorting]] ~if (items.size() <= 1) return items~ 
       - ~partition(items, getRandomItem(items), less, equal, greater)~ to get ~equal~ --> recursive ~less = quickSortR(less)~ to get ~less~ --> recursive ~greater = quickSortR(greater)~ to get ~greater~
       - ~catenate(catenate(less, equal), greater)~ to catenate ~less~, ~equal~ and ~greater~ 
     - Iterative
@@ -1686,7 +1927,7 @@
           return true;
       }
     #+end_src 
-    
+* CLab 11 Bears and Beds
 * Lab 12 Getting Started on Project 3
 ** ~HexWorld.java~ 
 *** ~addHexagon~ 
@@ -1737,4 +1978,3 @@
     - [ ] 进一步抽象函数： ~addHexagon~ 按行扫描添加并对称与 ~addHexagons~ 按列扫描添加并对称。
     - [ ] ~WIDTH~, ~HEIGHT~ 与六边形边长的关系，把六边形至于世界中间
 * Lab 13 Interactivity in Project 3                              :UNRESOLVED:
-

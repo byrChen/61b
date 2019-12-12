@@ -1,5 +1,5 @@
-#+TAGS: QUESTIONS(q) TOBEORG(t) UNCOVERED(u) EXTRA(e)
-* 1. Introduction to Java
+#+TAGS: QUESTIONS(q) TOBEORG(t) UNCOVERED(u) EXTRA(e) SLIDE(s)
+* 1. Introduction to Java                                             :SLIDE:
 ** Essentials
    #+begin_src java :classname HelloWorld
      public class HelloWorld {
@@ -116,7 +116,7 @@
       }
     #+end_src 
     - In python, funcs can be declared *anywhere*.
-    - In java, java code is *part of a class*, funcs must defed *belong to some class* and called *methods*.
+    - In java, java code is *part of a class*, funcs must defined *belong to some class* and called *methods*.
     - ~def~ in python, ~public static~ in java.  
 ** Objects
 *** Static vs. Non-Static Methods
@@ -442,7 +442,7 @@
         #+RESULTS:
         : 21
         - ~Integer.parseInt(String)~: Convert ~String~ to a *primitive* ~int~ and *return* it.
-* 2. Lists
+* 2. Lists                                                            :SLIDE:
 ** Mystery of the Walrus
    ~List~ could easily change the number of object after the simulation had begun.
 *** The Mystery of the Walrus
@@ -559,8 +559,6 @@
       #+end_src 
       #+DOWNLOADED: /tmp/screenshot.png @ 2019-04-01 00:28:59
       [[file:pictures/2.%20Lists/screenshot_2019-04-01_00-28-59.png]]
-**** Question:                                                    :QUESTIONS:
-     1. ~primitive type~ 变量存的是值而 ~reference type~ 变量存的是地址？
 *** Parameter Passing
     - Exercise 2.1.1
       #+begin_src java :classname PassByValueFigure
@@ -588,7 +586,7 @@
        x = new int[]{0, 1, 2, 95, 4}; //instantiate
      #+end_src 
      - *Declaration* ~type[] x~ (~type~ can be ~primitive~ or ~reference~): creating memory boxes of *64 bits* to store *addresses*.
-     - *Instantiation* ~x = new type[]{...}~: creating boxes of 32 bits each and returns the address of the overall object (this list) for assignment to x
+     - *Instantiation* ~x = new int[]{...}~: creating boxes of 32 bits each and returns the address of the overall object (this list) for assignment to x
 *** IntLists
     #+begin_src java :classname 
       public class IntList {
@@ -654,8 +652,6 @@
             }
         }
       #+end_src 
-**** Question:                                                    :QUESTIONS:
-     1. 如果获取函数 ~get(-1)~ 该怎么处理
 ** The SLList
    ~IntList~ is a *naked recursive* data structure 
 *** Improvement #1: Rebranding
@@ -952,8 +948,6 @@
     #+end_src 
     - ~SLList(int x)~ and ~SLList~ *overloaded*
     - ~addLast~ crashes on *empty* SLList
-**** Question:                                                    :QUESTIONS:
-     1. java里的 ~this~ 怎么用？可以来解决 ~addLast~ ？  
 *** Improvement #6b: Sentinel Nodes
     make all ~SLLists~ to use the *same methods* -> create a special ~IntNode~ node: *sentinel node*  
     #+begin_src java :classname 
@@ -1343,7 +1337,7 @@
    #+end_src 
     - Not ~Glorp[] items = new Glorp[8];~ but ~Glorp[] items = (Glorp []) new Object[8];~
     - Java only destroys *objects* when the last *reference* has been lost: ~items[size - 1] = null;~ to *save memory* and *avoid loitering*, while ~int~ need not ~items[size - 1] = 0~
-* 3. Testing
+* 3. Testing                                                          :SLIDE:
   Testing and Selection Sort
 ** JUnit Testing
 *** Ad hoc test 
@@ -1385,7 +1379,7 @@
           org.junit.Assert.assertArrayEquals(expected, input);
       }
     #+end_src 
-** Selection Sort
+** Selection Sort <<ilink13>>
    #+begin_src java :classname 
      public static void sort(String[] x) { 
          // find the smallest item
@@ -1604,7 +1598,7 @@
     2. ~import org.junit.Test~ and ~import static org.junit.Assert.*~
        - ~@org.junit.Test~ -> ~@Test~
        - Omit ~org.junit.Assert.~ 
-* 4. Inheritance, Implements
+* 4. Inheritance, Implements                                          :SLIDE:
 ** Intro, Hello World Java
 *** Method overloading
     #+begin_src java :classname 
@@ -1710,6 +1704,8 @@
     - Interface Inheritance (*what*): Simply tells *what* the subclasses should be able to do.
     - Implementation inheritance (*how*): Tells the subclasses *how* they should behave.
     - Common: "is-a" not "has-a"
+*** Question:                                                     :QUESTIONS:
+    - [ ] 这小节是不是搞错了？不是 interface inheritance 是 has-a 而 implementation(class) inheritance 是 is-a 的关系吗？这两者与公有继承和私有继承有什么关系？
 ** Extends, Casting, Higher Order Function
 *** Extends
     - ~RotatingSLList~ 
@@ -2035,7 +2031,7 @@
     #+DOWNLOADED: https://joshhug.gitbooks.io/hug61b/content/assets/comparator.png @ 2019-08-11 13:35:10
     [[file:pictures/4._Inheritance,_Implements/comparator_2019-08-11_13-35-10.png]]
     - ~Comparable~ used to compare Objects in natural order, ~Comparator~ used to compare in other user-defined order
-    - About nexted ~private static class NameComparator implements Comparator<Dog>~ <<ilink2>>
+    - About nested ~private static class NameComparator implements Comparator<Dog>~ <<ilink2>>
       - ~Dog~ can only implements just one interface ~Comparable~
       - ~Comparator~ is used to augment comparison order 
       - *Nested* because each ~class~ implements ~Comparator<T>~ can only compare 2 objects of class ~T~, it should be *nested* in ~class T~ according to *OOP*
@@ -2045,15 +2041,14 @@
     - To retrieve *NameComparator*: ~Comparator<Dog> nc = Dog.getNameComparator();~
     - Use *NameComparator* to compare 2 ~Dog~ objects: ~nc.compare(dog1, dog2);~
     - ~String~'s built-in ~compareTo~
-*** To summarize <<ilink1>> 
+*** To summarize <<ilink1>> <<elink13>>
     - *Interfaces* in Java provide the ability to make *callbacks*. A *callback* function is the *helping* function (in the scenario, ~compareTo~). In some languages, this is accomplished using *explicit function passing*; in Java, by *wrapping* the *needed function* in an *interface*.
       #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-11 14:23:33
       [[file:pictures/4._Inheritance,_Implements/screenshot_2019-08-11_14-23-33.png]]
-    - A *Comparable* is an object's method compares itself to another object, it is imbedded *within the object itself*
-    - A *Comparator* is an independent object compares 2 objects to each other, its class is *defined within the class* and it's *independent of object*
+    - *Comparable* is an *attribute of objects*, object can compare itself to another object of the same class if it is *Comparable*.
+    - *Comparator* is an *independent object* compares 2 *Comparable objects* to each other, its class is *defined within the class* and it's *independent of Comparable object*
 *** Question:                                                     :QUESTIONS:
-    1. 怎样理解 [[ilink1]] Comparable 和 Comparator 的区别？分析的对吗？
-    2. [[ilink2]] 中关于 nested 原因的分析对吗？为什么 Comparator 一定要是 Object？如下可以吗？
+    1. [[ilink2]] 中关于 nested 原因的分析对吗？为什么 Comparator 一定要是 Object？如下可以吗？
        #+begin_src java :classname 
          import java.util.Comparator;
 
@@ -2072,11 +2067,11 @@
          }
        #+end_src
        需要比较时直接 ~Dog.NameComparator.compare(dog1, dog2)~ 。
-    3. Comparator 不还是需要为每一种比较策略定义一个 nexted class 以及一个 getcomparator() ？这样做的意义？
-    4. Java8 之后是怎么显式传递函数作为参数或者把函数作为返回值？
+    2. Comparator 不还是需要为每一种比较策略定义一个 nexted class 以及一个 getcomparator() ？这样做的意义？
+    3. Java8 之后是怎么显式传递函数作为参数或者把函数作为返回值？
 ** Java libraries and packages                                :UNCOVERED:
-* 5. Generics and Autoboxing                                      :UNCOVERED:
-* 6. Exceptions, Iterators, Iterables, Object Methods
+* 5. Generics and Autoboxing                                :UNCOVERED:SLIDE:
+* 6. Exceptions, Iterators, Iterables, Object Methods                 :SLIDE:
 ** Lists, Sets, ArraySet 
 *** Lists in Real Java Code
     #+begin_src java :classname 
@@ -2342,7 +2337,7 @@
    - ~void wait()~
    - ~void wait(long timeout)~
    - ~void wait(long timeout, int nanos)~
-*** toString()
+*** toString() <<elink12>>
     The ~toString()~ method provides a string representation of an object.
     - ~System.out.println(dog)~
       #+begin_src java :classname 
@@ -2417,7 +2412,7 @@
      2. ~toString({1, 2, 3, 4, 5})~ 的分析对吗？为什么书上只有 ~1 + ... + 7~ ？
 *** equals()
     ~equals()~ and ~==~ have different behaviors in Java. ~==~ Checks if two *objects* are actually the *same object in memory* (if *two boxes* hold the same thing)
-    - The default ~Object~ class' ~equals(Object o)~ acts like ~=~ in that it checks if the *memory address* of the ~this~ is the same as ~o~
+    - The default ~Object~ class' ~equals(Object o)~ acts like ~==~ in that it checks if the *memory address* of the ~this~ is the same as ~o~
       - Override ~equals()~ in ~ArraySet~ 
         #+begin_src java :classname 
           import java.util.Iterator;
@@ -2474,9 +2469,9 @@
             - *reflexive*: ~x.equals(x)~ is ~true~
             - *symmetric*: ~x.equals(y)~ if and only if *y.equals(x)*
             - *transitive*: ~x.equals(y)~ and ~y.equals(z)~ implies ~x.equals(z)~
-          - It must take an Object argument, in order to *override* the original ~.equals()~ method
+          - It must take an ~Object~ argument, in order to *override* the original ~.equals(Object o)~ method.
           - It must be *consistent* if ~x.equals(y)~, then as long as ~x~ and ~y~ remain unchanged: ~x~ must continue to equal ~y~
-          - It is never ~true~ for ~null~ ~x.equals(null)~ must be ~false~
+          - It is never ~true~ for ~null~, ~x.equals(null)~ must be ~false~
 *** of()
     #+begin_src java :classname 
       import java.util.Iterator;
@@ -2504,8 +2499,8 @@
 ** Throwing Exceptions (legacy)                                   :UNCOVERED:
 ** Checked vs. Unchecked exception (legacy)                       :UNCOVERED:
 ** Iteration (legacy)                                             :UNCOVERED:
-* 7. Packages and Access Control                                  :UNCOVERED:
-* 8. Efficient Programming
+* 7. Packages and Access Control                            :UNCOVERED:SLIDE:
+* 8. Efficient Programming                                            :SLIDE:
 ** Encapsulation, API's, ADT's
 *** Encapsulation
     - Module: *A set of methods* that work together *as a whole* to perform some task or set of related tasks.
@@ -2644,7 +2639,7 @@
     - Average (*amortized*) cost is bounded by 5
 **** Question:                                                    :QUESTIONS:
      1. 怎么理解 amortized ？怎么翻译，直观上理解？
-* 9. Disjoint Sets
+* 9. Disjoint Sets                                                    :SLIDE:
   #+begin_src java :classname 
     public interface DisjointSets {
         /** connects two items P and Q */
@@ -2734,7 +2729,6 @@
 *** Summary
     #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-20 09:43:37
     [[file:pictures/9._Disjoint_Sets/screenshot_2019-08-20_09-43-37.png]]
- 
 ** Weighted Quick Union (WQU)
    When calling ~connect~, always link the root of the *smaller weight* tree to the *larger weight* tree
    #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-20 09:58:30
@@ -2757,7 +2751,7 @@
     [[file:pictures/9._Disjoint_Sets/screenshot_2019-08-20_10-38-40.png]]
     - $O(N+NM) = O((N+1)M) = O(NM)$ : *construction* + *actions* (~connect~ or ~isConnected~), similar for others
     - *Amortized runtime* and *iterated logarithm*: $\alpha(N)$ = $log^*(N)$ = constant in long term. ( $log^*(N) = 5$ for $N=2^{65536}$ )
-* 10. ADTs
+* 10. ADTs                                                            :SLIDE:
   An Abstract Data Type (ADT) is defined only by its *operations*, not by its *implementation*
   #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-20 16:34:58
   [[file:pictures/10._ADTs/screenshot_2019-08-20_16-34-58.png]]
@@ -2832,11 +2826,11 @@
       #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-21 10:39:38
       [[file:pictures/10._ADTs/screenshot_2019-08-21_10-39-38.png]]
       - No efficient way to look up by value: $O(n)$
-*** Deletion                                                    :SLIDE:EXTRA:
+*** Deletion                                                  :TOBEORG:EXTRA:
 ** Question:                                                      :QUESTIONS:
    1. 关于 ADT 与 interface 的关系？ ADT 一定是 interface 但 interface 不一定是 ADT ？(~default~ implement)
    2. BST 只适合表示一个 set 吧？如果是 Sets 呢？（比如 Disjoint Sets ）
-* 11. Balanced Trees
+* 11. Balanced Trees                                                  :SLIDE:
 ** Intro to B-Trees
 *** BST Performance
     #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-21 10:56:01
@@ -2864,7 +2858,7 @@
    2. If the new node has 4 nodes (for 2-3-4 tree, while 3 for 2-3 tree),  then pop up the *middle left* node to parent node and re-arrange the children accordingly
    3. If step 2 results in the parent node having 4 nodes, then repeat step 2 *at parent node*
    4. Repeat step 2 and 3 until the parent node can accommodate 
-** B-Trees deletion                                             :SLIDE:EXTRA:
+** B-Trees deletion                                           :TOBEORG:EXTRA:
 ** B-Tree invariants and runtime
 *** Invariants
     Invariants of a B-tree guarantees the B-tree *must be bushy*, while *inserting order* may decide the *height*
@@ -3515,6 +3509,9 @@
 ** Multi-Dimensional Data Summary
    #+DOWNLOADED: screenshot @ 2019-10-17 09:52:04
    [[file:pictures/L22_Range_Searching_and_Multi-Dimensional_Data/screenshot_2019-10-17_09-52-04.png]]
+** Question:                                                      :QUESTIONS:
+   - [ ] uniform partition + hash table 怎么实现？
+   - [ ] quadtree 实现？
 * L23 Tree and Graph Traversals
 ** Trees and Traversals 
 *** Trees implementations 
@@ -3645,13 +3642,13 @@
           }
       }
     #+end_src 
-    - ~adj = (List<Integer>[]) new ArrayList[V]~ 
+    - ~private List<Integer>[] adj~ and ~adj = (List<Integer>[]) new ArrayList[V]~ 
 ** Graph Traversal Implementations and Runtime
    Common design pattern in graph algorithms: *Decouple type* from *processing algorithm*.
    - Create a *graph object*.
    - Pass the *graph* to a *graph-processing method* (or constructor) in a *client class*.
    - Query the *client class* for information.
-*** DepthFirstPaths
+*** DepthFirstPaths <<elink14>>
     - Implementation (Recursive)
       #+begin_src java :classname 
         public class DepthFirstPaths {
@@ -3692,6 +3689,8 @@
       #+end_src
       - ~marked[v]~ is ~true~ *iff* ~v~ connected to ~s~
       - ~edgeTo[v]~ is *previous vertex* on path from ~s~ to ~v~
+      - Recursive: ~edgeTo[w] = v~ + ~dfs(G, w)~
+      - ~Collections.reverse(path)~ 
     - Runtime
       - Adjacency list
         #+DOWNLOADED: screenshot @ 2019-10-22 14:22:08
@@ -3701,12 +3700,13 @@
         [[file:pictures/L24_Graph_Traversals_and_Implementations/screenshot_2019-10-22_15-43-53.png]]
 **** Question:                                                    :QUESTIONS:
      - [ ] 上面的 Runtime 分析怎么理解？为什么 ~marked[w]~ 考虑的是边？为什么每条边最多考虑两次？为啥是 ~sum~ ？
-*** BreadthFirstPaths
+*** BreadthFirstPaths <<elink15>>
     - Implementation (*queue* instead of recursion)
       #+DOWNLOADED: screenshot @ 2019-10-22 14:12:31
       [[file:pictures/L24_Graph_Traversals_and_Implementations/screenshot_2019-10-22_14-12-31.png]]
-**** Question:                                                    :QUESTIONS:
-     - [ ] 怎么理解 Graph Problems 中 s-t shortest paths 的时间复杂度分析？为什么和 s-t paths 一样？
+      - ~Queue<Integer> fringe = new Queue<Integer>()~
+      - ~while (!fringe.isEmpty())~
+      - ~fringe.enqueue(w)~ + ~marked[w] = true~ + ~edgeTo[w] = v~ 
 *** Graph Problems
     - Adjacency matrix
       #+DOWNLOADED: screenshot @ 2019-10-22 15:42:11
@@ -3755,7 +3755,6 @@
     #+DOWNLOADED: screenshot @ 2019-10-22 17:38:55
     [[file:pictures/L25_Shortest_Paths/screenshot_2019-10-22_17-38-55.png]]
 **** Question:                                                    :QUESTIONS:
-     - [ ] 上图中的 ~changePriority~ 是什么功能？复杂度怎么分析？
      - [ ] Overall runtime 怎么分析出来的？主要是 ~changePriority~ 的复杂度和边的关系？
 ** A*
    Visit vertices in order of $d(source, v) + h(v, goal)$, where $h(v, goal)$ is an *estimate* of the distance from /v/ to /goal/. On visit, *relax* every *edge* from the *visited vertex*.
@@ -3765,8 +3764,7 @@
 *** Consistency and Admissibility (EXTRA: Beyond Course Scope)
     #+DOWNLOADED: screenshot @ 2019-10-22 20:15:47
     [[file:pictures/L25_Shortest_Paths/screenshot_2019-10-22_20-15-47.png]]
-    
-*** Memory Optimized A*                                       :TOBEORG:EXTRA:
+*** Memory Optimized A*                                               :EXTRA:
     - 3 differences from A*
       - The algorithm starts with *only the start* vertex in the PQ.
       - When relaxing an edge, if the relaxation is successful and the target vertex is not in the PQ, add it.
@@ -3804,6 +3802,7 @@
     #+DOWNLOADED: screenshot @ 2019-10-22 20:17:51
     [[file:pictures/L25_Shortest_Paths/screenshot_2019-10-22_20-17-51.png]]
 * L26 Minimum Spanning Trees
+  <<ilink14>>
   #+DOWNLOADED: screenshot @ 2019-10-26 16:45:44
   [[file:pictures/L26_Minimum_Spanning_Trees/screenshot_2019-10-26_16-45-44.png]]
   #+DOWNLOADED: screenshot @ 2019-10-26 16:46:04
@@ -3851,7 +3850,7 @@
 *** Implementation 
     #+DOWNLOADED: screenshot @ 2019-10-27 10:42:00
     [[file:pictures/L26_Minimum_Spanning_Trees/screenshot_2019-10-27_10-42-00.png]]
-*** Runtime
+*** Runtime <<ilink15>>
     #+DOWNLOADED: screenshot @ 2019-10-27 10:43:46
     [[file:pictures/L26_Minimum_Spanning_Trees/screenshot_2019-10-27_10-43-46.png]]
 ** Summary
@@ -3862,8 +3861,9 @@
 *** Question:                                                     :QUESTIONS:
     - [ ] Generic MST, Prim, Kruskal 的理解与相互联系？
     - [ ] Summary 里的复杂度分析
-** Question:                                                      :QUESTIONS: <<elink8>>
-   - [ ] L23-L26中数据结构以及算法的实现：树 图
+** Question:                                                      :QUESTIONS:
+   - [ ] Warm-up Problem 里 [[ilink14][复杂度]] 的分析
+   - [ ] [[ilink15][bottom-up heapification]] ？
 * L27 Reductions and Decomposition
 ** Topological Sorting
    #+DOWNLOADED: screenshot @ 2019-10-28 22:17:47
@@ -3907,10 +3907,12 @@
    [[file:pictures/L27_Reductions_and_Decomposition/2019-10-29_15-08-14_screenshot.png]]
    #+DOWNLOADED: screenshot @ 2019-10-29 15:09:11
    [[file:pictures/L27_Reductions_and_Decomposition/2019-10-29_15-09-11_screenshot.png]]
+** Question:                                                      :QUESTIONS:<<elink8>>
+   - [ ] L23-L27中数据结构以及算法的实现：树 图
 * L29 Basic Sorts
 ** Sorting Definitions
    #+DOWNLOADED: screenshot @ 2019-10-27 11:01:45
-   file:pictures/L29_Basic_Sorts/screenshot_2019-10-27_11-01-45.png]]
+   file:pictures/L29_Basic_Sorts/screenshot_2019-10-27_11-01-45.png
    - Java Note: Ordering relations are typically given in the form of ~compareTo~ or ~compare~ methods, not ~eqauls~
    - Another viewpoint: *inversion*
      #+DOWNLOADED: screenshot @ 2019-10-27 11:15:16
@@ -3929,17 +3931,19 @@
       - Runtime and memory usage
         #+DOWNLOADED: screenshot @ 2019-10-27 12:15:46
         [[file:pictures/L29_Basic_Sorts/screenshot_2019-10-27_12-15-46.png]]
-    - In-place Heapsort
+    - In-place Heapsort 
       #+DOWNLOADED: screenshot @ 2019-10-27 13:59:01
       [[file:pictures/L29_Basic_Sorts/screenshot_2019-10-27_13-59-01.png]]
       #+DOWNLOADED: screenshot @ 2019-10-27 13:59:22
       [[file:pictures/L29_Basic_Sorts/screenshot_2019-10-27_13-59-22.png]]
-     
+      - [[ilink16][Implementation]]
       - Runtime and memory usage
         #+DOWNLOADED: screenshot @ 2019-10-27 12:26:52
         [[file:pictures/L29_Basic_Sorts/screenshot_2019-10-27_12-26-52.png]]
         #+DOWNLOADED: screenshot @ 2019-10-27 12:28:37
         [[file:pictures/L29_Basic_Sorts/screenshot_2019-10-27_12-28-37.png]]
+**** Question:                                                    :QUESTIONS:
+     - [ ] In-place Heapsort 怎么理解？
 ** Mergesort
    #+DOWNLOADED: screenshot @ 2019-10-27 12:39:59
    [[file:pictures/L29_Basic_Sorts/screenshot_2019-10-27_12-39-59.png]]
@@ -4048,6 +4052,8 @@
 *** Expected Performance
     #+DOWNLOADED: screenshot @ 2019-10-28 09:05:36
     [[file:pictures/L30_Quick_Sort/screenshot_2019-10-28_09-05-36.png]]
+**** Question:                                                    :QUESTIONS:
+     - [ ] 为啥 expected performance 是 $\Theta(N)$ ？
 ** Stability, Adaptiveness, Optimization
 *** Stability 
     A sort is said to be *stable* if order of *equivalent* items is *preserved*.
@@ -4088,7 +4094,7 @@
 ** Sorting Implementations                                            :EXTRA:
    #+DOWNLOADED: screenshot @ 2019-10-29 15:59:57
    [[file:pictures/L33_Sorting_and_Algorithmic_Bounds/2019-10-29_15-59-57_screenshot.png]]
-*** Selection Sort 
+*** [[ilink13][Selection Sort]]
     #+DOWNLOADED: screenshot @ 2019-10-29 16:00:55
     [[file:pictures/L33_Sorting_and_Algorithmic_Bounds/2019-10-29_16-00-55_screenshot.png]]
 *** Insertion Sort
@@ -4111,7 +4117,7 @@
     - Heapsort With Separate PQ
       #+DOWNLOADED: screenshot @ 2019-10-29 16:05:54
       [[file:pictures/L33_Sorting_and_Algorithmic_Bounds/2019-10-29_16-05-54_screenshot.png]]
-    - In-Place Heapsort (with root in position 0).
+    - In-Place Heapsort (with root in position 0). <<ilink16>>
       #+DOWNLOADED: screenshot @ 2019-10-29 16:06:39
       [[file:pictures/L33_Sorting_and_Algorithmic_Bounds/2019-10-29_16-06-39_screenshot.png]]
       - ~sink~
