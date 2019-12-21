@@ -3769,7 +3769,7 @@
       - The algorithm starts with *only the start* vertex in the PQ.
       - When relaxing an edge, if the relaxation is successful and the target vertex is not in the PQ, add it.
       - If the algorithm takes longer than some timeout value, it stops running.
-    - Algorithm Pseudocode
+    - Algorithm Pseudocode <<elink17>>
       - Create a PQ where each vertex v will have priority p equal to the sum of v’s distance from the source plus the heuristic estimate from v to the goal, i.e. p = distTo[v] + h(v, goal).
       - Insert the source vertex into the PQ.
       - Repeat until the PQ is empty, PQ.getSmallest() is the goal, or timeout is exceeded:
@@ -3947,7 +3947,7 @@
 ** Mergesort
    #+DOWNLOADED: screenshot @ 2019-10-27 12:39:59
    [[file:pictures/L29_Basic_Sorts/screenshot_2019-10-27_12-39-59.png]]
-** Insertion Sort
+** Insertion Sort <<elink16>>
 *** Naive 
     #+DOWNLOADED: screenshot @ 2019-10-27 13:23:49
     [[file:pictures/L29_Basic_Sorts/screenshot_2019-10-27_13-23-49.png]]

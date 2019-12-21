@@ -466,7 +466,7 @@
       }
     #+end_src 
     - ~int[] expect = new int[5]~ and ~Arrays.fill(expect, -1)~, not ~int expect[]~ but ~int[] expect~ 
-* CLab 6 Falling Bubbles                                              :EXTRA:
+* CLab 6 Falling Bubbles
 ** ~BubbleGird.java~ 
 *** ~popBubbles~  
     #+begin_src java :classname 
@@ -944,7 +944,7 @@
      1. 是否 ~List~ 和 ~Set~ 都没有固定长度而 ~Arrays~ 的长度是指定的？
      2. ~Arrays.asList~ 返回的 ~ArrayList~ 和 ~java.util.ArrayList~ 异同？除了固定长度还有啥？
      3. ~Collection.toArray~ 返回的 ~Arrays~ 和 ~java.util.Arrays~ 异同？
-* CLab 7 BST Performance                                              :EXTRA:
+* CLab 7 BST Performance
 ** Experiment 1 - BST Generation Using Insertion
    #+DOWNLOADED: screenshot @ 2019-12-09 21:28:43
    [[file:pictures/CLab_7_BST_Performance/2019-12-09_21-28-43_screenshot.png]]
@@ -977,7 +977,7 @@
     #+end_src 
     - $log_{2}(N)$, can also ~Math.log(N) / Math.log(2)~ 
     - ~j >> 1~ = ~j / 2~ and ~j << 1~ = ~j * 2~ for ~j > 0~
-** Experiment 2 and 3 - BST Generation Using Insertion and Deletion :UNRESOLVED:
+** Experiment 2 and 3 - BST Generation Using Insertion and Deletion :UNRESOLVED:EXTRA:
    #+DOWNLOADED: screenshot @ 2019-12-09 22:23:22
    [[file:pictures/CLab_7_BST_Performance/2019-12-09_22-23-22_screenshot.png]]
    - The average depth actually drops as we randomly insert and delete. However, as the insertion/deletion cycle continues, you should see the depth *climb* well above the starting depth.
@@ -1379,7 +1379,7 @@
           assertTrue(q.containsKey("f"));
       }
     #+end_src 
-* CLab 8 Heaps and Hashes                                             :EXTRA:
+* CLab 8 Heaps and Hashes
 ** Problem 1 Flight 
 *** ~FlightSolver.java~  
     #+begin_src java :classname 
@@ -1441,7 +1441,7 @@
       }
     #+end_src 
     - ~public class FlightComparator implements Comparator<Flight>~ and *override* ~public int compare(Flight f1, Flight f2)~ 
-** Problem 2 Rabin-Karp Algorithm                                :UNRESOLVED:
+** Problem 2 Rabin-Karp Algorithm                          :UNRESOLVED:EXTRA:
 ** Question:                                                      :QUESTIONS:
    - [ ] FlightSolver的时间复杂度是 $O(NlogN)$ 吗？不是的话怎么改？
    - [ ] Rabin-Karp 实现？
@@ -1622,7 +1622,7 @@
           }
       }
     #+end_src 
-* CLab 9 Graphs                                                       :EXTRA:
+* CLab 9 Graphs
 ** ~SeparableEnemySolver.java~ 
 *** ~isSeparable~ 
     #+begin_src java :classname 
@@ -1658,7 +1658,7 @@
     - *DFS* on node ~n~ will return ~false~ when *one pair of unsuccessfully separated nodes* are stored in ~party~ while ~true~ when *all nodes of the graph* which this node belongs to are *successfully separated* in ~party~
     - Runtime
       - $O(V+E)$
-*** ~isSeparable3g~                                              :UNRESOLVED:
+*** ~isSeparable3g~                                        :UNRESOLVED:EXTRA:
 ** Question:                                                      :QUESTIONS:
    - [ ] 对比 [[file:~/csnds/Dropbox/orglife/61b_rnl.org::<<elink14>>][DFS]] 理解 DFS 的思想？
    - [ ] 用 [[file:~/csnds/Dropbox/orglife/61b_rnl.org::<<elink15>>][BFS]] 解决？
@@ -1927,7 +1927,19 @@
           return true;
       }
     #+end_src 
-* CLab 11 Bears and Beds
+* CLab 11 Bears and Beds                                         :UNRESOLVED:
+** ~solvedBears~ 
+   #+begin_src java :classname 
+     public List<Bear> solvedBears() {
+         // TODO: Fix me.
+         for (int i = 0; i < this.bears.size(); i++) {
+             bears.set(i, new Bear(beds.get(i).getSize()));
+         }
+         return bears;
+     }
+   #+end_src 
+** Questions:                                                     :QUESTIONS:
+   - [ ] 这道题应该意在通过两个列表之间的比较进行排序和配对，意图只在配对还是需要排序？怎么 *符合题意地* 实现？
 * Lab 12 Getting Started on Project 3
 ** ~HexWorld.java~ 
 *** ~addHexagon~ 

@@ -1,5 +1,4 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * BnBSolver for the Bears and Beds problem. Each Bear can only be compared to Bed objects and each Bed
@@ -10,8 +9,13 @@ import java.util.List;
  */
 public class BnBSolver {
 
+    private List<Bear> bears;
+    private List<Bed> beds;
+
     public BnBSolver(List<Bear> bears, List<Bed> beds) {
         // TODO: Fix me.
+        this.bears = bears;
+        this.beds = beds;
     }
 
     /**
@@ -19,7 +23,10 @@ public class BnBSolver {
      */
     public List<Bear> solvedBears() {
         // TODO: Fix me.
-        return null;
+        for (int i = 0; i < this.bears.size(); i++) {
+            bears.set(i, new Bear(beds.get(i).getSize()));
+        }
+        return bears;
     }
 
     /**
@@ -27,6 +34,6 @@ public class BnBSolver {
      */
     public List<Bed> solvedBeds() {
         // TODO: Fix me.
-        return null;
+        return beds;
     }
 }

@@ -26,7 +26,6 @@ public class LinkedListDeque<T> {
         sentinel = new Node(0, null, null);
         size = 0;
         Node<T> p = other.sentinel.next;
-//        LinkedListDeque<T> popyLLD = new LinkedListDeque<>();
         for (int i = 0; i < other.size; i++) {
             this.addLast(p.item);
             p = p.next;

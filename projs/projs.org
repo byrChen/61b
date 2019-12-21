@@ -130,143 +130,129 @@
 ** Extra for Experts                                                  :EXTRA:
 *** Adding Audio                                                :UNRESOLVED:
 *** Gold Points                                                 :UNRESOLVED:
-* Proj 1A Data Structures                                           :TOBEORG:
+* Proj 1A Data Structures
 ** ~LinkedListDeque.java~ 
-   #+begin_src java :classname 
-     import java.io.NotActiveException;
+*** ~LinkedListDeque~ 
+    #+begin_src java :classname 
+      public class LinkedListDeque<T> {
 
-     public class LinkedListDeque<T> {
+          private Node<T> sentinel;
+          private int size;
 
-         private Node<T> sentinel;
-         private int size;
+          private class Node<T> {
+              private Node<T> prev;
+              private Node<T> next;
+              private T item;
 
-         private class Node<T> {
-             private Node<T> prev;
-             private Node<T> next;
-             private T item;
+              public Node(T iteM, Node preV, Node nexT) {
+                  item = iteM;
+                  prev = preV;
+                  next = nexT;
+              }
+          }
 
-             public Node(T iteM, Node preV, Node nexT) {
-                 item = iteM;
-                 prev = preV;
-                 next = nexT;
-             }
-         }
+          public LinkedListDeque() {
+              sentinel = new Node(0, null, null);
+              size = 0;
+          }
 
-         public LinkedListDeque() {
-             sentinel = new Node(0, null, null);
-             size = 0;
-         }
+          public  LinkedListDeque(LinkedListDeque other) {
+              sentinel = new Node(0, null, null);
+              size = 0;
+              Node<T> p = other.sentinel.next;
+              //        LinkedListDeque<T> popyLLD = new LinkedListDeque<>();
+              for (int i = 0; i < other.size; i++) {
+                  this.addLast(p.item);
+                  p = p.next;
+              }
+          }
+          ...
+      }
+    #+end_src 
+    - ~LinkedListDeque(LinkedListDeque other)~
+    - ~this.addLast(p.item)~ + ~p = p.next~ 
+*** ~getRecursive~ 
+    #+begin_src java :classname 
+      public T getRecursive(int index) {
+          LinkedListDeque<T> copyLLD = new LinkedListDeque<>(this);
+          Node<T> p = copyLLD.sentinel;
+          if (p == null || index >= size) {
+              return null;
+          }
+          if (index == 0) {
+              return p.next.item;
+          }
+          copyLLD.removeFirst();
+          return copyLLD.getRecursive(index - 1);
+      }
+    #+end_src 
+    - ~LinkedListDeque<T> copyLLD = new LinkedListDeque<>(this)~ 
+    - Base or edge:
+      - ~if (p == null || index >= size)~
+      - ~if (index == 0)~ 
+    - Recursive: ~copyLLD.removeFirst()~ + ~return copyLLD.getRecursive(index - 1)~ 
+*** ~addFirst~ and ~addLast~ 
+    #+begin_src java :classname 
+      public void addFirst(T item) {
+          Node<T> node = new Node<>(item, null, null);
+          if (isEmpty()) {
+              size = size + 1;
+              sentinel.next = node;
+              node.prev = sentinel;
+              sentinel.prev = node;
+              node.next = sentinel;
+              return;
+          }
+          size = size + 1;
+          node.next = sentinel.next;
+          sentinel.next.prev = node;
+          node.prev = sentinel;
+          sentinel.next = node;
+      }
 
-         public  LinkedListDeque(LinkedListDeque other) {
-             sentinel = new Node(0, null, null);
-             size = 0;
-             Node<T> p = other.sentinel.next;
-     //        LinkedListDeque<T> popyLLD = new LinkedListDeque<>();
-             for (int i = 0; i < other.size; i++) {
-                 this.addLast(p.item);
-                 p = p.next;
-             }
-         }
+      public void addLast(T item) {
+          Node<T> node = new Node<>(item, null, null);
+          if (isEmpty()) {
+              sentinel.next = node;
+              node.prev = sentinel;
+              sentinel.prev = node;
+              node.next = sentinel;
+              size = size + 1;
+              return;
+          }
+          node.prev = sentinel.prev;
+          sentinel.prev.next = node;
+          node.next = sentinel;
+          sentinel.prev = node;
+          size = size + 1;
+      }
+    #+end_src 
+    - ~Node<T> node = new Node<>(item, null, null)~
+    - ~if (isEmpty())~ 
+*** ~removeFirst~ and ~removeLast~ 
+    #+begin_src java :classname 
+      public T removeFirst() {
+          if (isEmpty()) {
+              return null;
+          }
+          Node<T> first = sentinel.next;
+          sentinel.next = first.next;
+          first.next.prev = sentinel;
+          size = size - 1;
+          return first.item;
+      }
 
-         public T getRecursive(int index) {
-             LinkedListDeque<T> copyLLD = new LinkedListDeque<>(this);
-             Node<T> p = copyLLD.sentinel;
-             if (p == null || index >= size) {
-                 return null;
-             }
-             if (index == 0) {
-                 return p.next.item;
-             }
-             copyLLD.removeFirst();
-             return copyLLD.getRecursive(index - 1);
-         }
-
-         public void addFirst(T item) {
-             Node<T> node = new Node<>(item, null, null);
-             if (isEmpty()) {
-                 size = size + 1;
-                 sentinel.next = node;
-                 node.prev = sentinel;
-                 sentinel.prev = node;
-                 node.next = sentinel;
-                 return;
-             }
-             size = size + 1;
-             node.next = sentinel.next;
-             sentinel.next.prev = node;
-             node.prev = sentinel;
-             sentinel.next = node;
-         }
-
-         public void addLast(T item) {
-             Node<T> node = new Node<>(item, null, null);
-             if (isEmpty()) {
-                 sentinel.next = node;
-                 node.prev = sentinel;
-                 sentinel.prev = node;
-                 node.next = sentinel;
-                 size = size + 1;
-                 return;
-             }
-             node.prev = sentinel.prev;
-             sentinel.prev.next = node;
-             node.next = sentinel;
-             sentinel.prev = node;
-             size = size + 1;
-         }
-
-         public boolean isEmpty() {
-             return size == 0;
-         }
-
-         public int size() {
-             return size;
-         }
-
-         public void printDeque() {
-             Node p = sentinel;
-             for (int i = 0; i < size; i++) {
-                 System.out.print(p.next.item + " ");
-                 p = p.next;
-             }
-
-             System.out.println();
-         }
-
-         public T removeFirst() {
-             if (isEmpty()) {
-                 return null;
-             }
-             Node<T> first = sentinel.next;
-             sentinel.next = first.next;
-             first.next.prev = sentinel;
-             size = size - 1;
-             return first.item;
-         }
-
-         public T removeLast() {
-             if (isEmpty()) {
-                 return null;
-             }
-             Node<T> last = sentinel.prev;
-             sentinel.prev = last.prev;
-             last.prev.next = sentinel;
-             size = size - 1;
-             return last.item;
-         }
-
-         public T get(int index) {
-             if (isEmpty() || index < 0) {
-                 return null;
-             }
-             Node<T> p = sentinel;
-             for (int i = 0; i < index + 1; i++) {
-                 p = p.next;
-             }
-             return p.item;
-         }
-     }
-   #+end_src 
+      public T removeLast() {
+          if (isEmpty()) {
+              return null;
+          }
+          Node<T> last = sentinel.prev;
+          sentinel.prev = last.prev;
+          last.prev.next = sentinel;
+          size = size - 1;
+          return last.item;
+      }
+    #+end_src 
 ** ~ArrayDeque.java~
    #+begin_src java :classname 
      import java.util.TreeMap;
@@ -431,8 +417,153 @@
          }
      }
    #+end_src 
+*** ~ArrayDeque~ 
+    #+begin_src java :classname 
+      public class ArrayDeque<T> {
 
-** Tests
+          private T[] items;
+          private int size;
+          private int nextFirst;
+          private int nextLast;
+          private double ratio;
+
+          public ArrayDeque() {
+              size = 0;
+              items = (T[]) new Object[8]; 
+              nextFirst = 7;
+              nextLast = 0;
+              ratio = 0.25;
+          }
+
+          public ArrayDeque(ArrayDeque other) {
+              items = (T[]) new Object[other.items.length];
+              System.arraycopy(other.items, 0, items, 0, other.items.length);
+              size = other.size;
+              nextFirst = other.nextFirst;
+              nextLast = other.nextLast;
+              ratio = 0.25;
+          }
+          ...
+      }
+    #+end_src 
+    - ~items = (T[]) new Object[8]~
+    - ~public ArrayDeque(ArrayDeque other)~
+      - ~System.arraycopy(other.items, 0, items, 0, other.items.length)~ 
+*** ~addFirst~ and ~addLast~ 
+    #+begin_src java :classname 
+      public void addFirst(T item) {
+          items[nextFirst] = item;
+          nextFirst = minusOne(nextFirst);
+          size += 1;
+
+          if (isFull()) {
+              this.resize(size * 2);
+          }
+      }
+
+      public void addLast(T item) {
+          items[nextLast] = item;
+          nextLast = plusOne(nextLast);
+          size += 1;
+
+          if (isFull()) {
+              this.resize(size * 2);
+          }
+      }
+
+      private int minusOne(int index) {
+          return (index + items.length - 1) % items.length;
+      }
+
+      private int plusOne(int index) {
+          return (index + 1) % items.length;
+      }
+    #+end_src 
+    - ~nextFirst = minusOne(nextFirst)~ and ~nextLast = plusOne(nextLast)~ 
+*** ~resize~ 
+    #+begin_src java :classname 
+      private void resize(int capacity) {
+
+          T[] newItems = (T []) new Object[capacity];
+          int firstSize = items.length - nextFirst - 1;
+          int start = plusOne(nextFirst);
+          int secondSize = nextLast;
+
+          if (isFull()) {
+              if (nextFirst == nextLast - 1) {
+                  System.arraycopy(items, start, newItems, 0, firstSize);
+                  System.arraycopy(items, 0, newItems, firstSize, secondSize);
+              } else {
+                  System.arraycopy(items, start, newItems, 0, size);
+              }
+          }
+
+          if (isWaste()) {
+              if (nextLast > nextFirst) {
+                  System.arraycopy(items, start, newItems, 0, size);
+              } else {
+                  System.arraycopy(items, start, newItems, 0, firstSize);
+                  System.arraycopy(items, 0, newItems, firstSize, secondSize);
+              }
+          }
+
+          nextFirst = capacity - 1;
+          nextLast = size;
+          items = newItems;
+      }
+    #+end_src 
+    - ~T[] newItems = (T []) new Object[capacity]~
+    - ~if (isFull())~
+      - ~if (nextFirst == nextLast - 1)~: ~System.arraycopy(items, start, newItems, 0, firstSize)~ + ~System.arraycopy(items, 0, newItems, firstSize, secondSize)~
+      - ~if (nextFirst == items.length - 1 && nextLast == 0)~: ~System.arraycopy(items, start, newItems, 0, size)~
+    - ~if (isWaste())~
+      - ~if (nextLast > nextFirst)~: ~System.arraycopy(items, start, newItems, 0, size)~
+      - ~if (nextLast <= nextFirst)~: ~System.arraycopy(items, start, newItems, 0, firstSize)~ + ~System.arraycopy(items, 0, newItems, firstSize, secondSize)~ 
+*** ~removeFirst~ and ~removeLast~ 
+    #+begin_src java :classname 
+      public T removeFirst() {
+          if (isEmpty()) {
+              return null;
+          }
+          int index = plusOne(nextFirst);
+          T x = items[index];
+          items[index] = null;
+          nextFirst = index;
+          size -= 1;
+          if (isWaste()) {
+              resize(items.length / 2);
+          }
+          return x;
+      }
+
+      public T removeLast() {
+          if (isEmpty()) {
+              return null;
+          }
+          int index = minusOne(nextLast);
+          T x = items[index];
+          items[index] = null;
+          nextLast = index;
+          size -= 1;
+          if (isWaste()) {
+              resize(items.length / 2);
+          }
+          return x;
+      }
+    #+end_src 
+    - ~if (isWaste()) {resize(items.length / 2)}~ 
+*** ~get~ 
+    #+begin_src java :classname 
+      public T get(int index) {
+          if (index < 0 || index >= size) {
+              return  null;
+          }
+          return items[plusOne(index + nextFirst)];
+      }
+    #+end_src 
+    - Corner or Edge: ~if (index < 0 || index >= size)~
+    - ~items[plusOne(index + nextFirst)]~ 
+** Tests                                                            :TOBEORG:
 *** ~LLDTest.java~
     #+begin_src java :classname 
       import org.junit.Test;
@@ -629,46 +760,7 @@
           }
       }
     #+end_src 
-* Project 1B Applying and Testing Data Structures version 1.0       :TOBEORG:
-** ~Deque.java~
-   #+begin_src java :classname 
-     interface Deque<T> {
-
-         void addFirst(T item);
-
-         void addLast(T item);
-
-         default boolean isEmpty() {
-             return size() == 0;
-         }
-
-         int size();
-
-         void printDeque();
-
-         T removeFirst();
-
-         T removeLast();
-
-         T get(int index);
-     }
-   #+end_src 
-** ~wordToDeque~
-   #+begin_src java :classname 
-     public class Palindrome {
-
-         public Deque<Character> wordToDeque(String word) {
-
-             Deque<Character> deQue = new LinkedListDeque<>();
-             for (int i = word.length() - 1; i >= 0; i--) {
-                 deQue.addFirst(word.charAt(i));
-             }
-             return deQue;
-         }
-
-         ...
-     }
-   #+end_src 
+* Project 1B Applying and Testing Data Structures version 1.0
 ** ~isPalindrome~
    #+begin_src java :classname 
      public boolean isPalindrome(String word) {
@@ -693,6 +785,8 @@
          //        return reverse.equals(word);
      }
    #+end_src 
+   - ~if (word.charAt(i) != word.charAt(word.length() - i - 1))~ 
+   - ~String~ + ~char~ = ~String~: ~reverse += d.removeLast()~ 
 ** Generalized Palindrome and OffByOne
 *** ~OffByOne~
     #+begin_src java :classname 
@@ -711,6 +805,7 @@
           }
       }
     #+end_src 
+    ~public class OffByOne implements CharacterComparator~ 
 *** Generalized ~isPalindrome~
     #+begin_src java :classname 
       public boolean isPalindrome(String s, CharacterComparator cc) {
@@ -728,6 +823,7 @@
           return true;
       }
     #+end_src 
+    - ~if (!cc.equalChars(s.charAt(i), s.charAt(s.length() - i - 1)))~ 
 ** ~OffByN.java~
    #+begin_src java :classname 
      public class OffByN implements CharacterComparator {
@@ -743,7 +839,8 @@
          }
      }
    #+end_src 
-** Tests
+   - ~public class OffByN implements CharacterComparator~ 
+** Tests                                                            :TOBEORG:
 *** isPalindrome Testing
     #+begin_src java :classname 
       import org.junit.Test;
@@ -863,7 +960,7 @@
       }
     #+end_src 
     - ~ArrayList<PNode<T>> minHeap = new ArrayList<>()~ and ~HashMap<T, Integer> items = new HashMap<>()~
-    - ~minHeap.addd(null)~
+    - ~minHeap.add(null)~ to start from ~minHeap.get(0)~ 
 *** ~add~ 
     #+begin_src java :classname 
       @Override
@@ -902,7 +999,7 @@
     - ~swim~: ~swap(index, index / 2)~, recursive ~if (index == 1) return~ + ~swim(index / 2)~
     - ~lessThanParent~: ~if (child == 1) return false~ to avoid ~minHeap.get(child/2).priority~
     - ~swap~:
-      - *Update* ~index~ of ~item~ first: ~items.replace(minHeap.get(x).item, y)~ and ~items.replace(minHeap.get(y).item, x)~
+      - *Update* ~index~ of ~item~ first: ~items.replace(minHeap.get(x).item, y)~ + ~items.replace(minHeap.get(y).item, x)~
       - Then *swap* ~PNode<T>~: ~minHeap.set(x, minHeap.get(y))~ and ~minHeap.set(y, temp)~ 
 *** ~getSmallest~ 
     #+begin_src java :classname 
@@ -1061,7 +1158,7 @@
           }
       }
     #+end_src 
-    - ~try {fail("No exception thrown.")} cache (Exception e) {e.getMessage().contains()}~
+    - ~try {fail("No exception thrown.")} catch (Exception e) {e.getMessage().contains()}~
     - Use ~for~ to write tests
 **** Question:                                                    :QUESTIONS:
      - [ ] 写测试时 ~try{} catch () {}~ 怎么捕捉多个异常并对不同异常分开测试？
@@ -1171,7 +1268,7 @@
     - ~private boolean needBad (Node n, Node goal, double min)~ 
       - ~d = Math.pow(n.p.getX() - goal.p.getX(), 2)~ and ~d = Math.pow(n.p.getY() - goal.p.getY(), 2)~
       - ~cmp < 0 ? true : false~ 
-*** Question:                                                     :QUESTIONS:
+*** Question:                                                     :QUESTIONS: <<elink3>>
     - [ ] 关于 recursive 的思考：有无返回值，需要传入什么样的参数，怎样的返回条件
       - [ ] 无返回， ~ArrayHeapMinPQ~ 的 [[file:61b_projs.org::<<elink1>>][swim]] 和 [[file:61b_projs.org::<<elink2>>][sink]]
       - [ ] 有返回值， ~BSTMap~ 的 [[file:61b_labs.org::<<elink4>>][put]], [[file:61b_labs.org::<<elink5>>][updateBST]], [[file:61b_labs.org::<<elink6>>][get]]; ~KDTree~ 的 [[ilink3][put]], [[ilink4][nearest]] 等
@@ -1399,8 +1496,53 @@
 *** Question:                                                     :QUESTIONS:
     - [ ] [[ilink6][nToNodes 和 clToNames]] 是必要的吗？ [[ilink7][getLocationsByPrefix]] 和 [[ilink8][getLocations]] 能否有更优雅的实现？
     - [ ] 为什么搜索的时候先要用 [[ilink9][cleanString]] 处理？输入字符与输出结果之间需要怎样的逻辑处理？
-** ~Router.java~                                           :UNRESOLVED:EXTRA:
+** ~Router.java~                                              :EXTRA:TOBEORG:
 *** ~routeDirections~  
+    #+begin_src java :classname 
+      public static List<NavigationDirection> routeDirections(AugmentedStreetMapGraph g, List<Long> route) {
+          if (route.size() < 2) return null;
+          List<NavigationDirection> navigations = new ArrayList<>();
+          String direction = "Start";
+          long prevNode = route.get(0);
+          double distance = 0.0, prevBearing = 0.0;
+          String street = NavigationDirection.UNKNOWN_ROAD;
+
+          for (int i = 1; i < route.size(); i++) {
+              long currNode = i > 1 ? route.get(i) : route.get(1);
+              String currStreet = NavigationDirection.UNKNOWN_ROAD;
+              for (WeightedEdge e : g.neighbors(prevNode)) {
+                  if (e.to().equals(currNode)) {
+                      currStreet = e.getName().isEmpty() ? currStreet : e.getName();
+                        currStreet = e.getName();
+                  }
+              }
+
+              if (i == 1) street = currStreet;
+
+                String currStreet = g.name(currNode) == null ? NavigationDirection.UNKNOWN_ROAD : g.name(currNode);
+              if (!currStreet.equals(street)) {
+                  String dirString = String.format("%s on %s and continue for %.3f miles.",
+                          direction, street, distance);
+                  navigations.add(NavigationDirection.fromString(dirString));
+                  distance = 0;
+                  street = currStreet;
+                  double currBearing = Router.nodeToBearing(g, prevNode, currNode);
+                  direction = NavigationDirection.DIRECTIONS[NavigationDirection.getDirection(prevBearing, currBearing)];
+              }
+              distance += g.estimatedDistanceToGoal(prevNode, currNode);
+              prevBearing = Router.nodeToBearing(g, prevNode, currNode);
+              prevNode = currNode;
+          }
+
+          String dirString = String.format("%s on %s and continue for %.3f miles.",
+                  direction, street, distance);
+          navigations.add(NavigationDirection.fromString(dirString));
+          return navigations;
+          // /* fill in for part IV */
+          // return null;
+      }
+    #+end_src 
+** Heroku Deployment                                       :UNRESOLVED:EXTRA:
 ** Tests                                                            :TOBEORG:
 *** ~TestRasterAPIHandler.java~
     #+begin_src java :classname 
@@ -1671,9 +1813,93 @@
           }
       }
     #+end_src 
+*** ~TestDirections.java~ 
+    #+begin_src java :classname 
+      package bearmaps.test;
+
+      import bearmaps.proj2c.AugmentedStreetMapGraph;
+      import org.junit.Before;
+      import org.junit.Test;
+      import bearmaps.proj2c.Router;
+
+      import java.nio.charset.Charset;
+      import java.nio.file.Files;
+      import java.nio.file.Paths;
+      import java.util.ArrayList;
+      import java.util.List;
+
+      import static org.junit.Assert.assertEquals;
+
+      /** Test of the written driving directions part of the assignment. This part of the assignment is 
+        ,* optional and not worth any credit, and these tests should be thought of as just for fun.*/
+      public class TestDirections {
+          private static final String PATHS_FILE = "../../library-sp19/data/proj2c_test_inputs/path_results.txt";
+          private static final String RESULTS_FILE = "../../library-sp19/data/proj2c_test_inputs/directions_results.txt";
+          private static final int NUM_TESTS = 8;
+          private static final String OSM_DB_PATH = "../../library-sp19/data/proj2c_xml/berkeley-2019.osm.xml";
+          private static AugmentedStreetMapGraph graph;
+
+          @Before
+          public void setUp() throws Exception {
+              graph = new AugmentedStreetMapGraph(OSM_DB_PATH);
+          }
+
+          @Test
+          public void testRouteDirections() throws Exception {
+              List<List<Long>> paths = pathsFromFile();
+              List<List<Router.NavigationDirection>> expectedResults = resultsFromFile();
+
+              for (int i = 0; i < NUM_TESTS; i++) {
+                  System.out.println(String.format("Running test: %d", i));
+                  List<Long> path = paths.get(i);
+                  List<Router.NavigationDirection> actual = Router.routeDirections(graph, path);
+                  List<Router.NavigationDirection> expected = expectedResults.get(i);
+                  assertEquals("The directions lengths are not equal", expected.size(), actual.size());
+                  for (int j = 0; j < actual.size(); j++) {
+                      Router.NavigationDirection actualDir = actual.get(j);
+                      Router.NavigationDirection expectedDir = expected.get(j);
+                      assertEquals("Directions did not match", expectedDir.toString(),
+                              actualDir.toString());
+                  }
+              }
+          }
+
+          private List<List<Long>> pathsFromFile() throws Exception {
+              List<String> lines = Files.readAllLines(Paths.get(PATHS_FILE), Charset.defaultCharset());
+              List<List<Long>> paths = new ArrayList<>();
+              int lineIdx = 2; // ignore comment lines
+              for (int i = 0; i < NUM_TESTS; i++) {
+                  int numVertices = Integer.parseInt(lines.get(lineIdx));
+                  lineIdx++;
+                  List<Long> path = new ArrayList<>();
+                  for (int j = 0; j < numVertices; j++) {
+                      path.add(Long.parseLong(lines.get(lineIdx)));
+                      lineIdx++;
+                  }
+                  paths.add(path);
+              }
+              return paths;
+          }
+
+          private List<List<Router.NavigationDirection>> resultsFromFile() throws Exception {
+              List<String> lines = Files.readAllLines(Paths.get(RESULTS_FILE), Charset.defaultCharset());
+              List<List<Router.NavigationDirection>> expected = new ArrayList<>();
+              int lineIdx = 2; // ignore comment lines
+              for (int i = 0; i < NUM_TESTS; i++) {
+                  int numDirections = Integer.parseInt(lines.get(lineIdx));
+                  lineIdx++;
+                  List<Router.NavigationDirection> directions = new ArrayList<>();
+                  for (int j = 0; j < numDirections; j++) {
+                      directions.add(Router.NavigationDirection.fromString(lines.get(lineIdx)));
+                      lineIdx++;
+                  }
+                  expected.add(directions);
+              }
+              return expected;
+          }
+      }
+    #+end_src 
 *** Question:                                                     :QUESTIONS:
     - [ ] 以上 tests 理解？
-      
 * Project 3A BYOW Phase 1                                        :UNRESOLVED:
 * Project 3B BYOW Phase 2                                        :UNRESOLVED:
-

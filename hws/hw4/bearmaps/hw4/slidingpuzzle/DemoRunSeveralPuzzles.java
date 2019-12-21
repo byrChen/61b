@@ -23,7 +23,7 @@ public class DemoRunSeveralPuzzles {
 
     public static void main(String[] args) {
 
-        String[] puzzleFiles = elitePuzzles;
+        String[] puzzleFiles = hardPuzzles;
 
         System.out.println(puzzleFiles.length + " puzzle files being run.");
         for (int i = 0; i < puzzleFiles.length; i += 1) {

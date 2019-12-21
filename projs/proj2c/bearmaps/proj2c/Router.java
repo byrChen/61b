@@ -1,7 +1,11 @@
 package bearmaps.proj2c;
 
 import bearmaps.hw4.AStarSolver;
+import bearmaps.hw4.WeightedEdge;
+import bearmaps.hw4.streetmap.Node;
+import bearmaps.hw4.streetmap.StreetMapGraph;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -41,8 +45,51 @@ public class Router {
      * route.
      */
     public static List<NavigationDirection> routeDirections(AugmentedStreetMapGraph g, List<Long> route) {
-        /* fill in for part IV */
-        return null;
+        if (route.size() < 2) return null;
+        List<NavigationDirection> navigations = new ArrayList<>();
+        String direction = "Start";
+        long prevNode = route.get(0);
+        double distance = 0.0, prevBearing = 0.0;
+        String street = NavigationDirection.UNKNOWN_ROAD;
+
+        for (int i = 1; i < route.size(); i++) {
+            long currNode = i > 1 ? route.get(i) : route.get(1);
+            String currStreet = NavigationDirection.UNKNOWN_ROAD;
+            for (WeightedEdge e : g.neighbors(prevNode)) {
+                if (e.to().equals(currNode)) {
+                    currStreet = e.getName().isEmpty() ? currStreet : e.getName();
+//                    currStreet = e.getName();
+                }
+            }
+
+            if (i == 1) street = currStreet;
+
+//            String currStreet = g.name(currNode) == null ? NavigationDirection.UNKNOWN_ROAD : g.name(currNode);
+            if (!currStreet.equals(street)) {
+                String dirString = String.format("%s on %s and continue for %.3f miles.",
+                        direction, street, distance);
+                navigations.add(NavigationDirection.fromString(dirString));
+                distance = 0;
+                street = currStreet;
+                double currBearing = Router.nodeToBearing(g, prevNode, currNode);
+                direction = NavigationDirection.DIRECTIONS[NavigationDirection.getDirection(prevBearing, currBearing)];
+            }
+            distance += g.estimatedDistanceToGoal(prevNode, currNode);
+            prevBearing = Router.nodeToBearing(g, prevNode, currNode);
+            prevNode = currNode;
+        }
+
+        String dirString = String.format("%s on %s and continue for %.3f miles.",
+                direction, street, distance);
+        navigations.add(NavigationDirection.fromString(dirString));
+        return navigations;
+//        /* fill in for part IV */
+//        return null;
+    }
+
+    private static double nodeToBearing(AugmentedStreetMapGraph g, long n1, long n2) {
+        double lon1 = g.lon(n1), lon2 = g.lon(n2), lat1 = g.lat(n1), lat2 = g.lat(n2);
+        return NavigationDirection.bearing(lon1, lon2, lat1, lat2);
     }
 
     /**
