@@ -72,7 +72,8 @@ public class Router {
                 distance = 0;
                 street = currStreet;
                 double currBearing = Router.nodeToBearing(g, prevNode, currNode);
-                direction = NavigationDirection.DIRECTIONS[NavigationDirection.getDirection(prevBearing, currBearing)];
+                int navigationDir = NavigationDirection.getDirection(prevBearing, currBearing);
+                direction = NavigationDirection.DIRECTIONS[navigationDir];
             }
             distance += g.estimatedDistanceToGoal(prevNode, currNode);
             prevBearing = Router.nodeToBearing(g, prevNode, currNode);

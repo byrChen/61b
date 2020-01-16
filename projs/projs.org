@@ -254,169 +254,6 @@
       }
     #+end_src 
 ** ~ArrayDeque.java~
-   #+begin_src java :classname 
-     import java.util.TreeMap;
-
-     public class ArrayDeque<T> {
-
-         private T[] items;
-         private int size;
-         private int nextFirst;
-         private int nextLast;
-         private double ratio;
-
-         public ArrayDeque() {
-             size = 0;
-             items = (T[]) new Object[8]; 
-             nextFirst = 7;
-             nextLast = 0;
-             ratio = 0.25;
-         }
-
-         public ArrayDeque(ArrayDeque other) {
-             items = (T[]) new Object[other.items.length];
-             System.arraycopy(other.items, 0, items, 0, other.items.length);
-             size = other.size;
-             nextFirst = other.nextFirst;
-             nextLast = other.nextLast;
-             ratio = 0.25;
-         }
-
-         public void addFirst(T item) {
-             items[nextFirst] = item;
-             nextFirst = minusOne(nextFirst);
-             size += 1;
-
-             if (isFull()) {
-                 this.resize(size * 2);
-             }
-         }
-
-         public void addLast(T item) {
-             items[nextLast] = item;
-             nextLast = plusOne(nextLast);
-             size += 1;
-
-             if (isFull()) {
-                 this.resize(size * 2);
-             }
-         }
-
-         public int size() {
-             return size;
-         }
-
-         public void printDeque() {
-             for (int i = 0; i < size; i++) {
-                 System.out.print(get(i) + " ");
-             }
-             System.out.println();
-         }
-
-         public T removeFirst() {
-             if (isEmpty()) {
-                 return null;
-             }
-             int index = plusOne(nextFirst);
-             T x = items[index];
-             items[index] = null;
-             nextFirst = index;
-             size -= 1;
-             if (isWaste()) {
-                 resize(items.length / 2);
-             }
-             return x;
-         }
-
-         public T removeLast() {
-             if (isEmpty()) {
-                 return null;
-             }
-             int index = minusOne(nextLast);
-             T x = items[index];
-             items[index] = null;
-             nextLast = index;
-             size -= 1;
-             if (isWaste()) {
-                 resize(items.length / 2);
-             }
-             return x;
-         }
-
-         public T get(int index) {
-             if (index < 0 || index >= size) {
-                 return  null;
-             }
-             return items[plusOne(index + nextFirst)];
-         }
-
-         private void resize(int capacity) {
-
-             T[] newItems = (T []) new Object[capacity];
-             int firstSize = items.length - nextFirst - 1;
-             int start = plusOne(nextFirst);
-             int secondSize = nextLast;
-
-             if (isFull()) {
-                 if (nextFirst == nextLast - 1) {
-                     System.arraycopy(items, start, newItems, 0, firstSize);
-                     System.arraycopy(items, 0, newItems, firstSize, secondSize);
-                 } else {
-                     System.arraycopy(items, start, newItems, 0, size);
-                 }
-             }
-
-             if (isWaste()) {
-                 if (nextLast > nextFirst) {
-                     System.arraycopy(items, start, newItems, 0, size);
-                 } else {
-                     System.arraycopy(items, start, newItems, 0, firstSize);
-                     System.arraycopy(items, 0, newItems, firstSize, secondSize);
-                 }
-             }
-
-             nextFirst = capacity - 1;
-             nextLast = size;
-             items = newItems;
-         }
-
-         public Object[] items() {
-             return items;
-         }
-
-         public int nextFirst() {
-             return nextFirst;
-         }
-
-         public int nextLast() {
-             return nextLast;
-         }
-
-         public int itemsLength() {
-             return items.length;
-         }
-
-         private int minusOne(int index) {
-             return (index + items.length - 1) % items.length;
-         }
-
-         private int plusOne(int index) {
-             return (index + 1) % items.length;
-         }
-
-         public boolean isEmpty() {
-             return size == 0;
-         }
-
-         private boolean isFull() {
-             return size == items.length;
-         }
-
-         private boolean isWaste() {
-             return items.length >= 16 && (float) size / items.length < ratio;
-         }
-     }
-   #+end_src 
 *** ~ArrayDeque~ 
     #+begin_src java :classname 
       public class ArrayDeque<T> {
@@ -961,7 +798,7 @@
     #+end_src 
     - ~ArrayList<PNode<T>> minHeap = new ArrayList<>()~ and ~HashMap<T, Integer> items = new HashMap<>()~
     - ~minHeap.add(null)~ to start from ~minHeap.get(0)~ 
-*** ~add~ 
+*** ~add~
     #+begin_src java :classname 
       @Override
       public void add(T item, double priority) {
@@ -974,7 +811,7 @@
           swim(size);
       }
 
-      private void swim(int index) { <<elink1>>
+      private void swim(int index) {  <<elink1>>
           if (index == 1) return;
           if (lessThanParent(index)) {
               swap(index, index / 2);
@@ -1270,8 +1107,8 @@
       - ~cmp < 0 ? true : false~ 
 *** Question:                                                     :QUESTIONS: <<elink3>>
     - [ ] 关于 recursive 的思考：有无返回值，需要传入什么样的参数，怎样的返回条件
-      - [ ] 无返回， ~ArrayHeapMinPQ~ 的 [[file:61b_projs.org::<<elink1>>][swim]] 和 [[file:61b_projs.org::<<elink2>>][sink]]
-      - [ ] 有返回值， ~BSTMap~ 的 [[file:61b_labs.org::<<elink4>>][put]], [[file:61b_labs.org::<<elink5>>][updateBST]], [[file:61b_labs.org::<<elink6>>][get]]; ~KDTree~ 的 [[ilink3][put]], [[ilink4][nearest]] 等
+      - [ ] 无返回， ~ArrayHeapMinPQ~ 的 [[<<elink1>>][swim]] 和 [[<<elink2>>][sink]]
+      - [ ] 有返回值， ~BSTMap~ 的 [[file:~/csnds/Dropbox/orglife/61b_labs.org::<<elink4>>][put]], [[file:~/csnds/Dropbox/orglife/61b_labs.org::<<elink5>>][updateBST]], [[file:~/csnds/Dropbox/orglife/61b_labs.org::<<elink6>>][get]]; ~KDTree~ 的 [[ilink3][put]], [[ilink4][nearest]] 等
     - [ ] 有关模仿 ~BSTMap~ 的更多操作的实现，特别是 ~remove~ 
     - [ ] 关于 [[ilink5][needBad]] 的准确准则及实现，并用 randomized tests 验证速度
     - [ ] 如果数据的维数更多，又该怎么去实现？
@@ -1527,7 +1364,8 @@
                   distance = 0;
                   street = currStreet;
                   double currBearing = Router.nodeToBearing(g, prevNode, currNode);
-                  direction = NavigationDirection.DIRECTIONS[NavigationDirection.getDirection(prevBearing, currBearing)];
+                  int navigationDir = NavigationDirection.getDirection(prevBearing, currBearing);
+                  direction = NavigationDirection.DIRECTIONS[navigationDir];
               }
               distance += g.estimatedDistanceToGoal(prevNode, currNode);
               prevBearing = Router.nodeToBearing(g, prevNode, currNode);
@@ -1901,5 +1739,8 @@
     #+end_src 
 *** Question:                                                     :QUESTIONS:
     - [ ] 以上 tests 理解？
-* Project 3A BYOW Phase 1                                        :UNRESOLVED:
-* Project 3B BYOW Phase 2                                        :UNRESOLVED:
+** Provided files                                             :EXTRA:TOBEORG:
+* Project 3 BYOW                                                 :UNRESOLVED:
+** Phase 1
+** Phase 2
+** Provided files                                             :EXTRA:TOBEORG:

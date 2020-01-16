@@ -3517,7 +3517,7 @@
 *** Trees implementations 
     #+DOWNLOADED: screenshot @ 2019-10-17 11:14:52
     [[file:pictures/L23_Tree_and_Graph_Traversals/screenshot_2019-10-17_11-14-52.png]]
-*** Tree traversal
+*** Tree traversal 
     #+begin_src java :classname 
       preOrder(BSTNode x) {
           if (x == null) return;
