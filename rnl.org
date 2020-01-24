@@ -1,5 +1,5 @@
 #+TAGS: QUESTIONS(q) TOBEORG(t) UNCOVERED(u) EXTRA(e) SLIDE(s)
-* 1. Introduction to Java                                             :SLIDE:
+* 1 Introduction to Java                                             :SLIDE:
 ** Essentials
    #+begin_src java :classname HelloWorld
      public class HelloWorld {
@@ -17,7 +17,7 @@
     *The most common way to execute a Java pg*: Compiler ~javac~ --> Interpreter ~java~
 
     #+DOWNLOADED: https://joshhug.gitbooks.io/hug61b/content/assets/compilation_figure.svg @ 2019-03-01 10:36:13
-    [[file:pictures/1.%20Introduction%20to%20Java/compilation_figure_2019-03-01_10-36-13.svg]]
+    [[file:pictures/1_Introductio_t_Java/compilation_figure_2019-03-01_10-36-13.svg]]
 
     #+begin_src sh 
       javac HelloWorld.java 
@@ -385,7 +385,7 @@
         #+end_src
         - Env analysis and output
           #+DOWNLOADED: /tmp/screenshot.png @ 2019-03-17 14:43:29
-          [[file:pictures/1.%20Introduction%20to%20Java/screenshot_2019-03-17_14-43-29.png]]
+          [[file:pictures/1_Introductio_t_Java/screenshot_2019-03-17_14-43-29.png]]
           #+begin_example
             bark. bark.
             woof!
@@ -442,7 +442,7 @@
         #+RESULTS:
         : 21
         - ~Integer.parseInt(String)~: Convert ~String~ to a *primitive* ~int~ and *return* it.
-* 2. Lists                                                            :SLIDE:
+* 2 Lists                                                            :SLIDE:
 ** Mystery of the Walrus
    ~List~ could easily change the number of object after the simulation had begun.
 *** The Mystery of the Walrus
@@ -481,7 +481,7 @@
     #+end_src 
     - Env analysis
       #+DOWNLOADED: /tmp/screenshot.png @ 2019-03-19 23:37:17
-      [[file:pictures/2.%20Lists/screenshot_2019-03-19_23-37-17.png]]
+      [[file:pictures/2._Lists/screenshot_2019-03-19_23-37-17.png]]
 *** Bits
     72 and 'H' both stored as 01001000 *in memory*, interpreter differs them by *type*.
     8 primitive types of Java: byte, short, int, long, float, double, boolean, and char.
@@ -501,21 +501,21 @@
       double y;
     #+end_src 
     #+DOWNLOADED: /tmp/screenshot.png @ 2019-03-20 00:12:16
-    [[file:pictures/2.%20Lists/screenshot_2019-03-20_00-12-16.png]]
+    [[file:pictures/2._Lists/screenshot_2019-03-20_00-12-16.png]]
     #+begin_src java :classname 
       x = -1431195969;
       y = 567213.112;
     #+end_src 
     #+DOWNLOADED: /tmp/screenshot.png @ 2019-03-20 00:12:55
-    [[file:pictures/2.%20Lists/screenshot_2019-03-20_00-12-55.png]]
-    - When you *declare* a variable of a certain type, Java finds a *contiguous* block with exactly enough bits to hold a thing of that type.
+    [[file:pictures/2._Lists/screenshot_2019-03-20_00-12-55.png]]
+    - When you *declare* a variable of a certain type, Java finds a *continuous* block with exactly enough bits to hold a thing of that type.
     - In addition to setting aside memory, the Java interpreter also *creates an entry* in an *internal table* that *maps each variable name to the location of the first bit* in the box.
     - the *exact memory address* is *below the level of abstraction accessible* to us in Java
     - Java does not write anything into the *reserved* box when a variable is *declared*. Java compiler *prevents* you from using a variable until after the box has been filled with bits using the = operator.
      
     - Simplified Box Notation
       #+DOWNLOADED: /tmp/screenshot.png @ 2019-03-20 15:05:29
-      [[file:pictures/2.%20Lists/screenshot_2019-03-20_15-05-29.png]]
+      [[file:pictures/2._Lists/screenshot_2019-03-20_15-05-29.png]]
 *** The Golden Rule of Equals (GRoE)
     In Java, ~=~ for *any* assignment means *interpreter copying bits* from A into B.
 *** Reference Types
@@ -536,7 +536,7 @@
       #+end_src 
       Use ~new Walrus(1000, 8.3)~ 
       #+DOWNLOADED: /tmp/screenshot.png @ 2019-03-31 23:08:50
-      [[file:pictures/2.%20Lists/screenshot_2019-03-31_23-08-50.png]]
+      [[file:pictures/2._Lists/screenshot_2019-03-31_23-08-50.png]]
       In *real implementations* of the Java programming language, there is actually some *additional overhead* for any object, so a Walrus takes somewhat more than 96 bits. 
     - Reference Variable Declaration
       When a variable of *any reference type declared*, Java allocates *a box of 64 bits* to store the *address(fist bit)* of the variable *in memory*.
@@ -544,13 +544,13 @@
       2. ~someWalrus = new Walrus(1000, 8.3)~: Creating a new ~Walrus~ and return its *address* by the ~new~ operator.
          - If Walrus ~weight~ is stored starting at bit ~5051956592385990207~ and ~tuskSize~ at ~5051956592385990239~ (more 32 bits than ~weight~, which is ~int~):
            #+DOWNLOADED: /tmp/screenshot.png @ 2019-03-31 23:39:47
-           [[file:pictures/2.%20Lists/screenshot_2019-03-31_23-39-47.png]]
+           [[file:pictures/2._Lists/screenshot_2019-03-31_23-39-47.png]]
          - Assigning ~null~ to a *reference variable* (such as ~someWalrus~):
            #+DOWNLOADED: /tmp/screenshot.png @ 2019-03-31 23:41:47
-           [[file:pictures/2.%20Lists/screenshot_2019-03-31_23-41-47.png]]
+           [[file:pictures/2._Lists/screenshot_2019-03-31_23-41-47.png]]
     - Box and Pointer Notation
       #+DOWNLOADED: /tmp/screenshot.png @ 2019-03-31 23:45:22
-      [[file:pictures/2.%20Lists/screenshot_2019-03-31_23-45-22.png]]
+      [[file:pictures/2._Lists/screenshot_2019-03-31_23-45-22.png]]
     - Resolving the Mystery of the Walrus
       #+begin_src java :classname 
         Walrus a = new Walrus(1000, 8.3);
@@ -558,7 +558,7 @@
         b = a;
       #+end_src 
       #+DOWNLOADED: /tmp/screenshot.png @ 2019-04-01 00:28:59
-      [[file:pictures/2.%20Lists/screenshot_2019-04-01_00-28-59.png]]
+      [[file:pictures/2._Lists/screenshot_2019-04-01_00-28-59.png]]
 *** Parameter Passing
     - Exercise 2.1.1
       #+begin_src java :classname PassByValueFigure
@@ -1337,7 +1337,7 @@
    #+end_src 
     - Not ~Glorp[] items = new Glorp[8];~ but ~Glorp[] items = (Glorp []) new Object[8];~
     - Java only destroys *objects* when the last *reference* has been lost: ~items[size - 1] = null;~ to *save memory* and *avoid loitering*, while ~int~ need not ~items[size - 1] = 0~
-* 3. Testing                                                          :SLIDE:
+* 3 Testing                                                          :SLIDE:
   Testing and Selection Sort
 ** JUnit Testing
 *** Ad hoc test 
@@ -1598,7 +1598,7 @@
     2. ~import org.junit.Test~ and ~import static org.junit.Assert.*~
        - ~@org.junit.Test~ -> ~@Test~
        - Omit ~org.junit.Assert.~ 
-* 4. Inheritance, Implements                                          :SLIDE:
+* 4 Inheritance, Implements                                          :SLIDE:
 ** Intro, Hello World Java
 *** Method overloading
     #+begin_src java :classname 
@@ -2070,8 +2070,8 @@
     2. Comparator 不还是需要为每一种比较策略定义一个 nexted class 以及一个 getcomparator() ？这样做的意义？
     3. Java8 之后是怎么显式传递函数作为参数或者把函数作为返回值？
 ** Java libraries and packages                                :UNCOVERED:
-* 5. Generics and Autoboxing                                :UNCOVERED:SLIDE:
-* 6. Exceptions, Iterators, Iterables, Object Methods                 :SLIDE:
+* 5 Generics and Autoboxing                                :UNCOVERED:SLIDE:
+* 6 Exceptions, Iterators, Iterables, Object Methods                 :SLIDE:
 ** Lists, Sets, ArraySet 
 *** Lists in Real Java Code
     #+begin_src java :classname 
@@ -2499,8 +2499,8 @@
 ** Throwing Exceptions (legacy)                                   :UNCOVERED:
 ** Checked vs. Unchecked exception (legacy)                       :UNCOVERED:
 ** Iteration (legacy)                                             :UNCOVERED:
-* 7. Packages and Access Control                            :UNCOVERED:SLIDE:
-* 8. Efficient Programming                                            :SLIDE:
+* 7 Packages and Access Control                            :UNCOVERED:SLIDE:
+* 8 Efficient Programming                                            :SLIDE:
 ** Encapsulation, API's, ADT's
 *** Encapsulation
     - Module: *A set of methods* that work together *as a whole* to perform some task or set of related tasks.
@@ -2556,7 +2556,7 @@
                 private int start, end;
                 public Sublist(inst start, int end) {...}
                 public T get(int k) {return AbstractList.this.get(start+k);}
-                public void add(int l, T x) {AbstractList.this.add(start+k, x); end+=1}
+                public void add(int k, T x) {AbstractList.this.add(start+k, x); end+=1;}
             }
         }
       #+end_src
@@ -2639,7 +2639,7 @@
     - Average (*amortized*) cost is bounded by 5
 **** Question:                                                    :QUESTIONS:
      1. 怎么理解 amortized ？怎么翻译，直观上理解？
-* 9. Disjoint Sets                                                    :SLIDE:
+* 9 Disjoint Sets                                                    :SLIDE:
   #+begin_src java :classname 
     public interface DisjointSets {
         /** connects two items P and Q */
@@ -2751,7 +2751,7 @@
     [[file:pictures/9._Disjoint_Sets/screenshot_2019-08-20_10-38-40.png]]
     - $O(N+NM) = O((N+1)M) = O(NM)$ : *construction* + *actions* (~connect~ or ~isConnected~), similar for others
     - *Amortized runtime* and *iterated logarithm*: $\alpha(N)$ = $log^*(N)$ = constant in long term. ( $log^*(N) = 5$ for $N=2^{65536}$ )
-* 10. ADTs                                                            :SLIDE:
+* 10 ADTs                                                            :SLIDE:
   An Abstract Data Type (ADT) is defined only by its *operations*, not by its *implementation*
   #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-20 16:34:58
   [[file:pictures/10._ADTs/screenshot_2019-08-20_16-34-58.png]]
@@ -2830,7 +2830,7 @@
 ** Question:                                                      :QUESTIONS:
    1. 关于 ADT 与 interface 的关系？ ADT 一定是 interface 但 interface 不一定是 ADT ？(~default~ implement)
    2. BST 只适合表示一个 set 吧？如果是 Sets 呢？（比如 Disjoint Sets ）
-* 11. Balanced Trees                                                  :SLIDE:
+* 11 Balanced Trees                                                  :SLIDE:
 ** Intro to B-Trees
 *** BST Performance
     #+DOWNLOADED: /tmp/screenshot.png @ 2019-08-21 10:56:01
@@ -3197,7 +3197,6 @@
     - HashTable: No good! Items go into *random* places.
     #+DOWNLOADED: /tmp/screenshot.png @ 2019-10-15 18:33:17
     [[file:pictures/L20_Heaps_and_PQs/screenshot_2019-10-15_18-33-17.png]]
-
 *** Question:                                                     :QUESTIONS:
     - [ ] ~Queue~ 的实现？ <<elink6>>
 ** Heaps
@@ -3287,7 +3286,6 @@
     #+DOWNLOADED: /tmp/screenshot.png @ 2019-10-15 22:12:37
     [[file:pictures/L20_Heaps_and_PQs/screenshot_2019-10-15_22-12-37.png]]
     - Abstraction often happens in layers!
-    
     #+DOWNLOADED: /tmp/screenshot.png @ 2019-10-15 22:13:26
     [[file:pictures/L20_Heaps_and_PQs/screenshot_2019-10-15_22-13-26.png]]
 **** Question:                                                    :QUESTIONS:
@@ -3366,7 +3364,8 @@
                   isKey = b;
                   next = new DataIndexedCharMap<Node>(R);
               }
-          }
+          }    
+
       }
   
       public class DataIndexedCharMap<V> {
@@ -3450,6 +3449,8 @@
     - Even more efficient
       #+DOWNLOADED: screenshot @ 2019-10-16 14:16:29
       [[file:pictures/L21_Tries/screenshot_2019-10-16_14-16-29.png]]
+**** Question:                                                    :QUESTIONS:
+     - [ ] radix trie 实现
 ** Trie Summary
    #+DOWNLOADED: screenshot @ 2019-10-16 14:18:10
    [[file:pictures/L21_Tries/screenshot_2019-10-16_14-18-10.png]]
