@@ -3643,8 +3643,8 @@
           }
       }
     #+end_src 
-    - ~private List<Integer>[] adj~ and ~adj = (List<Integer>[]) new ArrayList[V]~ 
-** Graph Traversal Implementations and Runtime
+    - ~private List<Integer>[] adj~: *declaration* ~adj = (List<Integer>[]) new ArrayList[V]~ + *initiation* ~adj[v] = new ArrayList<Integer>()~ 
+** Graph Traversal Implementations and Runtime 
    Common design pattern in graph algorithms: *Decouple type* from *processing algorithm*.
    - Create a *graph object*.
    - Pass the *graph* to a *graph-processing method* (or constructor) in a *client class*.
