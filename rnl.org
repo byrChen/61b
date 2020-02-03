@@ -3992,7 +3992,7 @@
    [[file:pictures/L30_Quick_Sort/screenshot_2019-10-27_16-56-01.png]]
    - Intuition + empirical analysis
      - Argument #1: 10% Case
-       #+DOWNLOADED: screenshot @ 2019-10-27 17:08:32
+       #+DOWNLOADED: screenshot @ 2019-10-7 17:08:32
        [[file:pictures/L30_Quick_Sort/screenshot_2019-10-27_17-08-32.png]]
      - Argument #2: Quicksort is BST Sort
        #+DOWNLOADED: screenshot @ 2019-10-27 17:09:26
@@ -4137,3 +4137,5 @@
 * L38 Compression                                                   :TOBEORG:
 * L39 Compression, Complexity, and P=NP?                            :TOBEORG:
 * L40 Summary, Fun                                                  :TOBEORG:
+
+微博
