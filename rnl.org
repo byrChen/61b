@@ -4025,7 +4025,7 @@
     - Quicksort L3S
       #+DOWNLOADED: screenshot @ 2019-10-27 18:41:17
       [[file:pictures/L30_Quick_Sort/screenshot_2019-10-27_18-41-17.png]]
-    - Quicksort LTHS (Hoare Partition)
+    - Quicksort LTHS (Hoare Partition) <<elink19>>
       #+DOWNLOADED: screenshot @ 2019-10-27 18:54:45
       [[file:pictures/L30_Quick_Sort/screenshot_2019-10-27_18-54-45.png]]
       - *Pivot* is different with *pointer L* and *G*: *pivot = a[0] won't update* until *L and G crossing*, L initially points to *a[1]* and moves to right, while G to *a[n-1]* and moves to left
@@ -4053,8 +4053,6 @@
 *** Expected Performance
     #+DOWNLOADED: screenshot @ 2019-10-28 09:05:36
     [[file:pictures/L30_Quick_Sort/screenshot_2019-10-28_09-05-36.png]]
-**** Question:                                                    :QUESTIONS:
-     - [ ] 为啥 expected performance 是 $\Theta(N)$ ？
 ** Stability, Adaptiveness, Optimization
 *** Stability 
     A sort is said to be *stable* if order of *equivalent* items is *preserved*.
@@ -4104,7 +4102,7 @@
 *** Selection and Insertion Sort Runtimes (Code Analysis)
     #+DOWNLOADED: screenshot @ 2019-10-29 16:02:33
     [[file:pictures/L33_Sorting_and_Algorithmic_Bounds/2019-10-29_16-02-33_screenshot.png]]
-*** Mergesort
+*** Mergesort <<elink18>>
     - Merge Method
       #+DOWNLOADED: screenshot @ 2019-10-29 16:03:23
       [[file:pictures/L33_Sorting_and_Algorithmic_Bounds/2019-10-29_16-03-23_screenshot.png]]

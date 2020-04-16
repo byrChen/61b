@@ -1,5 +1,4 @@
 #+TAGS: UNRESOLVED(u) QUESTIONS(q) EXTRA(e) REQUIRED(r) TOBEORG(t)
-
 * Proj 0 NBody
 ** Writing the Body Class
 *** calcDistance
@@ -321,7 +320,7 @@
     #+begin_src java :classname 
       private void resize(int capacity) {
 
-          T[] newItems = (T []) new Object[capacity];
+          T[] newItems = (T[]) new Object[capacity];
           int firstSize = items.length - nextFirst - 1;
           int start = plusOne(nextFirst);
           int secondSize = nextLast;
@@ -1345,18 +1344,18 @@
           String street = NavigationDirection.UNKNOWN_ROAD;
 
           for (int i = 1; i < route.size(); i++) {
-              long currNode = i > 1 ? route.get(i) : route.get(1);
+              // long currNode = i > 1 ? route.get(i) : route.get(1);
+              long currNode = route.get(i);
               String currStreet = NavigationDirection.UNKNOWN_ROAD;
               for (WeightedEdge e : g.neighbors(prevNode)) {
                   if (e.to().equals(currNode)) {
                       currStreet = e.getName().isEmpty() ? currStreet : e.getName();
-                        currStreet = e.getName();
                   }
               }
 
               if (i == 1) street = currStreet;
 
-                String currStreet = g.name(currNode) == null ? NavigationDirection.UNKNOWN_ROAD : g.name(currNode);
+                // String currStreet = g.name(currNode) == null ? NavigationDirection.UNKNOWN_ROAD : g.name(currNode);
               if (!currStreet.equals(street)) {
                   String dirString = String.format("%s on %s and continue for %.3f miles.",
                           direction, street, distance);

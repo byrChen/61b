@@ -53,7 +53,8 @@ public class Router {
         String street = NavigationDirection.UNKNOWN_ROAD;
 
         for (int i = 1; i < route.size(); i++) {
-            long currNode = i > 1 ? route.get(i) : route.get(1);
+//            long currNode = i > 1 ? route.get(i) : route.get(1);
+            long currNode = route.get(i);
             String currStreet = NavigationDirection.UNKNOWN_ROAD;
             for (WeightedEdge e : g.neighbors(prevNode)) {
                 if (e.to().equals(currNode)) {

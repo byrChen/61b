@@ -778,7 +778,7 @@
           }
       }
     #+end_src 
-    - ~Set~ *implements* ~Collections~, while ~Collection~ *implements* ~Iterable~ -> ~Set~ is *iterable*, ~Set.iterator~ to return ~Iterator~
+    - ~Set~ *implements* ~Collection~, while ~Collection~ *implements* ~Iterable~ -> ~Set~ is *iterable*, ~Set.iterator~ to return ~Iterator~
     - ~for~ can be used on *iterables* [[file:~/csnds/Dropbox/orglife/61b_rnl.org::<<elink2>>][Iteration]]
 *** Question:                                                     :QUESTIONS:
     - [ ] 这种把方法定义全部以树为单位 与 以节点为单位的区别与优劣？而对于 ~size~ 又不是以树为单位，而是以节点为单位？
@@ -819,7 +819,7 @@
           - ~Arrays~ -> ~List~
             #+begin_src java :classname 
               String[] s = new String[]{"A", "B", "C", "D","E"};
-              List<String> list = Arrays.asList(s);
+              List<String> list = Arrays.asList(s); <<ilink3>>
 
               s[0] ="AA";
               System.out.println("list: " + list);
@@ -830,7 +830,7 @@
             - Elements in ~list~ *equals* elements in ~s~: changes in ~s~ will affect ~list~ 
           - ~List~ -> ~Arrays~
             #+begin_src java :classname 
-              String[] dest = list.toArray(new String[0]);//new String[0]是指定返回数组的类型
+              String[] dest = list.toArray(new String[0]);//new String[0]是指定返回数组的类型 <<ilink4>>
               System.out.println("dest: " + Arrays.toString(dest));
 
               dest: [AA, B, C, D, E]
@@ -880,7 +880,7 @@
             }
           #+end_src
           - ~ArrayList~ above is different from ~java.util.ArrayList~, it's a *nest class* of ~java.util.Arrays~ 
-          - ~list~ [[2]] is an *instance* of ~java.util.Arrays$ArrayList~, not ~java.util.ArrayList~
+          - [[ilink3][ ~list~ ]]is an *instance* of ~java.util.Arrays$ArrayList~, not ~java.util.ArrayList~
           - Return of ~Arrays.asList~ is *fixed-size*, doesn't have ~resize~ as ~java.util.ArrayList~ 
         - ~Collection.toArray()~
           - ~Object[] toArray()~: Returns an *array* containing all of the elements in this *collection*
@@ -938,7 +938,7 @@
                   ...
               }
             #+end_src
-            - *Runtime type* of ~dest~ [[3]] is ~String[]~, decided by ~new String[0]~ 
+            - *Runtime type* of [[ilink4][ ~dest~ ]] is ~String[]~, decided by ~new String[0]~ 
         - ~Iterable.iterator()~ to return an *iterator*
 **** Question:                                                   :QUESTIONS:
      1. 是否 ~List~ 和 ~Set~ 都没有固定长度而 ~Arrays~ 的长度是指定的？
@@ -1139,7 +1139,7 @@
 **** Question:                                                    :QUESTIONS:
      - [ ] 做完
        - [ ] 针对 ~put~ 和 ~remove~ 怎么加一个哨兵节点来一般化？主要是哨兵节点的 ~<K, V>~ 怎么确定？
-       - [ ] [[ilink1]] ~m.buckets~ 为什么能从 ~m~ 访问到？因为这是在成员函数里吗？
+       - [ ] [[ilink1][ ~m.buckets~ ]]为什么能从 ~m~ 访问到？因为这是在成员函数里吗？
 *** ~keySet~, ~containsKey~ and ~iterator~ 
     #+begin_src java :classname 
       public Set<K> keySet() {
@@ -1487,8 +1487,6 @@
     #+end_src 
     - ~TreeMap<Character, Node> map~ or ~HashMap<Character, Node> map~
     - ~map.keySet()~, ~map.get(c)~, ~map.containsKey(c)~, ~map.clear()~ and ~map.put(c, n)~
-**** Question:                                                    :QUESTIONS:
-     - [X] 尝试用自己实现的 ~BSTMap~ 和 ~MyHashMap~ 当底层结构试试 => 可以
 *** ~containsStr~ 
     #+begin_src java :classname 
       @Override
@@ -1819,7 +1817,7 @@
       }
     #+end_src 
     - Signature design: ~<Item extends Comparable> void partition(Queue<Item> unsorted, Item pivot, Queue<Item> less, Queue<Item> equal, Queue<Item> greater)~
-*** ~quicksort~                                                     :TOBEORG:
+*** ~quicksort~
     - Recursive
       #+begin_src java :classname 
         public static <Item extends Comparable> Queue<Item> quickSortR(
@@ -1834,7 +1832,7 @@
             return catenate(catenate(less, equal), greater);
         }
       #+end_src
-      - Base: ~if (items.size() <= 1) return items~ -> usual [[ilink1][base in recursive method for sorting]] ~if (items.size() <= 1) return items~ 
+      - Base: ~if (items.size() <= 1) return items~ -> usual [[ilink2][base in recursive method for sorting]] 
       - ~partition(items, getRandomItem(items), less, equal, greater)~ to get ~equal~ --> recursive ~less = quickSortR(less)~ to get ~less~ --> recursive ~greater = quickSortR(greater)~ to get ~greater~
       - ~catenate(catenate(less, equal), greater)~ to catenate ~less~, ~equal~ and ~greater~ 
     - Iterative
@@ -1876,7 +1874,6 @@
                     sortedItems.enqueue(q.dequeue());
                 }
             }
-
             return sortedItems;
         }
       #+end_src
